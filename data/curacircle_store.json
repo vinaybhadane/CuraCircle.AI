@@ -1,0 +1,1048 @@
+{
+  "profiles": [
+    {
+      "id": "profile_eleanor_vance_01",
+      "elderName": "Eleanor Vance",
+      "elderAge": 78,
+      "elderPhoto": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
+      "primaryCondition": "Hypertension & Type 2 Diabetes",
+      "allergies": [
+        "Penicillin",
+        "Sulfa Drugs"
+      ],
+      "bloodType": "O+",
+      "emergencyContact": {
+        "name": "Sarah Vance",
+        "relationship": "Daughter (Primary Guardian)",
+        "phone": "+1 (555) 234-5678",
+        "email": "vinaybhadane06@gmail.com"
+      },
+      "elderPasscodeHash": "$2a$10$9XQwgo3Ln4GhsrOViaTviOvuuMBhvpSgGCOkXWns812Nfh6W2O60C",
+      "caregiverPasscodeHash": "$2a$10$9XQwgo3Ln4GhsrOViaTviO0G4AY5qtq9X73EfvXhaW.cVTwSlUjqO",
+      "familyPasscodeHash": "$2a$10$9XQwgo3Ln4GhsrOViaTviOhu3YSOPSnN6m4uiLHrNpb8q629yI./q",
+      "createdAt": "2026-11-15T10:20:55.042Z",
+      "updatedAt": "2026-11-15T10:20:55.043Z"
+    }
+  ],
+  "members": [
+    {
+      "id": "member_eleanor",
+      "profileId": "profile_eleanor_vance_01",
+      "name": "Eleanor Vance",
+      "role": "ELDER",
+      "email": "eleanor.vance@curacircle.health",
+      "phone": "+1 (555) 234-5670",
+      "permissions": {
+        "canEditMeds": false,
+        "canLogAdherence": true,
+        "canManageAppointments": false,
+        "receiveMissedAlerts": true,
+        "receiveUpcomingAlerts": true
+      }
+    },
+    {
+      "id": "member_nurse_david",
+      "profileId": "profile_eleanor_vance_01",
+      "name": "David Miller, RN",
+      "role": "PRIMARY_CAREGIVER",
+      "email": "nurse.david@curacircle.health",
+      "phone": "+1 (555) 876-5432",
+      "permissions": {
+        "canEditMeds": true,
+        "canLogAdherence": true,
+        "canManageAppointments": true,
+        "receiveMissedAlerts": true,
+        "receiveUpcomingAlerts": true
+      }
+    },
+    {
+      "id": "member_sarah",
+      "profileId": "profile_eleanor_vance_01",
+      "name": "Sarah Vance",
+      "role": "FAMILY_MEMBER",
+      "email": "vinaybhadane06@gmail.com",
+      "phone": "+1 (555) 234-5678",
+      "permissions": {
+        "canEditMeds": true,
+        "canLogAdherence": true,
+        "canManageAppointments": true,
+        "receiveMissedAlerts": true,
+        "receiveUpcomingAlerts": true
+      }
+    },
+    {
+      "id": "member_marcus",
+      "profileId": "profile_eleanor_vance_01",
+      "name": "Marcus Vance",
+      "role": "FAMILY_MEMBER",
+      "email": "marcus.vance@curacircle.health",
+      "phone": "+1 (555) 345-6789",
+      "permissions": {
+        "canEditMeds": false,
+        "canLogAdherence": false,
+        "canManageAppointments": false,
+        "receiveMissedAlerts": true,
+        "receiveUpcomingAlerts": false
+      }
+    },
+    {
+      "id": "member_dr_reed",
+      "profileId": "profile_eleanor_vance_01",
+      "name": "Dr. Evelyn Reed, MD",
+      "role": "CLINICIAN",
+      "email": "dr.reed@stjudemedical.org",
+      "phone": "+1 (555) 998-1122",
+      "permissions": {
+        "canEditMeds": true,
+        "canLogAdherence": false,
+        "canManageAppointments": true,
+        "receiveMissedAlerts": true,
+        "receiveUpcomingAlerts": false
+      }
+    }
+  ],
+  "medications": [
+    {
+      "id": "med_lisinopril",
+      "profileId": "profile_eleanor_vance_01",
+      "name": "Lisinopril",
+      "genericName": "Lisinopril ACE Inhibitor",
+      "dosage": "10 mg",
+      "form": "TABLET",
+      "color": "#f87171",
+      "shape": "Round, debossed \"L 10\"",
+      "instructions": "Take 1 tablet every morning with a full glass of water. Maintain consistent fluid intake.",
+      "purpose": "High Blood Pressure (Hypertension) management and kidney protection.",
+      "foodRequirement": "NO_RESTRICTION",
+      "frequency": "DAILY",
+      "scheduledTimes": [
+        "08:00"
+      ],
+      "active": true,
+      "pillCountCurrent": 24,
+      "pillCountRefillThreshold": 7,
+      "prescribedBy": "Dr. Evelyn Reed, MD",
+      "startDate": "2026-01-15",
+      "createdAt": "2026-11-15T10:20:55.043Z",
+      "updatedAt": "2026-11-15T10:20:55.043Z"
+    },
+    {
+      "id": "med_metformin",
+      "profileId": "profile_eleanor_vance_01",
+      "name": "Metformin HCl",
+      "genericName": "Metformin Extended Release",
+      "dosage": "500 mg",
+      "form": "TABLET",
+      "color": "#ffffff",
+      "shape": "Oval, scored \"M 500\"",
+      "instructions": "Take 1 tablet twice daily with meals (breakfast & dinner) to reduce stomach discomfort.",
+      "purpose": "Blood sugar control for Type 2 Diabetes.",
+      "foodRequirement": "WITH_FOOD",
+      "frequency": "TWICE_DAILY",
+      "scheduledTimes": [
+        "08:00",
+        "20:00"
+      ],
+      "active": true,
+      "pillCountCurrent": 42,
+      "pillCountRefillThreshold": 10,
+      "prescribedBy": "Dr. Evelyn Reed, MD",
+      "startDate": "2026-02-01",
+      "createdAt": "2026-11-15T10:20:55.043Z",
+      "updatedAt": "2026-11-15T10:20:55.043Z"
+    },
+    {
+      "id": "med_atorvastatin",
+      "profileId": "profile_eleanor_vance_01",
+      "name": "Atorvastatin",
+      "genericName": "Atorvastatin Calcium",
+      "dosage": "20 mg",
+      "form": "TABLET",
+      "color": "#38bdf8",
+      "shape": "Oval film-coated \"A 20\"",
+      "instructions": "Take 1 tablet at bedtime. Avoid drinking grapefruit juice while taking this medication.",
+      "purpose": "Cholesterol lowering and cardiovascular arterial protection.",
+      "foodRequirement": "NO_RESTRICTION",
+      "frequency": "DAILY",
+      "scheduledTimes": [
+        "21:00"
+      ],
+      "active": true,
+      "pillCountCurrent": 18,
+      "pillCountRefillThreshold": 7,
+      "prescribedBy": "Dr. Evelyn Reed, MD",
+      "startDate": "2026-01-20",
+      "createdAt": "2026-11-15T10:20:55.043Z",
+      "updatedAt": "2026-11-15T10:20:55.043Z"
+    },
+    {
+      "id": "med_vit_d3",
+      "profileId": "profile_eleanor_vance_01",
+      "name": "Vitamin D3 (Cholecalciferol)",
+      "genericName": "Vitamin D3 Softgel",
+      "dosage": "1000 IU",
+      "form": "CAPSULE",
+      "color": "#fbbf24",
+      "shape": "Clear amber droplet softgel",
+      "instructions": "Take 1 softgel daily at lunchtime with food containing healthy fats.",
+      "purpose": "Bone density support & immune health for osteopenia.",
+      "foodRequirement": "WITH_FOOD",
+      "frequency": "DAILY",
+      "scheduledTimes": [
+        "13:00"
+      ],
+      "active": true,
+      "pillCountCurrent": 55,
+      "pillCountRefillThreshold": 14,
+      "prescribedBy": "Dr. Evelyn Reed, MD",
+      "startDate": "2026-03-10",
+      "createdAt": "2026-11-15T10:20:55.043Z",
+      "updatedAt": "2026-11-15T10:20:55.043Z"
+    }
+  ],
+  "doseLogs": [
+    {
+      "id": "dose_med_lisinopril_2026-11-15_08:00",
+      "profileId": "profile_eleanor_vance_01",
+      "medicationId": "med_lisinopril",
+      "medicationName": "Lisinopril",
+      "dosage": "10 mg",
+      "scheduledTime": "08:00",
+      "scheduledDate": "2026-11-15",
+      "actualTime": "2026-11-15T08:05:00.000Z",
+      "status": "TAKEN",
+      "takenByMemberId": "member_eleanor",
+      "takenByRole": "ELDER",
+      "notes": "Taken with breakfast glass of water."
+    },
+    {
+      "id": "dose_med_metformin_2026-11-15_08:00",
+      "profileId": "profile_eleanor_vance_01",
+      "medicationId": "med_metformin",
+      "medicationName": "Metformin HCl",
+      "dosage": "500 mg",
+      "scheduledTime": "08:00",
+      "scheduledDate": "2026-11-15",
+      "actualTime": "2026-11-15T08:12:00.000Z",
+      "status": "TAKEN",
+      "takenByMemberId": "member_eleanor",
+      "takenByRole": "ELDER",
+      "notes": "Taken with toast and eggs."
+    },
+    {
+      "id": "dose_med_vit_d3_2026-11-15_13:00",
+      "profileId": "profile_eleanor_vance_01",
+      "medicationId": "med_vit_d3",
+      "medicationName": "Vitamin D3 (Cholecalciferol)",
+      "dosage": "1000 IU",
+      "scheduledTime": "13:00",
+      "scheduledDate": "2026-11-15",
+      "status": "MISSED",
+      "missedAlertEscalatedAt": "2026-11-15T10:22:00.884Z"
+    },
+    {
+      "id": "dose_med_metformin_2026-11-15_20:00",
+      "profileId": "profile_eleanor_vance_01",
+      "medicationId": "med_metformin",
+      "medicationName": "Metformin HCl",
+      "dosage": "500 mg",
+      "scheduledTime": "20:00",
+      "scheduledDate": "2026-11-15",
+      "status": "PENDING"
+    },
+    {
+      "id": "dose_med_atorvastatin_2026-11-15_21:00",
+      "profileId": "profile_eleanor_vance_01",
+      "medicationId": "med_atorvastatin",
+      "medicationName": "Atorvastatin",
+      "dosage": "20 mg",
+      "scheduledTime": "21:00",
+      "scheduledDate": "2026-11-15",
+      "status": "PENDING"
+    },
+    {
+      "id": "dose_med_lisinopril_2026-11-25_08:00",
+      "profileId": "profile_eleanor_vance_01",
+      "medicationId": "med_lisinopril",
+      "medicationName": "Lisinopril",
+      "dosage": "10 mg",
+      "scheduledTime": "08:00",
+      "scheduledDate": "2026-11-25",
+      "status": "PENDING"
+    },
+    {
+      "id": "dose_med_metformin_2026-11-25_08:00",
+      "profileId": "profile_eleanor_vance_01",
+      "medicationId": "med_metformin",
+      "medicationName": "Metformin HCl",
+      "dosage": "500 mg",
+      "scheduledTime": "08:00",
+      "scheduledDate": "2026-11-25",
+      "status": "PENDING"
+    },
+    {
+      "id": "dose_med_metformin_2026-11-25_20:00",
+      "profileId": "profile_eleanor_vance_01",
+      "medicationId": "med_metformin",
+      "medicationName": "Metformin HCl",
+      "dosage": "500 mg",
+      "scheduledTime": "20:00",
+      "scheduledDate": "2026-11-25",
+      "status": "PENDING"
+    },
+    {
+      "id": "dose_med_atorvastatin_2026-11-25_21:00",
+      "profileId": "profile_eleanor_vance_01",
+      "medicationId": "med_atorvastatin",
+      "medicationName": "Atorvastatin",
+      "dosage": "20 mg",
+      "scheduledTime": "21:00",
+      "scheduledDate": "2026-11-25",
+      "status": "PENDING"
+    },
+    {
+      "id": "dose_med_vit_d3_2026-11-25_13:00",
+      "profileId": "profile_eleanor_vance_01",
+      "medicationId": "med_vit_d3",
+      "medicationName": "Vitamin D3 (Cholecalciferol)",
+      "dosage": "1000 IU",
+      "scheduledTime": "13:00",
+      "scheduledDate": "2026-11-25",
+      "status": "PENDING"
+    }
+  ],
+  "appointments": [
+    {
+      "id": "apt_cardio_checkup",
+      "profileId": "profile_eleanor_vance_01",
+      "doctorName": "Dr. Evelyn Reed, MD",
+      "specialty": "Cardiovascular Medicine",
+      "clinicName": "St. Jude Heart & Vascular Institute",
+      "address": "742 Evergreen Terrace, Suite 300, Medical Arts Pavilion",
+      "contactPhone": "+1 (555) 998-1122",
+      "appointmentDateTime": "2026-11-18T05:00:00.000Z",
+      "reasonForVisit": "6-Month Comprehensive Hypertension & ECG Follow-up. Review Lisinopril response.",
+      "accompaniedByMemberId": "member_sarah",
+      "accompaniedByName": "Sarah Vance (Daughter driving)",
+      "status": "UPCOMING",
+      "preVisitQuestions": [
+        "Should we adjust Lisinopril dosage if morning systolic pressure averages 128 mmHg?",
+        "Is it safe to continue Atorvastatin alongside new joint supplements for arthritis?",
+        "Could occasional mild lightheadedness upon standing be related to evening timing?"
+      ],
+      "doctorNotes": "Please bring recent 14-day home blood pressure log and current pill boxes.",
+      "remindersSent": {
+        "reminder24h": false,
+        "reminder2h": false
+      },
+      "createdAt": "2026-11-15T10:20:55.044Z",
+      "updatedAt": "2026-11-15T10:20:55.044Z"
+    },
+    {
+      "id": "apt_eye_exam",
+      "profileId": "profile_eleanor_vance_01",
+      "doctorName": "Dr. Julian Ward, OD",
+      "specialty": "Optometry & Diabetic Eye Health",
+      "clinicName": "Northwest Vision Specialists",
+      "address": "1200 Pine Street, Building B, Seattle, WA",
+      "contactPhone": "+1 (555) 443-8822",
+      "appointmentDateTime": "2026-11-24T08:30:00.000Z",
+      "reasonForVisit": "Annual Dilated Retinopathy Screening for Type 2 Diabetes management.",
+      "accompaniedByMemberId": "member_marcus",
+      "accompaniedByName": "Marcus Vance (Son)",
+      "status": "UPCOMING",
+      "preVisitQuestions": [
+        "Any signs of microvascular retinal changes related to blood sugar levels?",
+        "Do we need updated reading lens prescription for evening reading?"
+      ],
+      "doctorNotes": "Eyes will be dilated; patient will not be able to drive home. Companion required.",
+      "remindersSent": {
+        "reminder24h": false,
+        "reminder2h": false
+      },
+      "createdAt": "2026-11-15T10:20:55.044Z",
+      "updatedAt": "2026-11-15T10:20:55.044Z"
+    },
+    {
+      "doctorName": "Dr. Robert Santos, MD",
+      "specialty": "Endocrinology",
+      "clinicName": "Cascade Diabetes Care Clinic",
+      "address": "500 Medical Center Blvd, Suite 210",
+      "contactPhone": "+1 (555) 774-9021",
+      "appointmentDateTime": "2026-12-05T10:21:12.731Z",
+      "reasonForVisit": "HbA1c review and Metformin tolerance assessment",
+      "accompaniedByMemberId": "member_sarah",
+      "accompaniedByName": "Sarah Vance (Daughter)",
+      "status": "UPCOMING",
+      "preVisitQuestions": [
+        "Is morning fasting blood sugar within 90-120 range acceptable?"
+      ],
+      "doctorNotes": "Fasting labs required 2 hours prior.",
+      "id": "apt_1794738072734_kdxj",
+      "profileId": "profile_eleanor_vance_01",
+      "remindersSent": {},
+      "createdAt": "2026-11-15T10:21:12.734Z",
+      "updatedAt": "2026-11-15T10:21:12.734Z"
+    }
+  ],
+  "dispatchedEmails": [
+    {
+      "id": "email_1794738714946_gw93",
+      "profileId": "profile_eleanor_vance_01",
+      "to": "dr.reed@stjudemedical.org",
+      "toName": "Dr. Evelyn Reed, MD",
+      "subject": "[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!",
+      "htmlBody": "\n      <div style=\"font-family: Arial, sans-serif; padding: 28px; background: #450a0a; color: #ffffff; border-radius: 12px;\">\n        <h1 style=\"color: #f87171; margin-top: 0;\">EMERGENCY SOS ALERT</h1>\n        <p style=\"font-size: 18px;\"><strong>Eleanor Vance</strong> triggered an emergency SOS alert.</p>\n        <div style=\"background: #7f1d1d; padding: 16px; border-radius: 8px; margin: 16px 0;\">\n          <p style=\"margin: 4px 0;\"><strong>Event Details:</strong> Emergency SOS button triggered from platform kiosk</p>\n          <p style=\"margin: 4px 0;\"><strong>Timestamp:</strong> 15/11/2026, 4:01:52 pm</p>\n          <p style=\"margin: 4px 0;\"><strong>Primary Conditions:</strong> Hypertension & Type 2 Diabetes</p>\n          <p style=\"margin: 4px 0;\"><strong>Known Allergies:</strong> Penicillin, Sulfa Drugs</p>\n          <p style=\"margin: 4px 0;\"><strong>Blood Type:</strong> O+</p>\n        </div>\n        <p style=\"font-size: 16px;\">Please call immediately: <a href=\"tel:+1 (555) 234-5678\" style=\"color: #fecdd3; font-weight: bold;\">+1 (555) 234-5678</a></p>\n      </div>\n    ",
+      "sentAt": "2026-11-15T10:31:55.201Z",
+      "triggerType": "EMERGENCY_SOS",
+      "status": "SENT",
+      "meta": {
+        "elderName": "Eleanor Vance",
+        "reason": "Emergency SOS button triggered from platform kiosk",
+        "brevoMessageId": "<202611151031.55713543026@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794738714168_va35",
+      "profileId": "profile_eleanor_vance_01",
+      "to": "marcus.vance@curacircle.health",
+      "toName": "Marcus Vance",
+      "subject": "[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!",
+      "htmlBody": "\n      <div style=\"font-family: Arial, sans-serif; padding: 28px; background: #450a0a; color: #ffffff; border-radius: 12px;\">\n        <h1 style=\"color: #f87171; margin-top: 0;\">EMERGENCY SOS ALERT</h1>\n        <p style=\"font-size: 18px;\"><strong>Eleanor Vance</strong> triggered an emergency SOS alert.</p>\n        <div style=\"background: #7f1d1d; padding: 16px; border-radius: 8px; margin: 16px 0;\">\n          <p style=\"margin: 4px 0;\"><strong>Event Details:</strong> Emergency SOS button triggered from platform kiosk</p>\n          <p style=\"margin: 4px 0;\"><strong>Timestamp:</strong> 15/11/2026, 4:01:52 pm</p>\n          <p style=\"margin: 4px 0;\"><strong>Primary Conditions:</strong> Hypertension & Type 2 Diabetes</p>\n          <p style=\"margin: 4px 0;\"><strong>Known Allergies:</strong> Penicillin, Sulfa Drugs</p>\n          <p style=\"margin: 4px 0;\"><strong>Blood Type:</strong> O+</p>\n        </div>\n        <p style=\"font-size: 16px;\">Please call immediately: <a href=\"tel:+1 (555) 234-5678\" style=\"color: #fecdd3; font-weight: bold;\">+1 (555) 234-5678</a></p>\n      </div>\n    ",
+      "sentAt": "2026-11-15T10:31:54.942Z",
+      "triggerType": "EMERGENCY_SOS",
+      "status": "SENT",
+      "meta": {
+        "elderName": "Eleanor Vance",
+        "reason": "Emergency SOS button triggered from platform kiosk",
+        "brevoMessageId": "<202611151031.16391893716@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794738713341_s8bx",
+      "profileId": "profile_eleanor_vance_01",
+      "to": "vinaybhadane06@gmail.com",
+      "toName": "Sarah Vance",
+      "subject": "[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!",
+      "htmlBody": "\n      <div style=\"font-family: Arial, sans-serif; padding: 28px; background: #450a0a; color: #ffffff; border-radius: 12px;\">\n        <h1 style=\"color: #f87171; margin-top: 0;\">EMERGENCY SOS ALERT</h1>\n        <p style=\"font-size: 18px;\"><strong>Eleanor Vance</strong> triggered an emergency SOS alert.</p>\n        <div style=\"background: #7f1d1d; padding: 16px; border-radius: 8px; margin: 16px 0;\">\n          <p style=\"margin: 4px 0;\"><strong>Event Details:</strong> Emergency SOS button triggered from platform kiosk</p>\n          <p style=\"margin: 4px 0;\"><strong>Timestamp:</strong> 15/11/2026, 4:01:52 pm</p>\n          <p style=\"margin: 4px 0;\"><strong>Primary Conditions:</strong> Hypertension & Type 2 Diabetes</p>\n          <p style=\"margin: 4px 0;\"><strong>Known Allergies:</strong> Penicillin, Sulfa Drugs</p>\n          <p style=\"margin: 4px 0;\"><strong>Blood Type:</strong> O+</p>\n        </div>\n        <p style=\"font-size: 16px;\">Please call immediately: <a href=\"tel:+1 (555) 234-5678\" style=\"color: #fecdd3; font-weight: bold;\">+1 (555) 234-5678</a></p>\n      </div>\n    ",
+      "sentAt": "2026-11-15T10:31:54.166Z",
+      "triggerType": "EMERGENCY_SOS",
+      "status": "SENT",
+      "meta": {
+        "elderName": "Eleanor Vance",
+        "reason": "Emergency SOS button triggered from platform kiosk",
+        "brevoMessageId": "<202611151031.64102397764@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794738712205_cafe",
+      "profileId": "profile_eleanor_vance_01",
+      "to": "nurse.david@curacircle.health",
+      "toName": "David Miller, RN",
+      "subject": "[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!",
+      "htmlBody": "\n      <div style=\"font-family: Arial, sans-serif; padding: 28px; background: #450a0a; color: #ffffff; border-radius: 12px;\">\n        <h1 style=\"color: #f87171; margin-top: 0;\">EMERGENCY SOS ALERT</h1>\n        <p style=\"font-size: 18px;\"><strong>Eleanor Vance</strong> triggered an emergency SOS alert.</p>\n        <div style=\"background: #7f1d1d; padding: 16px; border-radius: 8px; margin: 16px 0;\">\n          <p style=\"margin: 4px 0;\"><strong>Event Details:</strong> Emergency SOS button triggered from platform kiosk</p>\n          <p style=\"margin: 4px 0;\"><strong>Timestamp:</strong> 15/11/2026, 4:01:52 pm</p>\n          <p style=\"margin: 4px 0;\"><strong>Primary Conditions:</strong> Hypertension & Type 2 Diabetes</p>\n          <p style=\"margin: 4px 0;\"><strong>Known Allergies:</strong> Penicillin, Sulfa Drugs</p>\n          <p style=\"margin: 4px 0;\"><strong>Blood Type:</strong> O+</p>\n        </div>\n        <p style=\"font-size: 16px;\">Please call immediately: <a href=\"tel:+1 (555) 234-5678\" style=\"color: #fecdd3; font-weight: bold;\">+1 (555) 234-5678</a></p>\n      </div>\n    ",
+      "sentAt": "2026-11-15T10:31:53.339Z",
+      "triggerType": "EMERGENCY_SOS",
+      "status": "SENT",
+      "meta": {
+        "elderName": "Eleanor Vance",
+        "reason": "Emergency SOS button triggered from platform kiosk",
+        "brevoMessageId": "<202611151031.61486882580@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794738120886_xr0f",
+      "profileId": "profile_eleanor_vance_01",
+      "to": "marcus.vance@curacircle.health",
+      "toName": "Marcus Vance",
+      "subject": "[URGENT] Missed Dose Alert: Eleanor Vance missed Vitamin D3 (Cholecalciferol) (13:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>Eleanor Vance</strong> (Age 78)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Vitamin D3 (Cholecalciferol) - 1000 IU</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 13:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> Bone density support & immune health for osteopenia.</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 softgel daily at lunchtime with food containing healthy fats.</p>\n          </div>\n\n          <p>Dear Marcus Vance,</p>\n          <p>Our smart monitoring system detected that Eleanor Vance has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:+1 (555) 234-5678\">+1 (555) 234-5678</a></p>\n            <p><strong>Primary Nurse:</strong> Nurse David Miller &bull; +1 (555) 876-5432</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T10:22:00.887Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_vit_d3",
+        "doseId": "dose_med_vit_d3_2026-11-15_13:00",
+        "scheduledTime": "13:00"
+      }
+    },
+    {
+      "id": "email_1794738120885_37xe",
+      "profileId": "profile_eleanor_vance_01",
+      "to": "vinaybhadane06@gmail.com",
+      "toName": "Sarah Vance",
+      "subject": "[URGENT] Missed Dose Alert: Eleanor Vance missed Vitamin D3 (Cholecalciferol) (13:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>Eleanor Vance</strong> (Age 78)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Vitamin D3 (Cholecalciferol) - 1000 IU</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 13:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> Bone density support & immune health for osteopenia.</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 softgel daily at lunchtime with food containing healthy fats.</p>\n          </div>\n\n          <p>Dear Sarah Vance,</p>\n          <p>Our smart monitoring system detected that Eleanor Vance has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:+1 (555) 234-5678\">+1 (555) 234-5678</a></p>\n            <p><strong>Primary Nurse:</strong> Nurse David Miller &bull; +1 (555) 876-5432</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T10:22:00.885Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_vit_d3",
+        "doseId": "dose_med_vit_d3_2026-11-15_13:00",
+        "scheduledTime": "13:00"
+      }
+    },
+    {
+      "id": "email_1794738120884_7uuv",
+      "profileId": "profile_eleanor_vance_01",
+      "to": "nurse.david@curacircle.health",
+      "toName": "David Miller, RN",
+      "subject": "[URGENT] Missed Dose Alert: Eleanor Vance missed Vitamin D3 (Cholecalciferol) (13:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>Eleanor Vance</strong> (Age 78)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Vitamin D3 (Cholecalciferol) - 1000 IU</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 13:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> Bone density support & immune health for osteopenia.</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 softgel daily at lunchtime with food containing healthy fats.</p>\n          </div>\n\n          <p>Dear David Miller, RN,</p>\n          <p>Our smart monitoring system detected that Eleanor Vance has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:+1 (555) 234-5678\">+1 (555) 234-5678</a></p>\n            <p><strong>Primary Nurse:</strong> Nurse David Miller &bull; +1 (555) 876-5432</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T10:22:00.884Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_vit_d3",
+        "doseId": "dose_med_vit_d3_2026-11-15_13:00",
+        "scheduledTime": "13:00"
+      }
+    },
+    {
+      "id": "email_1794738120880_upos",
+      "profileId": "profile_eleanor_vance_01",
+      "to": "dr.reed@stjudemedical.org",
+      "toName": "Dr. Evelyn Reed, MD",
+      "subject": "[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!",
+      "htmlBody": "\n      <div style=\"font-family: Arial, sans-serif; padding: 28px; background: #450a0a; color: #ffffff; border-radius: 12px;\">\n        <h1 style=\"color: #f87171; margin-top: 0;\">EMERGENCY SOS ALERT</h1>\n        <p style=\"font-size: 18px;\"><strong>Eleanor Vance</strong> triggered an emergency SOS alert.</p>\n        <div style=\"background: #7f1d1d; padding: 16px; border-radius: 8px; margin: 16px 0;\">\n          <p style=\"margin: 4px 0;\"><strong>Event Details:</strong> Test SOS Trigger</p>\n          <p style=\"margin: 4px 0;\"><strong>Timestamp:</strong> 15/11/2026, 3:52:00 pm</p>\n          <p style=\"margin: 4px 0;\"><strong>Primary Conditions:</strong> Hypertension & Type 2 Diabetes</p>\n          <p style=\"margin: 4px 0;\"><strong>Known Allergies:</strong> Penicillin, Sulfa Drugs</p>\n          <p style=\"margin: 4px 0;\"><strong>Blood Type:</strong> O+</p>\n        </div>\n        <p style=\"font-size: 16px;\">Please call immediately: <a href=\"tel:+1 (555) 234-5678\" style=\"color: #fecdd3; font-weight: bold;\">+1 (555) 234-5678</a></p>\n      </div>\n    ",
+      "sentAt": "2026-11-15T10:22:00.880Z",
+      "triggerType": "EMERGENCY_SOS",
+      "status": "SENT",
+      "meta": {
+        "elderName": "Eleanor Vance",
+        "reason": "Test SOS Trigger"
+      }
+    },
+    {
+      "id": "email_1794738120879_ffsa",
+      "profileId": "profile_eleanor_vance_01",
+      "to": "marcus.vance@curacircle.health",
+      "toName": "Marcus Vance",
+      "subject": "[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!",
+      "htmlBody": "\n      <div style=\"font-family: Arial, sans-serif; padding: 28px; background: #450a0a; color: #ffffff; border-radius: 12px;\">\n        <h1 style=\"color: #f87171; margin-top: 0;\">EMERGENCY SOS ALERT</h1>\n        <p style=\"font-size: 18px;\"><strong>Eleanor Vance</strong> triggered an emergency SOS alert.</p>\n        <div style=\"background: #7f1d1d; padding: 16px; border-radius: 8px; margin: 16px 0;\">\n          <p style=\"margin: 4px 0;\"><strong>Event Details:</strong> Test SOS Trigger</p>\n          <p style=\"margin: 4px 0;\"><strong>Timestamp:</strong> 15/11/2026, 3:52:00 pm</p>\n          <p style=\"margin: 4px 0;\"><strong>Primary Conditions:</strong> Hypertension & Type 2 Diabetes</p>\n          <p style=\"margin: 4px 0;\"><strong>Known Allergies:</strong> Penicillin, Sulfa Drugs</p>\n          <p style=\"margin: 4px 0;\"><strong>Blood Type:</strong> O+</p>\n        </div>\n        <p style=\"font-size: 16px;\">Please call immediately: <a href=\"tel:+1 (555) 234-5678\" style=\"color: #fecdd3; font-weight: bold;\">+1 (555) 234-5678</a></p>\n      </div>\n    ",
+      "sentAt": "2026-11-15T10:22:00.879Z",
+      "triggerType": "EMERGENCY_SOS",
+      "status": "SENT",
+      "meta": {
+        "elderName": "Eleanor Vance",
+        "reason": "Test SOS Trigger"
+      }
+    },
+    {
+      "id": "email_1794738120878_7u27",
+      "profileId": "profile_eleanor_vance_01",
+      "to": "vinaybhadane06@gmail.com",
+      "toName": "Sarah Vance",
+      "subject": "[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!",
+      "htmlBody": "\n      <div style=\"font-family: Arial, sans-serif; padding: 28px; background: #450a0a; color: #ffffff; border-radius: 12px;\">\n        <h1 style=\"color: #f87171; margin-top: 0;\">EMERGENCY SOS ALERT</h1>\n        <p style=\"font-size: 18px;\"><strong>Eleanor Vance</strong> triggered an emergency SOS alert.</p>\n        <div style=\"background: #7f1d1d; padding: 16px; border-radius: 8px; margin: 16px 0;\">\n          <p style=\"margin: 4px 0;\"><strong>Event Details:</strong> Test SOS Trigger</p>\n          <p style=\"margin: 4px 0;\"><strong>Timestamp:</strong> 15/11/2026, 3:52:00 pm</p>\n          <p style=\"margin: 4px 0;\"><strong>Primary Conditions:</strong> Hypertension & Type 2 Diabetes</p>\n          <p style=\"margin: 4px 0;\"><strong>Known Allergies:</strong> Penicillin, Sulfa Drugs</p>\n          <p style=\"margin: 4px 0;\"><strong>Blood Type:</strong> O+</p>\n        </div>\n        <p style=\"font-size: 16px;\">Please call immediately: <a href=\"tel:+1 (555) 234-5678\" style=\"color: #fecdd3; font-weight: bold;\">+1 (555) 234-5678</a></p>\n      </div>\n    ",
+      "sentAt": "2026-11-15T10:22:00.878Z",
+      "triggerType": "EMERGENCY_SOS",
+      "status": "SENT",
+      "meta": {
+        "elderName": "Eleanor Vance",
+        "reason": "Test SOS Trigger"
+      }
+    },
+    {
+      "id": "email_1794738120876_8646",
+      "profileId": "profile_eleanor_vance_01",
+      "to": "nurse.david@curacircle.health",
+      "toName": "David Miller, RN",
+      "subject": "[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!",
+      "htmlBody": "\n      <div style=\"font-family: Arial, sans-serif; padding: 28px; background: #450a0a; color: #ffffff; border-radius: 12px;\">\n        <h1 style=\"color: #f87171; margin-top: 0;\">EMERGENCY SOS ALERT</h1>\n        <p style=\"font-size: 18px;\"><strong>Eleanor Vance</strong> triggered an emergency SOS alert.</p>\n        <div style=\"background: #7f1d1d; padding: 16px; border-radius: 8px; margin: 16px 0;\">\n          <p style=\"margin: 4px 0;\"><strong>Event Details:</strong> Test SOS Trigger</p>\n          <p style=\"margin: 4px 0;\"><strong>Timestamp:</strong> 15/11/2026, 3:52:00 pm</p>\n          <p style=\"margin: 4px 0;\"><strong>Primary Conditions:</strong> Hypertension & Type 2 Diabetes</p>\n          <p style=\"margin: 4px 0;\"><strong>Known Allergies:</strong> Penicillin, Sulfa Drugs</p>\n          <p style=\"margin: 4px 0;\"><strong>Blood Type:</strong> O+</p>\n        </div>\n        <p style=\"font-size: 16px;\">Please call immediately: <a href=\"tel:+1 (555) 234-5678\" style=\"color: #fecdd3; font-weight: bold;\">+1 (555) 234-5678</a></p>\n      </div>\n    ",
+      "sentAt": "2026-11-15T10:22:00.876Z",
+      "triggerType": "EMERGENCY_SOS",
+      "status": "SENT",
+      "meta": {
+        "elderName": "Eleanor Vance",
+        "reason": "Test SOS Trigger"
+      }
+    },
+    {
+      "id": "email_1794738120854_4vp7",
+      "profileId": "profile_eleanor_vance_01",
+      "to": "sarah.vance@curacircle.health",
+      "toName": "Sarah Vance",
+      "subject": "[URGENT] Missed Dose Alert: Eleanor Vance missed Lisinopril (08:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>Eleanor Vance</strong> (Age 78)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Lisinopril - 10 mg</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 08:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> High Blood Pressure (Hypertension) management and kidney protection.</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 tablet every morning with a full glass of water. Maintain consistent fluid intake.</p>\n          </div>\n\n          <p>Dear Sarah Vance,</p>\n          <p>Our smart monitoring system detected that Eleanor Vance has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:+1 (555) 234-5678\">+1 (555) 234-5678</a></p>\n            <p><strong>Primary Nurse:</strong> Nurse David Miller &bull; +1 (555) 876-5432</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T10:22:00.855Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_lisinopril",
+        "doseId": "dose_med_lisinopril_2026-11-15_08:00",
+        "scheduledTime": "08:00"
+      }
+    },
+    {
+      "id": "email_1794738120848_5jco",
+      "profileId": "profile_eleanor_vance_01",
+      "to": "eleanor.vance@curacircle.health",
+      "toName": "Eleanor Vance",
+      "subject": "[CuraCircle] Upcoming Dose Reminder: Lisinopril (10 mg) at 08:00",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #f8fafc; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }\n          .header { border-bottom: 2px solid #0284c7; padding-bottom: 16px; margin-bottom: 20px; }\n          .badge { display: inline-block; background-color: #e0f2fe; color: #0369a1; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .pill-box { background-color: #f1f5f9; border-radius: 8px; padding: 16px; margin: 20px 0; border-left: 4px solid #0284c7; }\n          .instruction { font-size: 16px; font-weight: 500; color: #0f172a; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <div class=\"header\">\n            <span class=\"badge\">PROACTIVE MEDICATION REMINDER</span>\n            <h2 style=\"color: #0369a1; margin: 12px 0 4px 0;\">Upcoming Dose for Eleanor Vance</h2>\n            <p style=\"margin: 0; color: #64748b;\">Scheduled Time: <strong>08:00</strong> Today</p>\n          </div>\n          <p>Hello Eleanor Vance,</p>\n          <p>This is a proactive reminder from CuraCircle to ensure Eleanor Vance's healthcare routine stays on track:</p>\n          \n          <div class=\"pill-box\">\n            <h3 style=\"margin-top: 0; color: #0f172a;\">Lisinopril &bull; 10 mg</h3>\n            <p style=\"margin: 4px 0;\"><strong>Form & Appearance:</strong> TABLET (Round, debossed \"L 10\")</p>\n            <p style=\"margin: 4px 0;\"><strong>Food Requirement:</strong> NO RESTRICTION</p>\n            <p class=\"instruction\"><strong>Instructions:</strong> Take 1 tablet every morning with a full glass of water. Maintain consistent fluid intake.</p>\n          </div>\n\n          <p>Once taken, please log the dose in the CuraCircle platform or use the one-tap Elder Voice Companion.</p>\n          \n          <div class=\"footer\">\n            <p>Dispatched automatically by CuraCircle Smart Healthcare Engine &bull; Patient ID: profile_eleanor_vance_01</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T10:22:00.848Z",
+      "triggerType": "UPCOMING_DOSE",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_lisinopril",
+        "doseId": "dose_med_lisinopril_2026-11-15_08:00",
+        "scheduledTime": "08:00"
+      }
+    },
+    {
+      "id": "email_seed_01",
+      "profileId": "profile_eleanor_vance_01",
+      "to": "sarah.vance@curacircle.health",
+      "toName": "Sarah Vance",
+      "subject": "[CuraCircle] Morning Medication Confirmed: Eleanor Vance took Lisinopril & Metformin",
+      "htmlBody": "\n          <div style=\"font-family: Arial, sans-serif; padding: 20px; color: #1e293b;\">\n            <h2 style=\"color: #0284c7;\">CuraCircle Daily Adherence Update</h2>\n            <p>Good morning Sarah,</p>\n            <p>Your mother <strong>Eleanor Vance</strong> successfully logged her 08:00 AM medications on schedule:</p>\n            <ul>\n              <li><strong>Lisinopril 10 mg</strong> - Taken at 08:05 AM</li>\n              <li><strong>Metformin HCl 500 mg</strong> - Taken at 08:12 AM</li>\n            </ul>\n            <p>Her current adherence streak is <strong>14 consecutive days</strong>.</p>\n            <p style=\"color: #64748b; font-size: 13px;\">This automated alert was dispatched by CuraCircle AI.</p>\n          </div>\n        ",
+      "sentAt": "2026-11-15T08:15:00.000Z",
+      "triggerType": "UPCOMING_DOSE",
+      "status": "SENT"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "audit_1794738731824_wwxld",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:32:11.824Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738731643_otwlr",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:32:11.643Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738731463_zylct",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:32:11.463Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738731284_eea2j",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:32:11.284Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738731104_e17f3",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:32:11.104Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738730923_u42i8",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:32:10.923Z",
+      "actorName": "FAMILY_MEMBER",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "AUTHENTICATION_SUCCESS",
+      "details": "Authorized FAMILY_MEMBER access to Eleanor Vance's Care Circle."
+    },
+    {
+      "id": "audit_1794738730740_mkod7",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:32:10.740Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "AUTHENTICATION_SUCCESS",
+      "details": "Authorized PRIMARY_CAREGIVER access to Eleanor Vance's Care Circle."
+    },
+    {
+      "id": "audit_1794738730604_dlsge",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:32:10.604Z",
+      "actorName": "Eleanor Vance (Elder)",
+      "actorRole": "ELDER",
+      "action": "AUTHENTICATION_SUCCESS",
+      "details": "Authorized ELDER access to Eleanor Vance's Care Circle."
+    },
+    {
+      "id": "audit_1794738715203_cn3zw",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:31:55.203Z",
+      "actorName": "Eleanor Vance (Elder)",
+      "actorRole": "ELDER",
+      "action": "EMERGENCY_SOS_TRIGGERED",
+      "details": "Emergency SOS broadcast sent to 4 care circle members."
+    },
+    {
+      "id": "audit_1794738715202_3jemd",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:31:55.202Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_EMERGENCY_SOS",
+      "details": "Proactive email \"[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!\" sent to Dr. Evelyn Reed, MD (dr.reed@stjudemedical.org)."
+    },
+    {
+      "id": "audit_1794738714944_tfch1",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:31:54.944Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_EMERGENCY_SOS",
+      "details": "Proactive email \"[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!\" sent to Marcus Vance (marcus.vance@curacircle.health)."
+    },
+    {
+      "id": "audit_1794738714167_uhdns",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:31:54.167Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_EMERGENCY_SOS",
+      "details": "Proactive email \"[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!\" sent to Sarah Vance (vinaybhadane06@gmail.com)."
+    },
+    {
+      "id": "audit_1794738713340_lzitf",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:31:53.340Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_EMERGENCY_SOS",
+      "details": "Proactive email \"[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!\" sent to David Miller, RN (nurse.david@curacircle.health)."
+    },
+    {
+      "id": "audit_1794738580286_zl12s",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:29:40.286Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738580104_6imik",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:29:40.104Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738579924_ptaf6",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:29:39.924Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738579744_kzov7",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:29:39.744Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738579563_7tvqz",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:29:39.563Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738579372_akkvs",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:29:39.372Z",
+      "actorName": "FAMILY_MEMBER",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "AUTHENTICATION_SUCCESS",
+      "details": "Authorized FAMILY_MEMBER access to Eleanor Vance's Care Circle."
+    },
+    {
+      "id": "audit_1794738579183_ovfsu",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:29:39.183Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "AUTHENTICATION_SUCCESS",
+      "details": "Authorized PRIMARY_CAREGIVER access to Eleanor Vance's Care Circle."
+    },
+    {
+      "id": "audit_1794738579046_hde46",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:29:39.046Z",
+      "actorName": "Eleanor Vance (Elder)",
+      "actorRole": "ELDER",
+      "action": "AUTHENTICATION_SUCCESS",
+      "details": "Authorized ELDER access to Eleanor Vance's Care Circle."
+    },
+    {
+      "id": "audit_1794738120887_2natb",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:22:00.887Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Proactive email \"[URGENT] Missed Dose Alert: Eleanor Vance missed Vitamin D3 (Cholecalciferol) (13:00)\" sent to Marcus Vance (marcus.vance@curacircle.health)."
+    },
+    {
+      "id": "audit_1794738120886_s3v9u",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:22:00.886Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Proactive email \"[URGENT] Missed Dose Alert: Eleanor Vance missed Vitamin D3 (Cholecalciferol) (13:00)\" sent to Sarah Vance (vinaybhadane06@gmail.com)."
+    },
+    {
+      "id": "audit_1794738120885_87b97",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:22:00.885Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Proactive email \"[URGENT] Missed Dose Alert: Eleanor Vance missed Vitamin D3 (Cholecalciferol) (13:00)\" sent to David Miller, RN (nurse.david@curacircle.health)."
+    },
+    {
+      "id": "audit_1794738120882_nzfh1",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:22:00.882Z",
+      "actorName": "Eleanor Vance (Elder)",
+      "actorRole": "ELDER",
+      "action": "EMERGENCY_SOS_TRIGGERED",
+      "details": "Emergency SOS broadcast sent to 4 care circle members."
+    },
+    {
+      "id": "audit_1794738120881_v2nhm",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:22:00.881Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_EMERGENCY_SOS",
+      "details": "Proactive email \"[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!\" sent to Dr. Evelyn Reed, MD (dr.reed@stjudemedical.org)."
+    },
+    {
+      "id": "audit_1794738120880_9hzpm",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:22:00.880Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_EMERGENCY_SOS",
+      "details": "Proactive email \"[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!\" sent to Marcus Vance (marcus.vance@curacircle.health)."
+    },
+    {
+      "id": "audit_1794738120878_mcwvc",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:22:00.878Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_EMERGENCY_SOS",
+      "details": "Proactive email \"[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!\" sent to Sarah Vance (vinaybhadane06@gmail.com)."
+    },
+    {
+      "id": "audit_1794738120877_gaeio",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:22:00.877Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_EMERGENCY_SOS",
+      "details": "Proactive email \"[EMERGENCY SOS] Urgent Assistance Needed for Eleanor Vance!\" sent to David Miller, RN (nurse.david@curacircle.health)."
+    },
+    {
+      "id": "audit_1794738120856_wqgld",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:22:00.856Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Proactive email \"[URGENT] Missed Dose Alert: Eleanor Vance missed Lisinopril (08:00)\" sent to Sarah Vance (sarah.vance@curacircle.health)."
+    },
+    {
+      "id": "audit_1794738120852_5pc3b",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:22:00.852Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_UPCOMING_DOSE",
+      "details": "Proactive email \"[CuraCircle] Upcoming Dose Reminder: Lisinopril (10 mg) at 08:00\" sent to Eleanor Vance (eleanor.vance@curacircle.health)."
+    },
+    {
+      "id": "audit_1794738074156_3h8eh",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:21:14.156Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738073975_emd9v",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:21:13.975Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738073787_dhd4d",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:21:13.787Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738073580_gstbn",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:21:13.580Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738073392_ddxis",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:21:13.392Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738073179_sdd4q",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:21:13.179Z",
+      "actorName": "FAMILY_MEMBER",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "AUTHENTICATION_SUCCESS",
+      "details": "Authorized FAMILY_MEMBER access to Eleanor Vance's Care Circle."
+    },
+    {
+      "id": "audit_1794738072978_cdc8v",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:21:12.978Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "AUTHENTICATION_SUCCESS",
+      "details": "Authorized PRIMARY_CAREGIVER access to Eleanor Vance's Care Circle."
+    },
+    {
+      "id": "audit_1794738072816_fzif2",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:21:12.817Z",
+      "actorName": "Eleanor Vance (Elder)",
+      "actorRole": "ELDER",
+      "action": "AUTHENTICATION_SUCCESS",
+      "details": "Authorized ELDER access to Eleanor Vance's Care Circle."
+    },
+    {
+      "id": "audit_1794738056387_5zezb",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:20:56.387Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738056204_fdo4n",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:20:56.204Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738056011_frqua",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:20:56.011Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738055826_ptltf",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:20:55.826Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738055639_rsg3y",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:20:55.639Z",
+      "actorName": "UNKNOWN",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "PASSCODE_FAILED",
+      "details": "Failed passcode attempt from IP 192.168.1.99"
+    },
+    {
+      "id": "audit_1794738055454_k3jjd",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:20:55.454Z",
+      "actorName": "FAMILY_MEMBER",
+      "actorRole": "FAMILY_MEMBER",
+      "action": "AUTHENTICATION_SUCCESS",
+      "details": "Authorized FAMILY_MEMBER access to Eleanor Vance's Care Circle."
+    },
+    {
+      "id": "audit_1794738055261_kd3vm",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:20:55.261Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "AUTHENTICATION_SUCCESS",
+      "details": "Authorized PRIMARY_CAREGIVER access to Eleanor Vance's Care Circle."
+    },
+    {
+      "id": "audit_1794738055124_udgre",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T10:20:55.124Z",
+      "actorName": "Eleanor Vance (Elder)",
+      "actorRole": "ELDER",
+      "action": "AUTHENTICATION_SUCCESS",
+      "details": "Authorized ELDER access to Eleanor Vance's Care Circle."
+    },
+    {
+      "id": "audit_01",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T08:05:00.000Z",
+      "actorName": "Eleanor Vance",
+      "actorRole": "ELDER",
+      "action": "DOSE_MARKED_TAKEN",
+      "details": "Marked Lisinopril 10mg as TAKEN on schedule."
+    },
+    {
+      "id": "audit_02",
+      "profileId": "profile_eleanor_vance_01",
+      "timestamp": "2026-11-15T08:12:00.000Z",
+      "actorName": "Eleanor Vance",
+      "actorRole": "ELDER",
+      "action": "DOSE_MARKED_TAKEN",
+      "details": "Marked Metformin HCl 500mg as TAKEN on schedule."
+    }
+  ]
+}
