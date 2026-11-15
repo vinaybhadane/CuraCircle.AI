@@ -20,7 +20,7 @@ export const OnboardingSchema = z.object({
   primaryCondition: z.string().trim().max(500).default(''),
   allergies: z.array(z.string().trim().min(1).max(100)).max(30).default([]),
   timezone: z.string().refine((value) => { try { new Intl.DateTimeFormat('en', { timeZone: value }); return true; } catch { return false; } }, 'Invalid timezone'),
-  familyMembers: z.array(MemberInputSchema.extend({ role: z.literal('FAMILY_MEMBER').default('FAMILY_MEMBER') })).min(2, 'Add at least two family members.').max(20),
+  familyMembers: z.array(MemberInputSchema.extend({ role: z.literal('FAMILY_MEMBER').default('FAMILY_MEMBER') })).max(20).default([]),
 });
 export function permissionsFor(_role: Role): CareCircleMember['permissions'] {
   return { canEditMeds: true, canLogAdherence: true, canManageAppointments: true, receiveMissedAlerts: true, receiveUpcomingAlerts: true };
@@ -39,7 +39,9 @@ export function createCircle(identity: SessionIdentity, input: z.infer<typeof On
   const profile = { id: profileId, ownerUid: identity.uid, isDemo: false, onboardingCompleted: true,
     timezone: input.timezone, elderName: input.patientName, elderAge: input.patientAge,
     primaryCondition: input.primaryCondition, allergies: input.allergies,
-    emergencyContact: { name: first.name, email: first.email, phone: first.phone, relationship: 'Family member' },
+    emergencyContact: first
+      ? { name: first.name, email: first.email, phone: first.phone, relationship: 'Family member' }
+      : { name: input.memberName, email: identity.email, phone: '', relationship: input.role === 'ELDER' ? 'Self' : 'Primary Guardian' },
     elderPasscodeHash: '', caregiverPasscodeHash: '', familyPasscodeHash: '', createdAt: now, updatedAt: now };
   const owner: CareCircleMember = { id: `member_${randomUUID()}`, profileId, firebaseUid: identity.uid,
     name: input.memberName, email: identity.email, role: input.role, permissions: permissionsFor(input.role) };

@@ -39,8 +39,6 @@ export const PUT = secureRoute(async (req: NextRequest) => {
   const parsed = MemberInputSchema.safeParse({ ...member, ...updates });
   if (!parsed.success) throw new ApiError(parsed.error.issues[0].message);
   if (db.members.some((m) => m.profileId === profile.id && m.id !== id && m.email.toLowerCase() === parsed.data.email)) throw new ApiError('This email is already in the care circle.', 409);
-  const familyCount = db.members.filter((m) => m.profileId === profile.id && m.role === 'FAMILY_MEMBER').length;
-  if (member.role === 'FAMILY_MEMBER' && parsed.data.role !== 'FAMILY_MEMBER' && familyCount <= 2) throw new ApiError('Keep at least two family members in the care circle.');
   if (member.email !== parsed.data.email) delete member.firebaseUid;
   Object.assign(member, parsed.data, { permissions: { ...permissionsFor(parsed.data.role), ...parsed.data.permissions } });
   dbService.save();
@@ -53,7 +51,6 @@ export const DELETE = secureRoute(async (req: NextRequest) => {
   const member = db.members.find((m) => m.profileId === profile.id && m.id === id)!;
   if (!member) throw new ApiError('Member not found.', 404);
   if (member.role === 'ELDER' || member.firebaseUid === profile.ownerUid) throw new ApiError('The patient and profile owner cannot be removed.');
-  if (member.role === 'FAMILY_MEMBER' && db.members.filter((m) => m.profileId === profile.id && m.role === 'FAMILY_MEMBER').length <= 2) throw new ApiError('Keep at least two family members in the care circle.');
   db.members = db.members.filter((m) => m.id !== id);
   dbService.save();
   return NextResponse.json({ success: true });

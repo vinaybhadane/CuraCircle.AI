@@ -938,7 +938,8 @@
       "scheduledTime": "08:00",
       "scheduledDate": "2026-11-15",
       "status": "MISSED",
-      "missedAlertEscalatedAt": "2026-11-15T17:08:43.897Z"
+      "missedAlertEscalatedAt": "2026-11-15T17:08:43.897Z",
+      "excluded": true
     },
     {
       "id": "dose_med_1794762481397_x76b_2026-11-15_20:00",
@@ -949,7 +950,8 @@
       "scheduledTime": "20:00",
       "scheduledDate": "2026-11-15",
       "status": "MISSED",
-      "missedAlertEscalatedAt": "2026-11-15T17:08:46.500Z"
+      "missedAlertEscalatedAt": "2026-11-15T17:08:46.500Z",
+      "excluded": true
     },
     {
       "id": "dose_med_1794762804071_tig9_2026-11-15_08:00",
@@ -960,7 +962,8 @@
       "scheduledTime": "08:00",
       "scheduledDate": "2026-11-15",
       "status": "MISSED",
-      "missedAlertEscalatedAt": "2026-11-15T17:13:41.559Z"
+      "missedAlertEscalatedAt": "2026-11-15T17:13:41.559Z",
+      "excluded": true
     },
     {
       "id": "dose_med_1794762804080_gv0l_2026-11-15_08:00",
@@ -971,7 +974,8 @@
       "scheduledTime": "08:00",
       "scheduledDate": "2026-11-15",
       "status": "MISSED",
-      "missedAlertEscalatedAt": "2026-11-15T17:13:44.815Z"
+      "missedAlertEscalatedAt": "2026-11-15T17:13:44.815Z",
+      "excluded": true
     },
     {
       "id": "dose_med_1794762804080_gv0l_2026-11-15_20:00",
@@ -982,7 +986,68 @@
       "scheduledTime": "20:00",
       "scheduledDate": "2026-11-15",
       "status": "MISSED",
-      "missedAlertEscalatedAt": "2026-11-15T17:13:46.026Z"
+      "missedAlertEscalatedAt": "2026-11-15T17:13:46.026Z",
+      "excluded": true
+    },
+    {
+      "id": "dose_med_1794762481389_ta2i_2026-11-16_08:00",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "medicationId": "med_1794762481389_ta2i",
+      "medicationName": "Amlodipine",
+      "dosage": "5 mg",
+      "scheduledTime": "08:00",
+      "scheduledDate": "2026-11-16",
+      "status": "PENDING"
+    },
+    {
+      "id": "dose_med_1794762481397_x76b_2026-11-16_08:00",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "medicationId": "med_1794762481397_x76b",
+      "medicationName": "Metformin",
+      "dosage": "500 mg",
+      "scheduledTime": "08:00",
+      "scheduledDate": "2026-11-16",
+      "status": "PENDING"
+    },
+    {
+      "id": "dose_med_1794762481397_x76b_2026-11-16_20:00",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "medicationId": "med_1794762481397_x76b",
+      "medicationName": "Metformin",
+      "dosage": "500 mg",
+      "scheduledTime": "20:00",
+      "scheduledDate": "2026-11-16",
+      "status": "PENDING"
+    },
+    {
+      "id": "dose_med_1794762804071_tig9_2026-11-16_08:00",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "medicationId": "med_1794762804071_tig9",
+      "medicationName": "Amlodipine",
+      "dosage": "5 mg",
+      "scheduledTime": "08:00",
+      "scheduledDate": "2026-11-16",
+      "status": "PENDING"
+    },
+    {
+      "id": "dose_med_1794762804080_gv0l_2026-11-16_08:00",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "medicationId": "med_1794762804080_gv0l",
+      "medicationName": "Metformin",
+      "dosage": "500 mg",
+      "scheduledTime": "08:00",
+      "scheduledDate": "2026-11-16",
+      "status": "PENDING"
+    },
+    {
+      "id": "dose_med_1794762804080_gv0l_2026-11-16_20:00",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "medicationId": "med_1794762804080_gv0l",
+      "medicationName": "Metformin",
+      "dosage": "500 mg",
+      "scheduledTime": "20:00",
+      "scheduledDate": "2026-11-16",
+      "status": "PENDING"
     }
   ],
   "appointments": [

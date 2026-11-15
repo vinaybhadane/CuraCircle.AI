@@ -114,8 +114,8 @@ describe('Google care circle onboarding and authorization', () => {
     expect(data.profile.elderPasscodeHash).toBeUndefined();
     expect(data.profile.caregiverPasscodeHash).toBeUndefined();
   });
-  it('requires two family members and rejects duplicate emails', () => {
-    expect(OnboardingSchema.safeParse({ ...input, familyMembers: input.familyMembers.slice(0, 1) }).success).toBe(false);
+  it('allows flexible family members and rejects duplicate emails', () => {
+    expect(OnboardingSchema.safeParse({ ...input, familyMembers: input.familyMembers.slice(0, 1) }).success).toBe(true);
     expect(() => createCircle(owner, OnboardingSchema.parse({ ...input, familyMembers: [input.familyMembers[0], input.familyMembers[0]] }))).toThrow('different email');
   });
   it('creates only manually entered patient details with no medicines or fake statistics', () => {
@@ -146,9 +146,9 @@ describe('Google care circle onboarding and authorization', () => {
     expect((await updateMedication(request('/api/medications', owner, { id: 'med_lisinopril', updates: { dosage: '99 mg' } }, 'PUT'))).status).toBe(404);
     expect((await getMedications(request('/api/medications', { ...owner, uid: 'stranger', email: 'stranger@example.com' }))).status).toBe(409);
   });
-  it('preserves two family members and limits invitations to the profile owner', async () => {
+  it('limits invitations to the profile owner and protects owner and elder from deletion', async () => {
     const { members } = create();
-    expect((await removeMember(request(`/api/members?id=${members[1].id}`, owner, undefined, 'DELETE'))).status).toBe(400);
+    expect((await removeMember(request(`/api/members?id=${members[0].id}`, owner, undefined, 'DELETE'))).status).toBe(400);
     expect((await addMember(request('/api/members', { ...owner, uid: 'family', email: 'one@example.com' }, { name: 'New Member', email: 'new@example.com' }, 'POST'))).status).toBe(403);
   });
   it('returns and marks read only the signed-in member’s notifications', async () => {

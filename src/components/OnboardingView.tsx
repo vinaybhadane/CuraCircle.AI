@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Heart, Users, Check, LogOut } from 'lucide-react';
+import { Heart, Users, Check, LogOut, Plus, Trash2 } from 'lucide-react';
 
 export function OnboardingView({ onComplete, onSignOut }: { onComplete: () => Promise<void>; onSignOut: () => void }) {
   const [role, setRole] = useState<'ELDER' | 'FAMILY_MEMBER'>('ELDER');
@@ -10,17 +10,32 @@ export function OnboardingView({ onComplete, onSignOut }: { onComplete: () => Pr
   const [age, setAge] = useState('');
   const [condition, setCondition] = useState('');
   const [allergies, setAllergies] = useState('');
-  const [family, setFamily] = useState([{ name: '', email: '', phone: '' }, { name: '', email: '', phone: '' }]);
+  const [family, setFamily] = useState<{ name: string; email: string; phone: string }[]>([
+    { name: '', email: '', phone: '' }
+  ]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const field = 'w-full px-3 py-2 rounded-xl border bg-slate-50 dark:bg-slate-800 text-sm font-semibold';
+
+  const addFamilyMember = () => {
+    setFamily((prev) => [...prev, { name: '', email: '', phone: '' }]);
+  };
+
+  const removeFamilyMember = (index: number) => {
+    setFamily((prev) => prev.filter((_, i) => i !== index));
+  };
+
   async function submit(event: React.FormEvent) {
     event.preventDefault(); setSaving(true); setError('');
     try {
+      const validFamily = family
+        .map((m) => ({ name: m.name.trim(), email: m.email.trim().toLowerCase(), phone: m.phone.trim(), role: 'FAMILY_MEMBER' as const }))
+        .filter((m) => m.name && m.email);
+
       const response = await fetch('/api/onboarding', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
         role, memberName: role === 'ELDER' ? patientName : memberName, patientName, patientEmail: role === 'ELDER' ? '' : patientEmail,
         patientAge: Number(age), primaryCondition: condition, allergies: allergies.split(',').map((s) => s.trim()).filter(Boolean),
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone, familyMembers: family.map((m) => ({ ...m, role: 'FAMILY_MEMBER' })),
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone, familyMembers: validFamily,
       }) });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Could not save your care circle.');
@@ -32,24 +47,59 @@ export function OnboardingView({ onComplete, onSignOut }: { onComplete: () => Pr
     <form onSubmit={submit} className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl border border-slate-200 dark:border-slate-800 space-y-6">
       <div className="flex items-center justify-between border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3"><div className="w-12 h-12 rounded-2xl bg-brand-600 text-white flex items-center justify-center"><Heart /></div>
-          <div><h1 className="text-xl font-black">Add at least two family members</h1><p className="text-xs text-slate-500">Set up your care circle, then upload a prescription for Gemini to build your schedule.</p></div></div>
+          <div><h1 className="text-xl font-black">Set up your Care Circle</h1><p className="text-xs text-slate-500">Configure patient health profile and optionally invite family members or caregivers.</p></div></div>
         <button type="button" onClick={onSignOut} aria-label="Sign out" className="p-2 text-slate-500"><LogOut size={18} /></button>
       </div>
       {error && <p role="alert" className="p-3 rounded-xl bg-rose-50 text-rose-800 border border-rose-200 text-sm">{error}</p>}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <label className="text-xs font-bold space-y-1">Your role<select className={field} value={role} onChange={(e) => setRole(e.target.value as typeof role)}><option value="ELDER">Patient</option><option value="FAMILY_MEMBER">Family member</option></select></label>
+        <label className="text-xs font-bold space-y-1">Your role<select className={field} value={role} onChange={(e) => setRole(e.target.value as typeof role)}><option value="ELDER">Patient</option><option value="FAMILY_MEMBER">Family member / Caregiver</option></select></label>
         {role === 'FAMILY_MEMBER' && <label className="text-xs font-bold space-y-1">Your full name<input className={field} required maxLength={100} value={memberName} onChange={(e) => setMemberName(e.target.value)} /></label>}
         <label className="text-xs font-bold space-y-1">Patient full name<input className={field} required minLength={2} maxLength={100} value={patientName} onChange={(e) => setPatientName(e.target.value)} /></label>
         <label className="text-xs font-bold space-y-1">Patient age<input className={field} required type="number" min={1} max={120} value={age} onChange={(e) => setAge(e.target.value)} /></label>
         {role === 'FAMILY_MEMBER' && <label className="text-xs font-bold space-y-1">Patient Google email<input className={field} required type="email" value={patientEmail} onChange={(e) => setPatientEmail(e.target.value)} /></label>}
-        <label className="text-xs font-bold space-y-1">Medical conditions (optional)<input className={field} maxLength={500} value={condition} onChange={(e) => setCondition(e.target.value)} /></label>
-        <label className="text-xs font-bold space-y-1">Allergies, separated by commas (optional)<input className={field} value={allergies} onChange={(e) => setAllergies(e.target.value)} /></label>
+        <label className="text-xs font-bold space-y-1">Medical conditions (optional)<input className={field} maxLength={500} value={condition} onChange={(e) => setCondition(e.target.value)} placeholder="e.g. Hypertension, Diabetes" /></label>
+        <label className="text-xs font-bold space-y-1">Allergies, separated by commas (optional)<input className={field} value={allergies} onChange={(e) => setAllergies(e.target.value)} placeholder="e.g. Penicillin, Peanuts" /></label>
       </div>
-      <p className="text-xs text-slate-500">Each person needs a different Google email. Family members can sign in with that email to view notifications and add or modify this patient’s schedule.</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">{family.map((member, index) => <fieldset key={index} className="p-4 rounded-2xl border border-slate-200 bg-slate-50 dark:bg-slate-800 space-y-3">
-        <legend className="text-sm font-black px-1"><Users className="w-4 h-4 inline mr-1" />Family member {index + 1}</legend>
-        {(['name', 'email', 'phone'] as const).map((key) => <label key={key} className="block text-xs font-bold space-y-1">{key === 'name' ? 'Full name' : key === 'email' ? 'Google email' : 'Phone (optional)'}<input className={field} type={key === 'email' ? 'email' : key === 'phone' ? 'tel' : 'text'} required={key !== 'phone'} value={member[key]} onChange={(e) => setFamily((previous) => previous.map((m, i) => i === index ? { ...m, [key]: e.target.value } : m))} /></label>)}
-      </fieldset>)}</div>
+      
+      <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
+        <div className="flex items-center justify-between mb-2">
+          <div>
+            <h2 className="text-sm font-black">Family Members & Caregivers (Optional)</h2>
+            <p className="text-xs text-slate-500">Invite family members so they receive proactive email alerts for doses and appointments.</p>
+          </div>
+          <button type="button" onClick={addFamilyMember} className="px-3 py-1.5 text-xs font-bold rounded-xl border border-brand-300 text-brand-600 hover:bg-brand-50 flex items-center gap-1">
+            <Plus size={14} /> Add member
+          </button>
+        </div>
+
+        {family.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
+            {family.map((member, index) => (
+              <fieldset key={index} className="p-4 rounded-2xl border border-slate-200 bg-slate-50 dark:bg-slate-800 space-y-3 relative">
+                <div className="flex items-center justify-between">
+                  <legend className="text-sm font-black px-1"><Users className="w-4 h-4 inline mr-1" />Family member {index + 1}</legend>
+                  <button type="button" onClick={() => removeFamilyMember(index)} className="text-slate-400 hover:text-rose-600 p-1" title="Remove member">
+                    <Trash2 size={15} />
+                  </button>
+                </div>
+                {(['name', 'email', 'phone'] as const).map((key) => (
+                  <label key={key} className="block text-xs font-bold space-y-1">
+                    {key === 'name' ? 'Full name' : key === 'email' ? 'Google email' : 'Phone (optional)'}
+                    <input
+                      className={field}
+                      type={key === 'email' ? 'email' : key === 'phone' ? 'tel' : 'text'}
+                      value={member[key]}
+                      onChange={(e) => setFamily((previous) => previous.map((m, i) => i === index ? { ...m, [key]: e.target.value } : m))}
+                      placeholder={key === 'name' ? 'Name' : key === 'email' ? 'google@gmail.com' : 'Optional phone'}
+                    />
+                  </label>
+                ))}
+              </fieldset>
+            ))}
+          </div>
+        )}
+      </div>
+
       <button disabled={saving} className="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-black flex items-center justify-center gap-2 disabled:opacity-60"><Check size={20} />{saving ? 'Saving care circle…' : 'Save & upload prescription'}</button>
     </form>
   </div>;

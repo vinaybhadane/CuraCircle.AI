@@ -10,7 +10,6 @@ import { circleClock } from '@/lib/time';
 async function scan(req: NextRequest) {
   try {
     const { profile } = requireCircle(req);
-    if (dbService.getDb().members.filter((m) => m.profileId === profile.id && m.role === 'FAMILY_MEMBER').length < 2) throw new ApiError('Add at least two family members before uploading a prescription.', 409);
     const parsed = ScanPrescriptionSchema.safeParse(await req.json());
     if (!parsed.success) throw new ApiError(parsed.error.issues[0].message);
     const base64 = parsed.data.imageBase64.replace(/^data:[^;]+;base64,/, '');
