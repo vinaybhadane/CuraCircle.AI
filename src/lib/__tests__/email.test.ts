@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { EmailService } from '../services/email.service';
 import { dbService } from '../db/database';
+import { cleanNotificationText } from '../utils/sanitize';
 
 describe('EmailService & Proactive Notification Scheduler', () => {
   it('dispatches an upcoming dose reminder and logs to outbox', async () => {
@@ -65,5 +66,17 @@ describe('EmailService & Proactive Notification Scheduler', () => {
     expect(typeof summary.missedDoseEmailsSent).toBe('number');
     expect(typeof summary.appointmentEmailsSent).toBe('number');
     expect(typeof summary.refillEmailsSent).toBe('number');
+  });
+
+  it('sanitizes notification messages by stripping style tags, CSS rules and HTML entities', () => {
+    const rawWithCss = `
+      <style>body { font-family: sans-serif; } .card { color: red; }</style>
+      <div class="card">&bull; ESCALATED ADHERENCE ALERT Action Required: Medication Missed</div>
+    `;
+    const cleaned = cleanNotificationText(rawWithCss);
+    expect(cleaned).not.toContain('font-family');
+    expect(cleaned).not.toContain('.card');
+    expect(cleaned).not.toContain('<style>');
+    expect(cleaned).toContain('• ESCALATED ADHERENCE ALERT Action Required: Medication Missed');
   });
 });

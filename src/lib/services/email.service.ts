@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { randomUUID } from 'crypto';
 import { circleClock } from '@/lib/time';
 import { AdherenceService } from './adherence.service';
+import { cleanNotificationText } from '@/lib/utils/sanitize';
 
 export class EmailService {
   private static checks = new Map<string, Promise<{ upcomingDoseEmailsSent: number; missedDoseEmailsSent: number; appointmentEmailsSent: number; refillEmailsSent: number }>>();
@@ -127,7 +128,7 @@ export class EmailService {
     db.dispatchedEmails.unshift(emailRecord);
     const recipient = db.members.find((m) => m.profileId === profileId && m.email.toLowerCase() === to.toLowerCase());
     if (recipient) db.notifications.unshift({ id: `notification_${randomUUID()}`, profileId, memberId: recipient.id,
-      title: subject, message: htmlBody.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').slice(0, 1200), createdAt: emailRecord.sentAt });
+      title: subject, message: cleanNotificationText(htmlBody).slice(0, 500), createdAt: emailRecord.sentAt });
     if (db.dispatchedEmails.length > 300) {
       db.dispatchedEmails = db.dispatchedEmails.slice(0, 300);
     }

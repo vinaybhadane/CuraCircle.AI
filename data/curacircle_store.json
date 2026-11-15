@@ -1,11 +1,139 @@
 {
   "notifications": [
     {
+      "id": "notification_29eb0056-64f6-4444-8e91-cd7bcd944bf7",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_db2dcc0a-5c7f-44ad-bc3c-ffbf6a5e9e3e",
+      "title": "[URGENT] Missed Dose Alert: XYZ missed Metformin (20:00)",
+      "message": "• ESCALATED ADHERENCE ALERT Action Required: Medication Missed Elder: XYZ (Age 60) Metformin - 500 mg Scheduled Time: 20:00 (Over 30 minutes overdue) Clinical Purpose: Not stated in prescription Instructions: Take 1 tablet twice daily at 08:00 and 20:00 by",
+      "createdAt": "2026-11-15T17:13:47.168Z"
+    },
+    {
+      "id": "notification_2280c9c2-4c56-4237-b89a-3317e4686318",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_9132e197-1ccd-4d1b-8194-4f792755af92",
+      "title": "[URGENT] Missed Dose Alert: XYZ missed Metformin (20:00)",
+      "message": "• ESCALATED ADHERENCE ALERT Action Required: Medication Missed Elder: XYZ (Age 60) Metformin - 500 mg Scheduled Time: 20:00 (Over 30 minutes overdue) Clinical Purpose: Not stated in prescription Instructions: Take 1 tablet twice daily at 08:00 and 20:00 by",
+      "createdAt": "2026-11-15T17:13:46.424Z"
+    },
+    {
+      "id": "notification_7d5085fc-912e-40fa-bee9-8d96c2e606ec",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_db2dcc0a-5c7f-44ad-bc3c-ffbf6a5e9e3e",
+      "title": "[URGENT] Missed Dose Alert: XYZ missed Metformin (08:00)",
+      "message": "• ESCALATED ADHERENCE ALERT Action Required: Medication Missed Elder: XYZ (Age 60) Metformin - 500 mg Scheduled Time: 08:00 (Over 30 minutes overdue) Clinical Purpose: Not stated in prescription Instructions: Take 1 tablet twice daily at 08:00 and 20:00 by",
+      "createdAt": "2026-11-15T17:13:46.019Z"
+    },
+    {
+      "id": "notification_23f82bde-ab82-4efe-8e15-dbfb13a828ca",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_9132e197-1ccd-4d1b-8194-4f792755af92",
+      "title": "[URGENT] Missed Dose Alert: XYZ missed Metformin (08:00)",
+      "message": "• ESCALATED ADHERENCE ALERT Action Required: Medication Missed Elder: XYZ (Age 60) Metformin - 500 mg Scheduled Time: 08:00 (Over 30 minutes overdue) Clinical Purpose: Not stated in prescription Instructions: Take 1 tablet twice daily at 08:00 and 20:00 by",
+      "createdAt": "2026-11-15T17:13:45.639Z"
+    },
+    {
+      "id": "notification_3d953c45-0f42-4fb5-8924-5c2b6b8a4663",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_db2dcc0a-5c7f-44ad-bc3c-ffbf6a5e9e3e",
+      "title": "[URGENT] Missed Dose Alert: XYZ missed Amlodipine (08:00)",
+      "message": "• ESCALATED ADHERENCE ALERT Action Required: Medication Missed Elder: XYZ (Age 60) Amlodipine - 5 mg Scheduled Time: 08:00 (Over 30 minutes overdue) Clinical Purpose: Not stated in prescription Instructions: Take 1 tablet once daily at 08:00 by mouth, with",
+      "createdAt": "2026-11-15T17:13:44.808Z"
+    },
+    {
+      "id": "notification_6fb0d7d7-f83b-469b-b0be-437100d23c60",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_9132e197-1ccd-4d1b-8194-4f792755af92",
+      "title": "[URGENT] Missed Dose Alert: XYZ missed Amlodipine (08:00)",
+      "message": "• ESCALATED ADHERENCE ALERT Action Required: Medication Missed Elder: XYZ (Age 60) Amlodipine - 5 mg Scheduled Time: 08:00 (Over 30 minutes overdue) Clinical Purpose: Not stated in prescription Instructions: Take 1 tablet once daily at 08:00 by mouth, with",
+      "createdAt": "2026-11-15T17:13:43.296Z"
+    },
+    {
+      "id": "notification_05e4d1ab-e7bb-4853-9a8f-305bdf2f68dd",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_9132e197-1ccd-4d1b-8194-4f792755af92",
+      "title": "Schedule updated for XYZ",
+      "message": "XYZ added a Gemini-generated prescription schedule for XYZ. Amlodipine (5 mg): 08:00 — Take 1 tablet once daily at 08:00 by mouth, with or without food, for 7 days. Metformin (500 mg): 08:00, 20:00 — Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner, for 7 days. Amlodipine (5 mg): 08:00 — Take 1 tablet once daily at 08:00 by mouth, with or without food. Metformin (500 mg): 08:00, 20:00 — Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner. Times are in Asia/Calcutta. Sign in with Google to view or edit the schedule.",
+      "createdAt": "2026-11-15T17:13:25.088Z"
+    },
+    {
+      "id": "notification_04a74db4-df31-4e28-ab39-11245fcaa656",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_db2dcc0a-5c7f-44ad-bc3c-ffbf6a5e9e3e",
+      "title": "Schedule updated for XYZ",
+      "message": "XYZ added a Gemini-generated prescription schedule for XYZ. Amlodipine (5 mg): 08:00 — Take 1 tablet once daily at 08:00 by mouth, with or without food, for 7 days. Metformin (500 mg): 08:00, 20:00 — Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner, for 7 days. Amlodipine (5 mg): 08:00 — Take 1 tablet once daily at 08:00 by mouth, with or without food. Metformin (500 mg): 08:00, 20:00 — Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner. Times are in Asia/Calcutta. Sign in with Google to view or edit the schedule.",
+      "createdAt": "2026-11-15T17:13:24.971Z"
+    },
+    {
+      "id": "notification_e7e5242b-7c5e-4fb8-8d9d-b1e14a7731c3",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_db2dcc0a-5c7f-44ad-bc3c-ffbf6a5e9e3e",
+      "title": "[URGENT] Missed Dose Alert: XYZ missed Metformin (20:00)",
+      "message": "• ESCALATED ADHERENCE ALERT Action Required: Medication Missed Elder: XYZ (Age 60) Metformin - 500 mg Scheduled Time: 20:00 (Over 30 minutes overdue) Clinical Purpose: Not stated in prescription Instructions: Take 1 tablet twice daily at 08:00 and 20:00 by",
+      "createdAt": "2026-11-15T17:08:47.275Z"
+    },
+    {
+      "id": "notification_1deb4a5d-a450-4ce6-a6a6-3da2445a63d6",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_9132e197-1ccd-4d1b-8194-4f792755af92",
+      "title": "[URGENT] Missed Dose Alert: XYZ missed Metformin (20:00)",
+      "message": "• ESCALATED ADHERENCE ALERT Action Required: Medication Missed Elder: XYZ (Age 60) Metformin - 500 mg Scheduled Time: 20:00 (Over 30 minutes overdue) Clinical Purpose: Not stated in prescription Instructions: Take 1 tablet twice daily at 08:00 and 20:00 by",
+      "createdAt": "2026-11-15T17:08:46.931Z"
+    },
+    {
+      "id": "notification_ccfeb613-d25c-4356-9c05-44e869507e1e",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_db2dcc0a-5c7f-44ad-bc3c-ffbf6a5e9e3e",
+      "title": "[URGENT] Missed Dose Alert: XYZ missed Metformin (08:00)",
+      "message": "• ESCALATED ADHERENCE ALERT Action Required: Medication Missed Elder: XYZ (Age 60) Metformin - 500 mg Scheduled Time: 08:00 (Over 30 minutes overdue) Clinical Purpose: Not stated in prescription Instructions: Take 1 tablet twice daily at 08:00 and 20:00 by",
+      "createdAt": "2026-11-15T17:08:46.494Z"
+    },
+    {
+      "id": "notification_8316b2be-38e7-45b1-bcf2-8a398d2ab0e9",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_9132e197-1ccd-4d1b-8194-4f792755af92",
+      "title": "[URGENT] Missed Dose Alert: XYZ missed Metformin (08:00)",
+      "message": "• ESCALATED ADHERENCE ALERT Action Required: Medication Missed Elder: XYZ (Age 60) Metformin - 500 mg Scheduled Time: 08:00 (Over 30 minutes overdue) Clinical Purpose: Not stated in prescription Instructions: Take 1 tablet twice daily at 08:00 and 20:00 by",
+      "createdAt": "2026-11-15T17:08:45.742Z"
+    },
+    {
+      "id": "notification_b1be7867-55e4-4c5c-90ee-a4f704f23cb5",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_db2dcc0a-5c7f-44ad-bc3c-ffbf6a5e9e3e",
+      "title": "[URGENT] Missed Dose Alert: XYZ missed Amlodipine (08:00)",
+      "message": "• ESCALATED ADHERENCE ALERT Action Required: Medication Missed Elder: XYZ (Age 60) Amlodipine - 5 mg Scheduled Time: 08:00 (Over 30 minutes overdue) Clinical Purpose: Not stated in prescription Instructions: Take 1 tablet once daily at 08:00 by mouth, with",
+      "createdAt": "2026-11-15T17:08:43.891Z"
+    },
+    {
+      "id": "notification_44e7dd95-c4af-491c-b4f9-9302ac5de828",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_9132e197-1ccd-4d1b-8194-4f792755af92",
+      "title": "[URGENT] Missed Dose Alert: XYZ missed Amlodipine (08:00)",
+      "message": "• ESCALATED ADHERENCE ALERT Action Required: Medication Missed Elder: XYZ (Age 60) Amlodipine - 5 mg Scheduled Time: 08:00 (Over 30 minutes overdue) Clinical Purpose: Not stated in prescription Instructions: Take 1 tablet once daily at 08:00 by mouth, with",
+      "createdAt": "2026-11-15T17:08:43.026Z"
+    },
+    {
+      "id": "notification_445e9b39-5095-4389-9893-fd17b08e0024",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_db2dcc0a-5c7f-44ad-bc3c-ffbf6a5e9e3e",
+      "title": "Schedule updated for XYZ",
+      "message": "XYZ added a Gemini-generated prescription schedule for XYZ. Amlodipine (5 mg): 08:00 — Take 1 tablet once daily at 08:00 by mouth, with or without food, for 7 days. Metformin (500 mg): 08:00, 20:00 — Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner, for 7 days. Times are in Asia/Calcutta. Sign in with Google to view or edit the schedule.",
+      "createdAt": "2026-11-15T17:08:10.463Z"
+    },
+    {
+      "id": "notification_a59a14c3-53e9-4cad-a132-2fef00a3bb88",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "memberId": "member_9132e197-1ccd-4d1b-8194-4f792755af92",
+      "title": "Schedule updated for XYZ",
+      "message": "XYZ added a Gemini-generated prescription schedule for XYZ. Amlodipine (5 mg): 08:00 — Take 1 tablet once daily at 08:00 by mouth, with or without food, for 7 days. Metformin (500 mg): 08:00, 20:00 — Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner, for 7 days. Times are in Asia/Calcutta. Sign in with Google to view or edit the schedule.",
+      "createdAt": "2026-11-15T17:08:09.914Z"
+    },
+    {
       "id": "notification_b3bde260-3191-42b7-943e-c0c28912d8ad",
       "profileId": "circle_7aa01d60-e198-4891-a35b-b75d13376fdb",
       "memberId": "member_b8926db9-1df5-4f79-a636-94e5af19e9e4",
       "title": "You joined XYZ’s care circle",
-      "message": " Hello PQR, You joined XYZ’s care circle. Sign in with Google using this email address to view notifications and add or modify the patient’s schedule. ",
+      "message": "Hello PQR, You joined XYZ’s care circle. Sign in with Google using this email address to view notifications and add or modify the patient’s schedule.",
       "createdAt": "2026-11-15T16:35:06.591Z"
     },
     {
@@ -13,7 +141,7 @@
       "profileId": "circle_7aa01d60-e198-4891-a35b-b75d13376fdb",
       "memberId": "member_2dfb089a-77c4-4e79-bf43-fb258343c9c5",
       "title": "You joined XYZ’s care circle",
-      "message": " Hello ABC, You joined XYZ’s care circle. Sign in with Google using this email address to view notifications and add or modify the patient’s schedule. ",
+      "message": "Hello ABC, You joined XYZ’s care circle. Sign in with Google using this email address to view notifications and add or modify the patient’s schedule.",
       "createdAt": "2026-11-15T16:35:06.577Z"
     },
     {
@@ -21,7 +149,7 @@
       "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
       "memberId": "member_db2dcc0a-5c7f-44ad-bc3c-ffbf6a5e9e3e",
       "title": "You joined XYZ’s care circle",
-      "message": " Hello PQR, You joined XYZ’s care circle. Sign in with Google using this email address to view notifications and add or modify the patient’s schedule. ",
+      "message": "Hello PQR, You joined XYZ’s care circle. Sign in with Google using this email address to view notifications and add or modify the patient’s schedule.",
       "createdAt": "2026-11-15T16:19:23.133Z"
     },
     {
@@ -29,7 +157,7 @@
       "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
       "memberId": "member_9132e197-1ccd-4d1b-8194-4f792755af92",
       "title": "You joined XYZ’s care circle",
-      "message": " Hello ABC, You joined XYZ’s care circle. Sign in with Google using this email address to view notifications and add or modify the patient’s schedule. ",
+      "message": "Hello ABC, You joined XYZ’s care circle. Sign in with Google using this email address to view notifications and add or modify the patient’s schedule.",
       "createdAt": "2026-11-15T16:19:23.052Z"
     }
   ],
@@ -86,6 +214,114 @@
       "id": "rx_f9d9b804-c0a9-4553-bacf-0b194ed03433",
       "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
       "createdAt": "2026-11-15T16:21:32.377Z"
+    },
+    {
+      "medications": [
+        {
+          "name": "Amlodipine",
+          "genericName": "Amlodipine",
+          "dosage": "5 mg",
+          "form": "TABLET",
+          "color": "#0284c7",
+          "shape": "Not provided",
+          "instructions": "Take 1 tablet once daily at 08:00 by mouth, with or without food, for 7 days.",
+          "purpose": "Not stated in prescription",
+          "foodRequirement": "NO_RESTRICTION",
+          "frequency": "DAILY",
+          "scheduledTimes": [
+            "08:00"
+          ],
+          "active": true,
+          "pillCountCurrent": 7,
+          "pillCountRefillThreshold": 0,
+          "prescribedBy": "Dr. Demo Example (fictional)",
+          "startDate": "2026-11-15",
+          "endDate": "2026-11-21"
+        },
+        {
+          "name": "Metformin",
+          "genericName": "Metformin",
+          "dosage": "500 mg",
+          "form": "TABLET",
+          "color": "#0284c7",
+          "shape": "Not provided",
+          "instructions": "Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner, for 7 days.",
+          "purpose": "Not stated in prescription",
+          "foodRequirement": "WITH_FOOD",
+          "frequency": "TWICE_DAILY",
+          "scheduledTimes": [
+            "08:00",
+            "20:00"
+          ],
+          "active": true,
+          "pillCountCurrent": 14,
+          "pillCountRefillThreshold": 0,
+          "prescribedBy": "Dr. Demo Example (fictional)",
+          "startDate": "2026-11-15",
+          "endDate": "2026-11-21"
+        }
+      ],
+      "warnings": [
+        "This document is marked as a SAMPLE PRESCRIPTION / DEMO ONLY and is not intended for clinical use."
+      ],
+      "id": "rx_8fef33fe-a98a-4d2c-8917-13d6f8028258",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "createdAt": "2026-11-15T17:07:57.690Z",
+      "appliedAt": "2026-11-15T17:08:01.403Z"
+    },
+    {
+      "medications": [
+        {
+          "name": "Amlodipine",
+          "genericName": "Amlodipine",
+          "dosage": "5 mg",
+          "form": "TABLET",
+          "color": "#0284c7",
+          "shape": "Not provided",
+          "instructions": "Take 1 tablet once daily at 08:00 by mouth, with or without food.",
+          "purpose": "Not stated in prescription",
+          "foodRequirement": "NO_RESTRICTION",
+          "frequency": "DAILY",
+          "scheduledTimes": [
+            "08:00"
+          ],
+          "active": true,
+          "pillCountCurrent": 7,
+          "pillCountRefillThreshold": 0,
+          "prescribedBy": "Dr. Demo Example (fictional)",
+          "startDate": "2026-11-15",
+          "endDate": "2026-11-21"
+        },
+        {
+          "name": "Metformin",
+          "genericName": "Metformin",
+          "dosage": "500 mg",
+          "form": "TABLET",
+          "color": "#0284c7",
+          "shape": "Not provided",
+          "instructions": "Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner.",
+          "purpose": "Not stated in prescription",
+          "foodRequirement": "WITH_FOOD",
+          "frequency": "TWICE_DAILY",
+          "scheduledTimes": [
+            "08:00",
+            "20:00"
+          ],
+          "active": true,
+          "pillCountCurrent": 14,
+          "pillCountRefillThreshold": 0,
+          "prescribedBy": "Dr. Demo Example (fictional)",
+          "startDate": "2026-11-15",
+          "endDate": "2026-11-21"
+        }
+      ],
+      "warnings": [
+        "This document is explicitly marked as a DEMO ONLY prescription and is sample data not intended for clinical use."
+      ],
+      "id": "rx_296d9d16-5899-4a98-81e4-6e357d002224",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "createdAt": "2026-11-15T17:13:20.504Z",
+      "appliedAt": "2026-11-15T17:13:24.089Z"
     }
   ],
   "profiles": [
@@ -451,6 +687,108 @@
       "startDate": "2026-03-10",
       "createdAt": "2026-11-15T10:20:55.043Z",
       "updatedAt": "2026-11-15T10:20:55.043Z"
+    },
+    {
+      "name": "Amlodipine",
+      "genericName": "Amlodipine",
+      "dosage": "5 mg",
+      "form": "TABLET",
+      "color": "#0284c7",
+      "shape": "Not provided",
+      "instructions": "Take 1 tablet once daily at 08:00 by mouth, with or without food, for 7 days.",
+      "purpose": "Not stated in prescription",
+      "foodRequirement": "NO_RESTRICTION",
+      "frequency": "DAILY",
+      "scheduledTimes": [
+        "08:00"
+      ],
+      "active": true,
+      "pillCountCurrent": 6,
+      "pillCountRefillThreshold": 0,
+      "prescribedBy": "Dr. Demo Example (fictional)",
+      "startDate": "2026-11-15",
+      "endDate": "2026-11-21",
+      "id": "med_1794762481389_ta2i",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "createdAt": "2026-11-15T17:08:01.389Z",
+      "updatedAt": "2026-11-15T17:57:01.999Z"
+    },
+    {
+      "name": "Metformin",
+      "genericName": "Metformin",
+      "dosage": "500 mg",
+      "form": "TABLET",
+      "color": "#0284c7",
+      "shape": "Not provided",
+      "instructions": "Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner, for 7 days.",
+      "purpose": "Not stated in prescription",
+      "foodRequirement": "WITH_FOOD",
+      "frequency": "TWICE_DAILY",
+      "scheduledTimes": [
+        "08:00",
+        "20:00"
+      ],
+      "active": true,
+      "pillCountCurrent": 14,
+      "pillCountRefillThreshold": 0,
+      "prescribedBy": "Dr. Demo Example (fictional)",
+      "startDate": "2026-11-15",
+      "endDate": "2026-11-21",
+      "id": "med_1794762481397_x76b",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "createdAt": "2026-11-15T17:08:01.397Z",
+      "updatedAt": "2026-11-15T17:08:01.397Z"
+    },
+    {
+      "name": "Amlodipine",
+      "genericName": "Amlodipine",
+      "dosage": "5 mg",
+      "form": "TABLET",
+      "color": "#0284c7",
+      "shape": "Not provided",
+      "instructions": "Take 1 tablet once daily at 08:00 by mouth, with or without food.",
+      "purpose": "Not stated in prescription",
+      "foodRequirement": "NO_RESTRICTION",
+      "frequency": "DAILY",
+      "scheduledTimes": [
+        "08:00"
+      ],
+      "active": true,
+      "pillCountCurrent": 7,
+      "pillCountRefillThreshold": 0,
+      "prescribedBy": "Dr. Demo Example (fictional)",
+      "startDate": "2026-11-15",
+      "endDate": "2026-11-21",
+      "id": "med_1794762804071_tig9",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "createdAt": "2026-11-15T17:13:24.071Z",
+      "updatedAt": "2026-11-15T17:13:24.071Z"
+    },
+    {
+      "name": "Metformin",
+      "genericName": "Metformin",
+      "dosage": "500 mg",
+      "form": "TABLET",
+      "color": "#0284c7",
+      "shape": "Not provided",
+      "instructions": "Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner.",
+      "purpose": "Not stated in prescription",
+      "foodRequirement": "WITH_FOOD",
+      "frequency": "TWICE_DAILY",
+      "scheduledTimes": [
+        "08:00",
+        "20:00"
+      ],
+      "active": true,
+      "pillCountCurrent": 14,
+      "pillCountRefillThreshold": 0,
+      "prescribedBy": "Dr. Demo Example (fictional)",
+      "startDate": "2026-11-15",
+      "endDate": "2026-11-21",
+      "id": "med_1794762804080_gv0l",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "createdAt": "2026-11-15T17:13:24.081Z",
+      "updatedAt": "2026-11-15T17:13:24.081Z"
     }
   ],
   "doseLogs": [
@@ -574,6 +912,75 @@
       "missedAlertEscalatedAt": "2026-11-15T14:21:40.102Z",
       "actualTime": "2026-11-15T14:32:28.122Z",
       "takenByRole": "ELDER"
+    },
+    {
+      "id": "dose_med_1794762481389_ta2i_2026-11-15_08:00",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "medicationId": "med_1794762481389_ta2i",
+      "medicationName": "Amlodipine",
+      "dosage": "5 mg",
+      "scheduledTime": "08:00",
+      "scheduledDate": "2026-11-15",
+      "status": "TAKEN",
+      "missedAlertEscalatedAt": "2026-11-15T17:08:42.238Z",
+      "actualTime": "2026-11-15T17:57:01.999Z",
+      "takenByMemberId": "member_2e0dd5e0-ed5a-4f57-8843-a172e9442596",
+      "takenByRole": "ELDER"
+    },
+    {
+      "id": "dose_med_1794762481397_x76b_2026-11-15_08:00",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "medicationId": "med_1794762481397_x76b",
+      "medicationName": "Metformin",
+      "dosage": "500 mg",
+      "scheduledTime": "08:00",
+      "scheduledDate": "2026-11-15",
+      "status": "MISSED",
+      "missedAlertEscalatedAt": "2026-11-15T17:08:43.897Z"
+    },
+    {
+      "id": "dose_med_1794762481397_x76b_2026-11-15_20:00",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "medicationId": "med_1794762481397_x76b",
+      "medicationName": "Metformin",
+      "dosage": "500 mg",
+      "scheduledTime": "20:00",
+      "scheduledDate": "2026-11-15",
+      "status": "MISSED",
+      "missedAlertEscalatedAt": "2026-11-15T17:08:46.500Z"
+    },
+    {
+      "id": "dose_med_1794762804071_tig9_2026-11-15_08:00",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "medicationId": "med_1794762804071_tig9",
+      "medicationName": "Amlodipine",
+      "dosage": "5 mg",
+      "scheduledTime": "08:00",
+      "scheduledDate": "2026-11-15",
+      "status": "MISSED",
+      "missedAlertEscalatedAt": "2026-11-15T17:13:41.559Z"
+    },
+    {
+      "id": "dose_med_1794762804080_gv0l_2026-11-15_08:00",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "medicationId": "med_1794762804080_gv0l",
+      "medicationName": "Metformin",
+      "dosage": "500 mg",
+      "scheduledTime": "08:00",
+      "scheduledDate": "2026-11-15",
+      "status": "MISSED",
+      "missedAlertEscalatedAt": "2026-11-15T17:13:44.815Z"
+    },
+    {
+      "id": "dose_med_1794762804080_gv0l_2026-11-15_20:00",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "medicationId": "med_1794762804080_gv0l",
+      "medicationName": "Metformin",
+      "dosage": "500 mg",
+      "scheduledTime": "20:00",
+      "scheduledDate": "2026-11-15",
+      "status": "MISSED",
+      "missedAlertEscalatedAt": "2026-11-15T17:13:46.026Z"
     }
   ],
   "appointments": [
@@ -693,6 +1100,266 @@
   ],
   "dispatchedEmails": [
     {
+      "id": "email_1794762826432_b3jv",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "bhadane123vinay@gmail.com",
+      "toName": "PQR",
+      "subject": "[URGENT] Missed Dose Alert: XYZ missed Metformin (20:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>XYZ</strong> (Age 60)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Metformin - 500 mg</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 20:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> Not stated in prescription</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner.</p>\n          </div>\n\n          <p>Dear PQR,</p>\n          <p>Our smart monitoring system detected that XYZ has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:\"></a></p>\n            <p><strong>Care circle contact:</strong> ABC &bull; Phone not provided</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T17:13:47.168Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_1794762804080_gv0l",
+        "doseId": "dose_med_1794762804080_gv0l_2026-11-15_20:00",
+        "scheduledTime": "20:00",
+        "brevoMessageId": "<202611151713.79870076157@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794762826026_gpsx",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "vinaybhadane06@gmail.com",
+      "toName": "ABC",
+      "subject": "[URGENT] Missed Dose Alert: XYZ missed Metformin (20:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>XYZ</strong> (Age 60)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Metformin - 500 mg</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 20:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> Not stated in prescription</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner.</p>\n          </div>\n\n          <p>Dear ABC,</p>\n          <p>Our smart monitoring system detected that XYZ has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:\"></a></p>\n            <p><strong>Care circle contact:</strong> ABC &bull; Phone not provided</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T17:13:46.424Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_1794762804080_gv0l",
+        "doseId": "dose_med_1794762804080_gv0l_2026-11-15_20:00",
+        "scheduledTime": "20:00",
+        "brevoMessageId": "<202611151713.19354181373@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794762825648_r9zt",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "bhadane123vinay@gmail.com",
+      "toName": "PQR",
+      "subject": "[URGENT] Missed Dose Alert: XYZ missed Metformin (08:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>XYZ</strong> (Age 60)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Metformin - 500 mg</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 08:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> Not stated in prescription</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner.</p>\n          </div>\n\n          <p>Dear PQR,</p>\n          <p>Our smart monitoring system detected that XYZ has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:\"></a></p>\n            <p><strong>Care circle contact:</strong> ABC &bull; Phone not provided</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T17:13:46.019Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_1794762804080_gv0l",
+        "doseId": "dose_med_1794762804080_gv0l_2026-11-15_08:00",
+        "scheduledTime": "08:00",
+        "brevoMessageId": "<202611151713.40102950537@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794762824815_okld",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "vinaybhadane06@gmail.com",
+      "toName": "ABC",
+      "subject": "[URGENT] Missed Dose Alert: XYZ missed Metformin (08:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>XYZ</strong> (Age 60)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Metformin - 500 mg</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 08:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> Not stated in prescription</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner.</p>\n          </div>\n\n          <p>Dear ABC,</p>\n          <p>Our smart monitoring system detected that XYZ has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:\"></a></p>\n            <p><strong>Care circle contact:</strong> ABC &bull; Phone not provided</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T17:13:45.639Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_1794762804080_gv0l",
+        "doseId": "dose_med_1794762804080_gv0l_2026-11-15_08:00",
+        "scheduledTime": "08:00",
+        "brevoMessageId": "<202611151713.60680435328@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794762823304_sbj3",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "bhadane123vinay@gmail.com",
+      "toName": "PQR",
+      "subject": "[URGENT] Missed Dose Alert: XYZ missed Amlodipine (08:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>XYZ</strong> (Age 60)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Amlodipine - 5 mg</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 08:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> Not stated in prescription</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 tablet once daily at 08:00 by mouth, with or without food.</p>\n          </div>\n\n          <p>Dear PQR,</p>\n          <p>Our smart monitoring system detected that XYZ has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:\"></a></p>\n            <p><strong>Care circle contact:</strong> ABC &bull; Phone not provided</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T17:13:44.808Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_1794762804071_tig9",
+        "doseId": "dose_med_1794762804071_tig9_2026-11-15_08:00",
+        "scheduledTime": "08:00",
+        "brevoMessageId": "<202611151713.71207308456@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794762821559_uptr",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "vinaybhadane06@gmail.com",
+      "toName": "ABC",
+      "subject": "[URGENT] Missed Dose Alert: XYZ missed Amlodipine (08:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>XYZ</strong> (Age 60)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Amlodipine - 5 mg</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 08:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> Not stated in prescription</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 tablet once daily at 08:00 by mouth, with or without food.</p>\n          </div>\n\n          <p>Dear ABC,</p>\n          <p>Our smart monitoring system detected that XYZ has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:\"></a></p>\n            <p><strong>Care circle contact:</strong> ABC &bull; Phone not provided</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T17:13:43.296Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_1794762804071_tig9",
+        "doseId": "dose_med_1794762804071_tig9_2026-11-15_08:00",
+        "scheduledTime": "08:00",
+        "brevoMessageId": "<202611151713.91241576101@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794762804096_ibr7",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "vinaybhadane06@gmail.com",
+      "toName": "ABC",
+      "subject": "Schedule updated for XYZ",
+      "htmlBody": "<p>XYZ added a Gemini-generated prescription schedule for XYZ.</p><ul><li>Amlodipine (5 mg): 08:00 — Take 1 tablet once daily at 08:00 by mouth, with or without food, for 7 days.</li><li>Metformin (500 mg): 08:00, 20:00 — Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner, for 7 days.</li><li>Amlodipine (5 mg): 08:00 — Take 1 tablet once daily at 08:00 by mouth, with or without food.</li><li>Metformin (500 mg): 08:00, 20:00 — Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner.</li></ul><p>Times are in Asia/Calcutta. Sign in with Google to view or edit the schedule.</p>",
+      "sentAt": "2026-11-15T17:13:25.088Z",
+      "triggerType": "SCHEDULE_UPDATED",
+      "status": "SENT",
+      "meta": {
+        "brevoMessageId": "<202611151713.99772792372@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794762804100_pxs1",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "bhadane123vinay@gmail.com",
+      "toName": "PQR",
+      "subject": "Schedule updated for XYZ",
+      "htmlBody": "<p>XYZ added a Gemini-generated prescription schedule for XYZ.</p><ul><li>Amlodipine (5 mg): 08:00 — Take 1 tablet once daily at 08:00 by mouth, with or without food, for 7 days.</li><li>Metformin (500 mg): 08:00, 20:00 — Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner, for 7 days.</li><li>Amlodipine (5 mg): 08:00 — Take 1 tablet once daily at 08:00 by mouth, with or without food.</li><li>Metformin (500 mg): 08:00, 20:00 — Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner.</li></ul><p>Times are in Asia/Calcutta. Sign in with Google to view or edit the schedule.</p>",
+      "sentAt": "2026-11-15T17:13:24.971Z",
+      "triggerType": "SCHEDULE_UPDATED",
+      "status": "SENT",
+      "meta": {
+        "brevoMessageId": "<202611151713.99031451375@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794762526936_lpaj",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "bhadane123vinay@gmail.com",
+      "toName": "PQR",
+      "subject": "[URGENT] Missed Dose Alert: XYZ missed Metformin (20:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>XYZ</strong> (Age 60)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Metformin - 500 mg</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 20:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> Not stated in prescription</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner, for 7 days.</p>\n          </div>\n\n          <p>Dear PQR,</p>\n          <p>Our smart monitoring system detected that XYZ has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:\"></a></p>\n            <p><strong>Care circle contact:</strong> ABC &bull; Phone not provided</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T17:08:47.275Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_1794762481397_x76b",
+        "doseId": "dose_med_1794762481397_x76b_2026-11-15_20:00",
+        "scheduledTime": "20:00",
+        "brevoMessageId": "<202611151708.35903647377@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794762526500_fwl9",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "vinaybhadane06@gmail.com",
+      "toName": "ABC",
+      "subject": "[URGENT] Missed Dose Alert: XYZ missed Metformin (20:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>XYZ</strong> (Age 60)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Metformin - 500 mg</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 20:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> Not stated in prescription</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner, for 7 days.</p>\n          </div>\n\n          <p>Dear ABC,</p>\n          <p>Our smart monitoring system detected that XYZ has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:\"></a></p>\n            <p><strong>Care circle contact:</strong> ABC &bull; Phone not provided</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T17:08:46.931Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_1794762481397_x76b",
+        "doseId": "dose_med_1794762481397_x76b_2026-11-15_20:00",
+        "scheduledTime": "20:00",
+        "brevoMessageId": "<202611151708.51479176356@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794762525749_dpu6",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "bhadane123vinay@gmail.com",
+      "toName": "PQR",
+      "subject": "[URGENT] Missed Dose Alert: XYZ missed Metformin (08:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>XYZ</strong> (Age 60)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Metformin - 500 mg</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 08:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> Not stated in prescription</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner, for 7 days.</p>\n          </div>\n\n          <p>Dear PQR,</p>\n          <p>Our smart monitoring system detected that XYZ has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:\"></a></p>\n            <p><strong>Care circle contact:</strong> ABC &bull; Phone not provided</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T17:08:46.494Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_1794762481397_x76b",
+        "doseId": "dose_med_1794762481397_x76b_2026-11-15_08:00",
+        "scheduledTime": "08:00",
+        "brevoMessageId": "<202611151708.57084942852@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794762523897_qyl1",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "vinaybhadane06@gmail.com",
+      "toName": "ABC",
+      "subject": "[URGENT] Missed Dose Alert: XYZ missed Metformin (08:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>XYZ</strong> (Age 60)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Metformin - 500 mg</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 08:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> Not stated in prescription</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner, for 7 days.</p>\n          </div>\n\n          <p>Dear ABC,</p>\n          <p>Our smart monitoring system detected that XYZ has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:\"></a></p>\n            <p><strong>Care circle contact:</strong> ABC &bull; Phone not provided</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T17:08:45.742Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_1794762481397_x76b",
+        "doseId": "dose_med_1794762481397_x76b_2026-11-15_08:00",
+        "scheduledTime": "08:00",
+        "brevoMessageId": "<202611151708.29330772415@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794762523033_y1t2",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "bhadane123vinay@gmail.com",
+      "toName": "PQR",
+      "subject": "[URGENT] Missed Dose Alert: XYZ missed Amlodipine (08:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>XYZ</strong> (Age 60)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Amlodipine - 5 mg</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 08:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> Not stated in prescription</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 tablet once daily at 08:00 by mouth, with or without food, for 7 days.</p>\n          </div>\n\n          <p>Dear PQR,</p>\n          <p>Our smart monitoring system detected that XYZ has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:\"></a></p>\n            <p><strong>Care circle contact:</strong> ABC &bull; Phone not provided</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T17:08:43.891Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_1794762481389_ta2i",
+        "doseId": "dose_med_1794762481389_ta2i_2026-11-15_08:00",
+        "scheduledTime": "08:00",
+        "brevoMessageId": "<202611151708.64105621322@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794762522239_wear",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "vinaybhadane06@gmail.com",
+      "toName": "ABC",
+      "subject": "[URGENT] Missed Dose Alert: XYZ missed Amlodipine (08:00)",
+      "htmlBody": "\n      <!DOCTYPE html>\n      <html>\n      <head>\n        <meta charset=\"utf-8\">\n        <style>\n          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #fff1f2; margin: 0; padding: 24px; }\n          .card { background-color: #ffffff; border-radius: 12px; border: 2px solid #e11d48; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1); }\n          .badge-alert { display: inline-block; background-color: #ffe4e6; color: #be123c; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }\n          .action-box { background-color: #fff1f2; border-radius: 8px; padding: 18px; margin: 20px 0; border-left: 4px solid #e11d48; }\n          .btn { display: inline-block; background-color: #e11d48; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 12px; }\n          .footer { margin-top: 24px; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }\n        </style>\n      </head>\n      <body>\n        <div class=\"card\">\n          <span class=\"badge-alert\">&bull; ESCALATED ADHERENCE ALERT</span>\n          <h2 style=\"color: #be123c; margin: 12px 0 4px 0;\">Action Required: Medication Missed</h2>\n          <p style=\"margin: 0; color: #64748b;\">Elder: <strong>XYZ</strong> (Age 60)</p>\n          \n          <div class=\"action-box\">\n            <h3 style=\"margin-top: 0; color: #be123c;\">Amlodipine - 5 mg</h3>\n            <p style=\"margin: 4px 0;\"><strong>Scheduled Time:</strong> 08:00 (Over 30 minutes overdue)</p>\n            <p style=\"margin: 4px 0;\"><strong>Clinical Purpose:</strong> Not stated in prescription</p>\n            <p style=\"margin: 4px 0;\"><strong>Instructions:</strong> Take 1 tablet once daily at 08:00 by mouth, with or without food, for 7 days.</p>\n          </div>\n\n          <p>Dear ABC,</p>\n          <p>Our smart monitoring system detected that XYZ has not confirmed taking this critical dose. As a designated Care Circle family guardian, please check in on them to ensure their safety and well-being.</p>\n          \n          <div style=\"margin: 24px 0;\">\n            <p><strong>Elder Phone:</strong> <a href=\"tel:\"></a></p>\n            <p><strong>Care circle contact:</strong> ABC &bull; Phone not provided</p>\n          </div>\n\n          <div class=\"footer\">\n            <p>Automated Care Circle Escalation &bull; CuraCircle Health AI Guardian</p>\n          </div>\n        </div>\n      </body>\n      </html>\n    ",
+      "sentAt": "2026-11-15T17:08:43.026Z",
+      "triggerType": "MISSED_DOSE_ESCALATION",
+      "status": "SENT",
+      "meta": {
+        "medicationId": "med_1794762481389_ta2i",
+        "doseId": "dose_med_1794762481389_ta2i_2026-11-15_08:00",
+        "scheduledTime": "08:00",
+        "brevoMessageId": "<202611151708.89254893469@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794762481408_54x7",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "bhadane123vinay@gmail.com",
+      "toName": "PQR",
+      "subject": "Schedule updated for XYZ",
+      "htmlBody": "<p>XYZ added a Gemini-generated prescription schedule for XYZ.</p><ul><li>Amlodipine (5 mg): 08:00 — Take 1 tablet once daily at 08:00 by mouth, with or without food, for 7 days.</li><li>Metformin (500 mg): 08:00, 20:00 — Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner, for 7 days.</li></ul><p>Times are in Asia/Calcutta. Sign in with Google to view or edit the schedule.</p>",
+      "sentAt": "2026-11-15T17:08:10.463Z",
+      "triggerType": "SCHEDULE_UPDATED",
+      "status": "SENT",
+      "meta": {
+        "brevoMessageId": "<202611151708.22070593311@smtp-relay.mailin.fr>"
+      }
+    },
+    {
+      "id": "email_1794762481407_d7eb",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "to": "vinaybhadane06@gmail.com",
+      "toName": "ABC",
+      "subject": "Schedule updated for XYZ",
+      "htmlBody": "<p>XYZ added a Gemini-generated prescription schedule for XYZ.</p><ul><li>Amlodipine (5 mg): 08:00 — Take 1 tablet once daily at 08:00 by mouth, with or without food, for 7 days.</li><li>Metformin (500 mg): 08:00, 20:00 — Take 1 tablet twice daily at 08:00 and 20:00 by mouth, with breakfast and dinner, for 7 days.</li></ul><p>Times are in Asia/Calcutta. Sign in with Google to view or edit the schedule.</p>",
+      "sentAt": "2026-11-15T17:08:09.914Z",
+      "triggerType": "SCHEDULE_UPDATED",
+      "status": "SENT",
+      "meta": {
+        "brevoMessageId": "<202611151708.24253731032@smtp-relay.mailin.fr>"
+      }
+    },
+    {
       "id": "email_1794760505744_3xf8",
       "profileId": "circle_7aa01d60-e198-4891-a35b-b75d13376fdb",
       "to": "bhadane123vinay@gmail.com",
@@ -772,6 +1439,195 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "audit_1794765422003_rec9a",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:57:02.003Z",
+      "actorName": "XYZ",
+      "actorRole": "ELDER",
+      "action": "DOSE_MARKED_TAKEN",
+      "details": "Dose Amlodipine (5 mg) scheduled for 08:00 marked as TAKEN by XYZ."
+    },
+    {
+      "id": "audit_1794762827172_zaoj7",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:13:47.172Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Email \"[URGENT] Missed Dose Alert: XYZ missed Metformin (20:00)\" for PQR (bhadane123vinay@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762826429_pzxy1",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:13:46.429Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Email \"[URGENT] Missed Dose Alert: XYZ missed Metformin (20:00)\" for ABC (vinaybhadane06@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762826022_hkzc2",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:13:46.022Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Email \"[URGENT] Missed Dose Alert: XYZ missed Metformin (08:00)\" for PQR (bhadane123vinay@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762825643_oxt00",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:13:45.643Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Email \"[URGENT] Missed Dose Alert: XYZ missed Metformin (08:00)\" for ABC (vinaybhadane06@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762824812_90ozz",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:13:44.812Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Email \"[URGENT] Missed Dose Alert: XYZ missed Amlodipine (08:00)\" for PQR (bhadane123vinay@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762823300_e0am6",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:13:43.300Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Email \"[URGENT] Missed Dose Alert: XYZ missed Amlodipine (08:00)\" for ABC (vinaybhadane06@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762805092_k2k6d",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:13:25.092Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_SCHEDULE_UPDATED",
+      "details": "Email \"Schedule updated for XYZ\" for ABC (vinaybhadane06@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762804975_t7alw",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:13:24.975Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_SCHEDULE_UPDATED",
+      "details": "Email \"Schedule updated for XYZ\" for PQR (bhadane123vinay@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762804085_30j12",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:13:24.085Z",
+      "actorName": "XYZ",
+      "actorRole": "ELDER",
+      "action": "MEDICATION_ADDED",
+      "details": "Added medication Metformin (500 mg) scheduled at [08:00, 20:00] by XYZ."
+    },
+    {
+      "id": "audit_1794762804076_9bedk",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:13:24.076Z",
+      "actorName": "XYZ",
+      "actorRole": "ELDER",
+      "action": "MEDICATION_ADDED",
+      "details": "Added medication Amlodipine (5 mg) scheduled at [08:00] by XYZ."
+    },
+    {
+      "id": "audit_1794762527279_wun1a",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:08:47.279Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Email \"[URGENT] Missed Dose Alert: XYZ missed Metformin (20:00)\" for PQR (bhadane123vinay@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762526933_jvh0w",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:08:46.933Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Email \"[URGENT] Missed Dose Alert: XYZ missed Metformin (20:00)\" for ABC (vinaybhadane06@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762526497_lrfx8",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:08:46.497Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Email \"[URGENT] Missed Dose Alert: XYZ missed Metformin (08:00)\" for PQR (bhadane123vinay@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762525746_o30i5",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:08:45.746Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Email \"[URGENT] Missed Dose Alert: XYZ missed Metformin (08:00)\" for ABC (vinaybhadane06@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762523894_7mzjl",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:08:43.894Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Email \"[URGENT] Missed Dose Alert: XYZ missed Amlodipine (08:00)\" for PQR (bhadane123vinay@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762523030_wmu7o",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:08:43.030Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_MISSED_DOSE_ESCALATION",
+      "details": "Email \"[URGENT] Missed Dose Alert: XYZ missed Amlodipine (08:00)\" for ABC (vinaybhadane06@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762490466_xbxr1",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:08:10.466Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_SCHEDULE_UPDATED",
+      "details": "Email \"Schedule updated for XYZ\" for PQR (bhadane123vinay@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762489918_kowou",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:08:09.918Z",
+      "actorName": "PRIMARY_CAREGIVER",
+      "actorRole": "PRIMARY_CAREGIVER",
+      "action": "EMAIL_DISPATCHED_SCHEDULE_UPDATED",
+      "details": "Email \"Schedule updated for XYZ\" for ABC (vinaybhadane06@gmail.com): SENT."
+    },
+    {
+      "id": "audit_1794762481400_o6cyd",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:08:01.400Z",
+      "actorName": "XYZ",
+      "actorRole": "ELDER",
+      "action": "MEDICATION_ADDED",
+      "details": "Added medication Metformin (500 mg) scheduled at [08:00, 20:00] by XYZ."
+    },
+    {
+      "id": "audit_1794762481394_j3tih",
+      "profileId": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",
+      "timestamp": "2026-11-15T17:08:01.394Z",
+      "actorName": "XYZ",
+      "actorRole": "ELDER",
+      "action": "MEDICATION_ADDED",
+      "details": "Added medication Amlodipine (5 mg) scheduled at [08:00] by XYZ."
+    },
     {
       "id": "audit_1794760506595_a4ri3",
       "profileId": "circle_7aa01d60-e198-4891-a35b-b75d13376fdb",

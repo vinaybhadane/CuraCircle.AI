@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Mail, Clock, AlertTriangle, Calendar, PhoneCall, RefreshCw, X, Check, Eye } from 'lucide-react';
 import { DispatchedEmail, CareNotification } from '@/lib/types';
+import { cleanNotificationText } from '@/lib/utils/sanitize';
 
 interface OutboxModalProps {
   isOpen: boolean;
@@ -141,11 +142,44 @@ export const OutboxModal: React.FC<OutboxModalProps> = ({
           }}>Mark all read</button>
         </div>
         {notice && <p role="status" className="text-xs text-slate-600">{notice}</p>}
-        {tab === 'notifications' && <div className="space-y-3 max-h-[60vh] overflow-y-auto">
+        {tab === 'notifications' && <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
           {notifications.length === 0 && <p className="text-sm text-slate-500 text-center py-8">No notifications yet. Care circle invitations, schedule changes and dose alerts appear here.</p>}
-          {notifications.map((notification) => <article key={notification.id} className={`p-4 rounded-2xl border ${notification.readAt ? 'bg-slate-50 border-slate-200' : 'bg-sky-50 border-sky-200'}`}>
-            <h4 className="text-sm font-bold">{notification.title}</h4><p className="text-xs text-slate-600 mt-1">{notification.message}</p><time className="text-xs text-slate-400">{new Date(notification.createdAt).toLocaleString()}</time>
-          </article>)}
+          {notifications.map((notification) => {
+            const isUrgent = notification.title.toLowerCase().includes('missed') || notification.title.toLowerCase().includes('urgent') || notification.title.toLowerCase().includes('emergency');
+            return (
+              <article key={notification.id} className={`p-4 rounded-2xl border transition-all ${
+                notification.readAt 
+                  ? 'bg-slate-50 border-slate-200 text-slate-700' 
+                  : isUrgent 
+                    ? 'bg-rose-50/80 border-rose-300 shadow-sm' 
+                    : 'bg-sky-50 border-sky-200'
+              }`}>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    {isUrgent && <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-600 text-white">Urgent</span>}
+                    <h4 className={`text-sm font-bold ${isUrgent ? 'text-rose-950' : 'text-slate-900'}`}>{notification.title}</h4>
+                  </div>
+                  {!notification.readAt && <span className="inline-block w-2 h-2 rounded-full bg-brand-600 animate-pulse" title="Unread" />}
+                </div>
+                <p className="text-xs text-slate-700 mt-2 leading-relaxed">{cleanNotificationText(notification.message)}</p>
+                <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-200/60">
+                  <time className="text-[11px] text-slate-500 font-medium">{new Date(notification.createdAt).toLocaleString()}</time>
+                  {!notification.readAt && (
+                    <button 
+                      type="button"
+                      className="text-[11px] font-bold text-brand-600 hover:text-brand-800"
+                      onClick={async () => {
+                        await fetch('/api/notifications', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ notificationId: notification.id }) });
+                        await loadEmails();
+                      }}
+                    >
+                      Mark read
+                    </button>
+                  )}
+                </div>
+              </article>
+            );
+          })}
         </div>}
         {/* Two-Pane Outbox Inspector */}
         {tab === 'outbox' &&
