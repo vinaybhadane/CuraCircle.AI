@@ -12,6 +12,7 @@ import {
   AuditLog,
   CareNotification
 } from '../types';
+import { FirestoreService } from '../services/firestore.service';
 
 export interface DatabaseSchema {
   prescriptionDrafts: { id: string; profileId: string; medications: Omit<Medication, 'id' | 'profileId' | 'createdAt' | 'updatedAt'>[]; warnings: string[]; createdAt: string; appliedAt?: string }[];
@@ -129,6 +130,14 @@ class DatabaseService {
       this.modifiedAt = fs.statSync(this.activeDbFile).mtimeMs;
     } catch (err) {
       throw new Error('Care circle data could not be saved. Configure a writable persistent data directory.');
+    }
+
+    if (process.env.NODE_ENV !== 'test' && !process.env.VITEST) {
+      try {
+        void FirestoreService.syncAllToFirestore(this.cache);
+      } catch {
+        // Non-blocking background sync
+      }
     }
   }
 

@@ -4,6 +4,7 @@ import { apiError, ApiError, requireCircle, secureRoute } from '@/lib/auth/sessi
 import { dbService } from '@/lib/db/database';
 import { MedicationService } from '@/lib/services/medication.service';
 import { NotificationService } from '@/lib/services/notification.service';
+import { FirestoreService } from '@/lib/services/firestore.service';
 
 async function apply(req: NextRequest) {
   try {
@@ -17,6 +18,7 @@ async function apply(req: NextRequest) {
     const medications = draft.medications.map((medication) => MedicationService.addMedication(profile.id, medication, member.name, member.role));
     draft.appliedAt = new Date().toISOString();
     dbService.save();
+    void FirestoreService.savePrescriptionDraft(draft);
     await NotificationService.scheduleChanged(profile, member.name, 'added a Gemini-generated prescription schedule');
     return NextResponse.json({ success: true, medications });
   } catch (error) { return apiError(error); }

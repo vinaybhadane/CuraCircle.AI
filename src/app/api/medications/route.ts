@@ -5,15 +5,33 @@ import { MedicationService } from '@/lib/services/medication.service';
 import { MedicationCreateSchema } from '@/lib/validations/schemas';
 import { dbService } from '@/lib/db/database';
 import { circleClock } from '@/lib/time';
+import { FirestoreService } from '@/lib/services/firestore.service';
 
 async function handleGET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const db = dbService.getDb();
-    const profileId = searchParams.get('profileId') || db.profiles[0].id;
+    const profileId = searchParams.get('profileId') || db.profiles[0]?.id;
     const activeOnly = searchParams.get('activeOnly') === 'true';
 
-    const medications = MedicationService.getMedications(profileId, activeOnly);
+    let medications = MedicationService.getMedications(profileId, activeOnly);
+    if (medications.length === 0 && profileId) {
+      try {
+        const remoteMeds = await FirestoreService.getMedications(profileId);
+        if (remoteMeds.length > 0) {
+          for (const m of remoteMeds) {
+            if (!db.medications.some((existing) => existing.id === m.id)) {
+              db.medications.push(m);
+            }
+          }
+          dbService.save();
+          medications = MedicationService.getMedications(profileId, activeOnly);
+        }
+      } catch {
+        // Fallback to local
+      }
+    }
+
     return NextResponse.json({ medications });
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : 'Unknown internal error';

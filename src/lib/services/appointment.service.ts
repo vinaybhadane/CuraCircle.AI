@@ -1,6 +1,7 @@
 import { dbService } from '../db/database';
 import { DoctorAppointment, Role } from '../types';
 import { AuthService } from './auth.service';
+import { FirestoreService } from './firestore.service';
 
 export class AppointmentService {
   public static getAppointments(profileId: string): DoctorAppointment[] {
@@ -37,6 +38,7 @@ export class AppointmentService {
 
     db.appointments.push(newApt);
     dbService.save();
+    void FirestoreService.saveAppointment(newApt);
 
     AuthService.recordAudit(
       profileId,
@@ -67,6 +69,7 @@ export class AppointmentService {
 
     db.appointments[index] = updated;
     dbService.save();
+    void FirestoreService.saveAppointment(updated);
 
     AuthService.recordAudit(
       updated.profileId,
@@ -86,6 +89,7 @@ export class AppointmentService {
     const apt = db.appointments[index];
     db.appointments.splice(index, 1);
     dbService.save();
+    void FirestoreService.deleteAppointment(id);
 
     AuthService.recordAudit(
       apt.profileId,
