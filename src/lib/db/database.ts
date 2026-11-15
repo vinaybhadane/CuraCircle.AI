@@ -9,10 +9,12 @@ import {
   DoseLog,
   DoctorAppointment,
   DispatchedEmail,
-  AuditLog
+  AuditLog,
+  CareNotification
 } from '../types';
 
 export interface DatabaseSchema {
+  prescriptionDrafts: { id: string; profileId: string; medications: Omit<Medication, 'id' | 'profileId' | 'createdAt' | 'updatedAt'>[]; warnings: string[]; createdAt: string; appliedAt?: string }[];
   profiles: CareCircleProfile[];
   members: CareCircleMember[];
   medications: Medication[];
@@ -20,24 +22,46 @@ export interface DatabaseSchema {
   appointments: DoctorAppointment[];
   dispatchedEmails: DispatchedEmail[];
   auditLogs: AuditLog[];
+  notifications: CareNotification[];
 }
 
 // Vercel Serverless & Local Filesystem Dual-Path Support
 const isVercel = Boolean(process.env.VERCEL);
-const PRIMARY_DATA_DIR = path.join(process.cwd(), 'data');
+const PRIMARY_DATA_DIR = process.env.CURACIRCLE_DATA_DIR || path.join(process.cwd(), 'data');
 const TMP_DATA_DIR = path.join(os.tmpdir(), 'curacircle_data');
 
 class DatabaseService {
   private cache: DatabaseSchema | null = null;
   private activeDbFile: string;
+  private modifiedAt = 0;
 
   constructor() {
     this.activeDbFile = this.resolveDbFile();
   }
 
+  // Serialize API mutations across Next.js route workers on this persistent disk.
+  // The lock also protects asynchronous email/scheduler updates from lost writes.
+  public async runExclusive<T>(operation: () => Promise<T>): Promise<T> {
+    const lockPath = `${this.activeDbFile}.lock`;
+    const startedAt = Date.now();
+    while (true) {
+      try { fs.mkdirSync(lockPath); break; }
+      catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
+        if (fs.existsSync(lockPath) && Date.now() - fs.statSync(lockPath).mtimeMs > 120000) {
+          try { fs.rmdirSync(lockPath); } catch { /* Another worker recovered it. */ }
+        }
+        if (Date.now() - startedAt > 60000) throw new Error('Care circle is busy. Please retry.');
+        await new Promise((resolve) => setTimeout(resolve, 40));
+      }
+    }
+    try { return await operation(); }
+    finally { try { fs.rmdirSync(lockPath); } catch { /* Lock has already been removed. */ } }
+  }
+
   private resolveDbFile(): string {
     // If running on Vercel, use /tmp which is the only writable directory in serverless lambdas
-    if (isVercel) {
+    if (isVercel && !process.env.CURACIRCLE_DATA_DIR) {
       try {
         if (!fs.existsSync(TMP_DATA_DIR)) {
           fs.mkdirSync(TMP_DATA_DIR, { recursive: true });
@@ -60,7 +84,7 @@ class DatabaseService {
   }
 
   public getDb(): DatabaseSchema {
-    if (this.cache) {
+    if (this.cache && fs.existsSync(this.activeDbFile) && fs.statSync(this.activeDbFile).mtimeMs === this.modifiedAt) {
       return this.cache;
     }
 
@@ -68,7 +92,8 @@ class DatabaseService {
     if (fs.existsSync(this.activeDbFile)) {
       try {
         const raw = fs.readFileSync(this.activeDbFile, 'utf-8');
-        this.cache = JSON.parse(raw);
+        this.cache = { notifications: [], prescriptionDrafts: [], ...JSON.parse(raw) };
+        this.modifiedAt = fs.statSync(this.activeDbFile).mtimeMs;
         return this.cache!;
       } catch (err) {
         console.error('Failed reading active DB file, falling back', err);
@@ -80,7 +105,7 @@ class DatabaseService {
     if (fs.existsSync(bundledSeedFile)) {
       try {
         const raw = fs.readFileSync(bundledSeedFile, 'utf-8');
-        this.cache = JSON.parse(raw);
+        this.cache = { notifications: [], prescriptionDrafts: [], ...JSON.parse(raw) };
         this.save();
         return this.cache!;
       } catch {
@@ -89,7 +114,7 @@ class DatabaseService {
     }
 
     // 3. Fallback to programmatic seed
-    this.cache = this.createSeedData();
+    this.cache = { profiles: [], members: [], medications: [], doseLogs: [], appointments: [], dispatchedEmails: [], auditLogs: [], notifications: [], prescriptionDrafts: [] };
     this.save();
     return this.cache;
   }
@@ -98,9 +123,12 @@ class DatabaseService {
     if (!this.cache) return;
     const payload = JSON.stringify(this.cache, null, 2);
     try {
-      fs.writeFileSync(this.activeDbFile, payload, 'utf-8');
+      const temporaryFile = `${this.activeDbFile}.${process.pid}.tmp`;
+      fs.writeFileSync(temporaryFile, payload, 'utf-8');
+      fs.renameSync(temporaryFile, this.activeDbFile);
+      this.modifiedAt = fs.statSync(this.activeDbFile).mtimeMs;
     } catch (err) {
-      console.warn('Filesystem write bypassed (operating in serverless memory):', err);
+      throw new Error('Care circle data could not be saved. Configure a writable persistent data directory.');
     }
   }
 
@@ -483,7 +511,9 @@ class DatabaseService {
       doseLogs,
       appointments,
       dispatchedEmails,
-      auditLogs
+      auditLogs,
+      notifications: []
+      , prescriptionDrafts: []
     };
   }
 }

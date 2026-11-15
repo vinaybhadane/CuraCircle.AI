@@ -1,8 +1,10 @@
+export const dynamic = 'force-dynamic';
+import { secureRoute, requireCircle } from '@/lib/auth/session';
 import { NextRequest, NextResponse } from 'next/server';
 import { GeminiService } from '@/lib/services/gemini.service';
 import { CompanionChatSchema } from '@/lib/validations/schemas';
 
-export async function POST(req: NextRequest) {
+async function handlePOST(req: NextRequest) {
   try {
     const body = await req.json();
     const parsed = CompanionChatSchema.safeParse(body);
@@ -28,3 +30,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed companion check-in', details: errorMsg }, { status: 500 });
   }
 }
+
+export const POST = secureRoute(handlePOST);

@@ -2,18 +2,24 @@ import nodemailer from 'nodemailer';
 import { dbService } from '../db/database';
 import { DispatchedEmail, Medication, DoctorAppointment, DoseLog, CareCircleProfile } from '../types';
 import { AuthService } from './auth.service';
+import { randomUUID } from 'crypto';
+import { circleClock } from '@/lib/time';
+import { AdherenceService } from './adherence.service';
 
 export class EmailService {
+  private static checks = new Map<string, Promise<{ upcomingDoseEmailsSent: number; missedDoseEmailsSent: number; appointmentEmailsSent: number; refillEmailsSent: number }>>();
   private static transporter: nodemailer.Transporter | null = null;
 
   private static getTransporter(): nodemailer.Transporter | null {
     if (this.transporter) return this.transporter;
 
-    if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+    if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS && process.env.NODE_ENV !== 'test') {
       this.transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: Number(process.env.SMTP_PORT) || 587,
         secure: Number(process.env.SMTP_PORT) === 465,
+        connectionTimeout: 8000,
+        socketTimeout: 10000,
         auth: {
           user: process.env.SMTP_USER,
           pass: process.env.SMTP_PASS
@@ -42,8 +48,9 @@ export class EmailService {
     const id = `email_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
     let status: 'SENT' | 'SIMULATED' | 'FAILED' = 'SIMULATED';
 
-    const brevoApiKey = process.env.BREVO_API_KEY;
-    const senderEmail = process.env.BREVO_SENDER_EMAIL || process.env.SMTP_FROM || 'vinaybhadane06@gmail.com';
+    const isPreview = process.env.NODE_ENV === 'test' || Boolean(db.profiles.find((p) => p.id === profileId)?.isDemo);
+    const brevoApiKey = isPreview ? undefined : process.env.BREVO_API_KEY;
+    const senderEmail = process.env.BREVO_SENDER_EMAIL || process.env.SMTP_FROM || 'alerts@example.invalid';
     const senderName = process.env.BREVO_SENDER_NAME || 'CuraCircle Health Alerts';
 
     // 1. First Priority: Brevo REST API (Fastest & direct deliverability)
@@ -64,6 +71,7 @@ export class EmailService {
             'Accept': 'application/json'
           },
           body: JSON.stringify(brevoPayload)
+          , signal: AbortSignal.timeout(10000)
         });
 
         if (res.ok) {
@@ -71,20 +79,22 @@ export class EmailService {
           status = 'SENT';
           if (!meta) meta = {};
           meta.brevoMessageId = resData.messageId;
-          console.log(`[Brevo] Email successfully delivered to ${to} (${subject}), messageId: ${resData.messageId}`);
+          console.log(`[Brevo] Email accepted by the provider, messageId: ${resData.messageId}`);
         } else {
-          const errData = await res.text();
-          console.warn('[Brevo] API returned non-200:', res.status, errData);
-          status = 'SENT'; // fallback to simulated
+          console.warn('[Brevo] Delivery rejected:', res.status);
+          status = 'FAILED';
+          meta = { ...meta, deliveryError: `Email provider rejected the request (${res.status}).` };
         }
       } catch (brevoErr) {
-        console.error('[Brevo] API error:', brevoErr);
+        console.error('[Brevo] Email request failed.');
+        status = 'FAILED';
+        meta = { ...meta, deliveryError: 'Email provider could not be reached.' };
       }
     }
 
     // 2. Secondary: SMTP Transport fallback
     if (status !== 'SENT') {
-      const transporter = this.getTransporter();
+      const transporter = isPreview ? null : this.getTransporter();
       if (transporter) {
         try {
           await transporter.sendMail({
@@ -98,8 +108,6 @@ export class EmailService {
           console.error('SMTP transmission error:', err);
           status = 'FAILED';
         }
-      } else {
-        status = 'SENT'; // Simulated delivery logged in outbox
       }
     }
 
@@ -117,6 +125,9 @@ export class EmailService {
     };
 
     db.dispatchedEmails.unshift(emailRecord);
+    const recipient = db.members.find((m) => m.profileId === profileId && m.email.toLowerCase() === to.toLowerCase());
+    if (recipient) db.notifications.unshift({ id: `notification_${randomUUID()}`, profileId, memberId: recipient.id,
+      title: subject, message: htmlBody.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').slice(0, 1200), createdAt: emailRecord.sentAt });
     if (db.dispatchedEmails.length > 300) {
       db.dispatchedEmails = db.dispatchedEmails.slice(0, 300);
     }
@@ -126,7 +137,7 @@ export class EmailService {
       profileId,
       'PRIMARY_CAREGIVER',
       `EMAIL_DISPATCHED_${triggerType}`,
-      `Proactive email "${subject}" sent to ${toName} (${to}).`
+      `Email "${subject}" for ${toName} (${to}): ${status}.`
     );
 
     return emailRecord;
@@ -235,7 +246,7 @@ export class EmailService {
           
           <div style="margin: 24px 0;">
             <p><strong>Elder Phone:</strong> <a href="tel:${profile.emergencyContact.phone}">${profile.emergencyContact.phone}</a></p>
-            <p><strong>Primary Nurse:</strong> Nurse David Miller &bull; +1 (555) 876-5432</p>
+            <p><strong>Care circle contact:</strong> ${profile.emergencyContact.name} &bull; ${profile.emergencyContact.phone || 'Phone not provided'}</p>
           </div>
 
           <div class="footer">
@@ -372,7 +383,7 @@ export class EmailService {
           <p style="margin: 4px 0;"><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
           <p style="margin: 4px 0;"><strong>Primary Conditions:</strong> ${profile.primaryCondition}</p>
           <p style="margin: 4px 0;"><strong>Known Allergies:</strong> ${profile.allergies.join(', ')}</p>
-          <p style="margin: 4px 0;"><strong>Blood Type:</strong> ${profile.bloodType || 'O+'}</p>
+          <p style="margin: 4px 0;"><strong>Blood Type:</strong> ${profile.bloodType || 'Not provided'}</p>
         </div>
         <p style="font-size: 16px;">Please call immediately: <a href="tel:${profile.emergencyContact.phone}" style="color: #fecdd3; font-weight: bold;">${profile.emergencyContact.phone}</a></p>
       </div>
@@ -411,7 +422,16 @@ export class EmailService {
    * Inspects all active doses, appointments, and inventory thresholds,
    * proactively dispatching necessary reminders.
    */
-  public static async runNotificationChecks(profileId: string): Promise<{
+  public static async runNotificationChecks(profileId: string) {
+    const existing = this.checks.get(profileId);
+    if (existing) return existing;
+    const pending = this.runChecks(profileId);
+    this.checks.set(profileId, pending);
+    try { return await pending; }
+    finally { this.checks.delete(profileId); }
+  }
+
+  private static async runChecks(profileId: string): Promise<{
     upcomingDoseEmailsSent: number;
     missedDoseEmailsSent: number;
     appointmentEmailsSent: number;
@@ -423,11 +443,9 @@ export class EmailService {
       return { upcomingDoseEmailsSent: 0, missedDoseEmailsSent: 0, appointmentEmailsSent: 0, refillEmailsSent: 0 };
     }
 
-    const todayStr = new Date().toISOString().split('T')[0];
+    const { date: todayStr, minutes: nowTotalMinutes } = circleClock(profileId);
     const now = new Date();
-    const currentHours = now.getHours();
-    const currentMinutes = now.getMinutes();
-    const nowTotalMinutes = currentHours * 60 + currentMinutes;
+    AdherenceService.getDosesForDate(profileId, todayStr);
 
     let upcomingCount = 0;
     let missedCount = 0;
@@ -435,13 +453,14 @@ export class EmailService {
     let refillCount = 0;
 
     const familyAndCaregivers = db.members.filter(
-      (m) => m.profileId === profileId && ['PRIMARY_CAREGIVER', 'FAMILY_MEMBER'].includes(m.role)
+      (m) => m.profileId === profileId && ['PRIMARY_CAREGIVER', 'FAMILY_MEMBER', 'CLINICIAN'].includes(m.role)
     );
 
     // 1. Check Doses Today
-    const todayDoses = db.doseLogs.filter((d) => d.profileId === profileId && d.scheduledDate === todayStr);
+    const todayDoses = db.doseLogs.filter((d) => d.profileId === profileId && d.scheduledDate === todayStr && !d.excluded);
 
     for (const dose of todayDoses) {
+      if (dose.status === 'SNOOZED' && dose.actualTime && Date.now() < Date.parse(dose.actualTime) + (dose.snoozeMinutes || 15) * 60000) continue;
       const [h, m] = dose.scheduledTime.split(':').map(Number);
       const scheduledTotalMinutes = h * 60 + m;
       const med = db.medications.find((m) => m.id === dose.medicationId);
@@ -450,17 +469,17 @@ export class EmailService {
       // Upcoming dose check: within next 30 minutes (difference between 0 and 30)
       const diffToScheduled = scheduledTotalMinutes - nowTotalMinutes;
       if (diffToScheduled >= 0 && diffToScheduled <= 30 && !dose.reminderSentAt && dose.status === 'PENDING') {
-        const elderMember = db.members.find((m) => m.profileId === profileId && m.role === 'ELDER');
-        if (elderMember) {
-          await this.sendUpcomingDoseReminder(profile, med, dose, elderMember.email, elderMember.name);
-          dose.reminderSentAt = new Date().toISOString();
-          upcomingCount++;
+        const recipients = db.members.filter((m) => m.profileId === profileId && m.permissions.receiveUpcomingAlerts);
+        for (const recipient of recipients) {
+          const delivered = await this.sendUpcomingDoseReminder(profile, med, dose, recipient.email, recipient.name);
+          if (delivered.status === 'SENT') upcomingCount++;
         }
+        dose.reminderSentAt = new Date().toISOString();
       }
 
       // Missed dose check: past scheduled by > 30 minutes and not yet escalated
       const overdueMinutes = nowTotalMinutes - scheduledTotalMinutes;
-      if (overdueMinutes > 30 && dose.status === 'PENDING' && !dose.missedAlertEscalatedAt) {
+      if (overdueMinutes > 30 && ['PENDING', 'MISSED', 'SNOOZED'].includes(dose.status) && !dose.missedAlertEscalatedAt) {
         dose.status = 'MISSED';
         dose.missedAlertEscalatedAt = new Date().toISOString();
         missedCount++;
@@ -483,7 +502,7 @@ export class EmailService {
 
       // 24-hour reminder
       if (diffHours > 0 && diffHours <= 26 && !apt.remindersSent.reminder24h) {
-        for (const guardian of familyAndCaregivers) {
+        for (const guardian of familyAndCaregivers.filter((m) => m.permissions.receiveUpcomingAlerts)) {
           await this.sendAppointmentReminder(profile, apt, '24h', guardian.email, guardian.name);
         }
         apt.remindersSent.reminder24h = true;
@@ -492,7 +511,7 @@ export class EmailService {
 
       // 2-hour reminder
       if (diffHours > 0 && diffHours <= 3 && !apt.remindersSent.reminder2h) {
-        for (const guardian of familyAndCaregivers) {
+        for (const guardian of familyAndCaregivers.filter((m) => m.permissions.receiveUpcomingAlerts)) {
           await this.sendAppointmentReminder(profile, apt, '2h', guardian.email, guardian.name);
         }
         apt.remindersSent.reminder2h = true;
@@ -503,11 +522,10 @@ export class EmailService {
     // 3. Check Low Inventory Refills
     const activeMeds = db.medications.filter((m) => m.profileId === profileId && m.active);
     for (const med of activeMeds) {
-      if (med.pillCountCurrent <= med.pillCountRefillThreshold) {
-        const primaryNurse = familyAndCaregivers.find((m) => m.role === 'PRIMARY_CAREGIVER');
-        if (primaryNurse) {
-          await this.sendLowInventoryAlert(profile, med, primaryNurse.email, primaryNurse.name);
-          refillCount++;
+      if (med.pillCountRefillThreshold > 0 && med.pillCountCurrent <= med.pillCountRefillThreshold) {
+        for (const guardian of familyAndCaregivers.filter((m) => m.permissions.receiveMissedAlerts)) {
+          const alreadyNotified = db.dispatchedEmails.some((e) => e.profileId === profileId && e.to === guardian.email && e.triggerType === 'LOW_INVENTORY' && e.meta?.medicationId === med.id && e.sentAt.slice(0, 10) === now.toISOString().slice(0, 10));
+          if (!alreadyNotified) { await this.sendLowInventoryAlert(profile, med, guardian.email, guardian.name); refillCount++; }
         }
       }
     }

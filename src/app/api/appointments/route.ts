@@ -1,9 +1,11 @@
+export const dynamic = 'force-dynamic';
+import { secureRoute, requireCircle } from '@/lib/auth/session';
 import { NextRequest, NextResponse } from 'next/server';
 import { AppointmentService } from '@/lib/services/appointment.service';
 import { AppointmentCreateSchema } from '@/lib/validations/schemas';
 import { dbService } from '@/lib/db/database';
 
-export async function GET(req: NextRequest) {
+async function handleGET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const db = dbService.getDb();
@@ -21,7 +23,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
+async function handlePOST(req: NextRequest) {
   try {
     const body = await req.json();
     const parsed = AppointmentCreateSchema.safeParse(body);
@@ -46,10 +48,12 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function PUT(req: NextRequest) {
+async function handlePUT(req: NextRequest) {
   try {
     const body = await req.json();
     const { id, updates, actorName, actorRole } = body;
+    const validatedUpdates = AppointmentCreateSchema.partial().safeParse(updates);
+    if (!validatedUpdates.success) return NextResponse.json({ error: 'Invalid appointment updates' }, { status: 400 });
 
     if (!id || !updates) {
       return NextResponse.json({ error: 'Appointment ID and updates are required' }, { status: 400 });
@@ -57,7 +61,7 @@ export async function PUT(req: NextRequest) {
 
     const updated = AppointmentService.updateAppointment(
       id,
-      updates,
+      validatedUpdates.data,
       actorName || 'Caregiver',
       actorRole || 'PRIMARY_CAREGIVER'
     );
@@ -73,7 +77,7 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-export async function DELETE(req: NextRequest) {
+async function handleDELETE(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
@@ -95,3 +99,11 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to cancel appointment', details: errorMsg }, { status: 500 });
   }
 }
+
+export const GET = secureRoute(handleGET);
+
+export const POST = secureRoute(handlePOST, 'canManageAppointments');
+
+export const PUT = secureRoute(handlePUT, 'canManageAppointments');
+
+export const DELETE = secureRoute(handleDELETE, 'canManageAppointments');

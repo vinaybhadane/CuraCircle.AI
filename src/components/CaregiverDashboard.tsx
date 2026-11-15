@@ -47,7 +47,10 @@ interface CaregiverDashboardProps {
   onOpenOutboxModal: () => void;
   onOpenAuditModal: () => void;
   onOpenVoiceCompanion: () => void;
+  onOpenMembersModal: () => void;
   onDeleteMedication: (id: string) => void;
+  onDeleteAppointment: (id: string) => void;
+  onDeleteDose: (doseId: string) => void;
   onRefillMedication: (id: string, newCount: number) => void;
   onRunSchedulerCheck: () => void;
   schedulerLoading: boolean;
@@ -68,12 +71,15 @@ export const CaregiverDashboard: React.FC<CaregiverDashboardProps> = ({
   onOpenOutboxModal,
   onOpenAuditModal,
   onOpenVoiceCompanion,
+  onOpenMembersModal,
   onDeleteMedication,
+  onDeleteAppointment,
+  onDeleteDose,
   onRefillMedication,
   onRunSchedulerCheck,
   schedulerLoading
 }) => {
-  const canEdit = currentRole === 'PRIMARY_CAREGIVER' || currentRole === 'FAMILY_MEMBER';
+  const canEdit = ['ELDER', 'PRIMARY_CAREGIVER', 'FAMILY_MEMBER', 'CLINICIAN'].includes(currentRole);
   const upcomingAppointments = appointments.filter((a) => a.status === 'UPCOMING');
 
   return (
@@ -86,7 +92,7 @@ export const CaregiverDashboard: React.FC<CaregiverDashboardProps> = ({
         <div className="flex items-center gap-5">
           <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-brand-600 to-sky-400 p-1 flex-shrink-0 shadow-md">
             <div className="w-full h-full rounded-xl bg-slate-100 flex items-center justify-center text-3xl font-black text-brand-700">
-              EV
+              {profile.elderName.split(/\s+/).map((name) => name[0]).slice(0, 2).join('').toUpperCase()}
             </div>
           </div>
           <div className="space-y-1">
@@ -99,10 +105,10 @@ export const CaregiverDashboard: React.FC<CaregiverDashboardProps> = ({
               </span>
             </div>
             <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">
-              <strong className="text-slate-900 dark:text-white">Primary Conditions:</strong> {profile.primaryCondition}
+              <strong className="text-slate-900 dark:text-white">Primary Conditions:</strong> {profile.primaryCondition || 'Not provided'}
             </p>
             <p className="text-xs font-semibold text-rose-600 dark:text-rose-400">
-              <strong>Allergies:</strong> {profile.allergies.join(', ')} &bull; <strong>Blood Type:</strong> {profile.bloodType || 'O+'}
+              <strong>Allergies:</strong> {profile.allergies.join(', ') || 'Not provided'} &bull; <strong>Blood Type:</strong> {profile.bloodType || 'Not provided'}
             </p>
           </div>
         </div>
@@ -156,10 +162,10 @@ export const CaregiverDashboard: React.FC<CaregiverDashboardProps> = ({
               <span className="text-4xl font-black text-emerald-600 dark:text-emerald-400">
                 {stats.sevenDayComplianceRate}%
               </span>
-              <span className="text-xs text-emerald-600 font-bold">Stable</span>
+              <span className="text-xs text-emerald-600 font-bold">recorded</span>
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-400">
-              Evaluated over 35 past scheduled doses
+              Based on recorded doses in the last 7 days
             </p>
           </div>
 
@@ -187,7 +193,7 @@ export const CaregiverDashboard: React.FC<CaregiverDashboardProps> = ({
               <span className="text-xs text-slate-500 font-semibold">today</span>
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-400">
-              {stats.dosesMissedToday > 0 ? 'Urgent escalation dispatched' : 'Zero missed doses today'}
+              {stats.dosesMissedToday > 0 ? 'Check family notifications for alerts' : 'No missed doses recorded today'}
             </p>
           </div>
         </div>
@@ -278,9 +284,19 @@ export const CaregiverDashboard: React.FC<CaregiverDashboardProps> = ({
               <Clock className="w-5 h-5 text-brand-600" />
               <span>Today&apos;s Medication Timeline</span>
             </h2>
-            <span className="text-xs font-bold text-slate-500">
-              {doses.length} scheduled doses today
-            </span>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => onOpenMedicationModal()}
+                className="px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>+ Add Medicine to Schedule</span>
+              </button>
+              <span className="text-xs font-bold text-slate-500">
+                {doses.length} scheduled doses
+              </span>
+            </div>
           </div>
 
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-4">
@@ -336,10 +352,19 @@ export const CaregiverDashboard: React.FC<CaregiverDashboardProps> = ({
                     )}
                   </div>
 
-                  <div className="mt-3 sm:mt-0 flex items-center gap-2">
+                  <div className="mt-3 sm:mt-0 flex items-center gap-3">
                     <span className="text-xs font-semibold text-slate-500">
                       Logged by: {dose.takenByRole || 'Auto-monitor'}
                     </span>
+                    <button
+                      type="button"
+                      onClick={() => onDeleteDose(dose.id)}
+                      title="Remove medicine dose from today's schedule"
+                      className="px-2.5 py-1 text-xs font-bold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-lg flex items-center gap-1 transition-colors"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Remove</span>
+                    </button>
                   </div>
                 </div>
               );
@@ -354,25 +379,37 @@ export const CaregiverDashboard: React.FC<CaregiverDashboardProps> = ({
             <div className="flex items-center justify-between">
               <h2 id="caregiver-appointments-heading" className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-purple-600" />
-                <span>Upcoming Appointments</span>
+                <span>Upcoming Appointments ({upcomingAppointments.length})</span>
               </h2>
               <button
+                type="button"
                 onClick={onOpenAppointmentsModal}
-                className="text-xs font-bold text-brand-600 hover:underline"
+                className="px-2.5 py-1 text-xs font-bold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg flex items-center gap-1 transition-colors"
               >
-                + Schedule
+                <Plus className="w-3.5 h-3.5" />
+                <span>+ Add</span>
               </button>
             </div>
 
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-sm space-y-3">
               {upcomingAppointments.length > 0 ? (
                 upcomingAppointments.map((apt) => (
-                  <div key={apt.id} className="p-3.5 rounded-2xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900 space-y-1">
+                  <div key={apt.id} className="p-3.5 rounded-2xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900 space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-black text-slate-900 dark:text-white">{apt.doctorName}</span>
-                      <span className="text-xs font-bold text-purple-700 bg-purple-100 px-2 py-0.5 rounded-full">
-                        {new Date(apt.appointmentDateTime).toLocaleDateString([], { month: 'short', day: 'numeric' })}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-purple-700 bg-purple-100 px-2 py-0.5 rounded-full">
+                          {new Date(apt.appointmentDateTime).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => onDeleteAppointment(apt.id)}
+                          title="Remove appointment"
+                          className="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded transition-colors"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
                     <p className="text-xs font-medium text-slate-600 dark:text-slate-400">
                       {apt.specialty} &bull; {apt.clinicName}
@@ -390,10 +427,18 @@ export const CaregiverDashboard: React.FC<CaregiverDashboardProps> = ({
 
           {/* Care Circle Members */}
           <section aria-labelledby="circle-members-heading" className="space-y-3">
-            <h2 id="circle-members-heading" className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-              <UserCheck className="w-5 h-5 text-emerald-600" />
-              <span>Care Circle Members</span>
-            </h2>
+            <div className="flex items-center justify-between">
+              <h2 id="circle-members-heading" className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <UserCheck className="w-5 h-5 text-emerald-600" />
+                <span>Care Circle Members</span>
+              </h2>
+              <button
+                onClick={onOpenMembersModal}
+                className="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline"
+              >
+                + Manage Emails
+              </button>
+            </div>
 
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-sm divide-y divide-slate-100 dark:divide-slate-800">
               {members.map((member) => (

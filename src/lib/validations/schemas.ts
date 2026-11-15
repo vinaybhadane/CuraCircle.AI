@@ -18,7 +18,7 @@ export const MedicationCreateSchema = z.object({
   frequency: z.enum(['DAILY', 'TWICE_DAILY', 'THREE_TIMES_DAILY', 'FOUR_TIMES_DAILY', 'EVERY_OTHER_DAY', 'WEEKLY', 'AS_NEEDED']),
   scheduledTimes: z.array(z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Invalid 24h time format (HH:MM)')).min(1, 'At least one scheduled time is required'),
   active: z.boolean().default(true),
-  pillCountCurrent: z.number().int().nonnegative().default(30),
+  pillCountCurrent: z.number().int().nonnegative().default(0),
   pillCountRefillThreshold: z.number().int().nonnegative().default(7),
   prescribedBy: z.string().default('Physician'),
   startDate: z.string().default(() => new Date().toISOString().split('T')[0]),
@@ -51,7 +51,7 @@ export const AppointmentCreateSchema = z.object({
 
 export const CompanionChatSchema = z.object({
   message: z.string().min(1, 'Message is required'),
-  elderName: z.string().default('Eleanor Vance'),
+  elderName: z.string().default('Patient'),
   history: z.array(z.object({
     role: z.enum(['user', 'model']),
     text: z.string()
@@ -59,8 +59,8 @@ export const CompanionChatSchema = z.object({
 });
 
 export const ScanPrescriptionSchema = z.object({
-  imageBase64: z.string().min(10, 'Image base64 data required'),
-  mimeType: z.string().default('image/jpeg')
+  imageBase64: z.string().min(10, 'Prescription file required').max(7_000_000, 'File must be 5 MB or smaller'),
+  mimeType: z.enum(['image/jpeg', 'image/png', 'image/webp', 'application/pdf']).default('image/jpeg')
 });
 
 export const EmergencySOSSchema = z.object({

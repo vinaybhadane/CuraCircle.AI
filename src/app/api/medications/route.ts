@@ -1,9 +1,12 @@
+export const dynamic = 'force-dynamic';
+import { secureRoute, requireCircle } from '@/lib/auth/session';
 import { NextRequest, NextResponse } from 'next/server';
 import { MedicationService } from '@/lib/services/medication.service';
 import { MedicationCreateSchema } from '@/lib/validations/schemas';
 import { dbService } from '@/lib/db/database';
+import { circleClock } from '@/lib/time';
 
-export async function GET(req: NextRequest) {
+async function handleGET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const db = dbService.getDb();
@@ -18,9 +21,10 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
+async function handlePOST(req: NextRequest) {
   try {
     const body = await req.json();
+    if (!body.startDate) body.startDate = circleClock(requireCircle(req).profile.id).date;
     const parsed = MedicationCreateSchema.safeParse(body);
 
     if (!parsed.success) {
@@ -43,10 +47,12 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function PUT(req: NextRequest) {
+async function handlePUT(req: NextRequest) {
   try {
     const body = await req.json();
     const { id, updates, actorName, actorRole } = body;
+    const validatedUpdates = MedicationCreateSchema.partial().safeParse(updates);
+    if (!validatedUpdates.success) return NextResponse.json({ error: 'Invalid medication updates' }, { status: 400 });
 
     if (!id || !updates) {
       return NextResponse.json({ error: 'Medication ID and updates are required' }, { status: 400 });
@@ -54,7 +60,7 @@ export async function PUT(req: NextRequest) {
 
     const updated = MedicationService.updateMedication(
       id,
-      updates,
+      validatedUpdates.data,
       actorName || 'Caregiver',
       actorRole || 'PRIMARY_CAREGIVER'
     );
@@ -70,7 +76,7 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-export async function DELETE(req: NextRequest) {
+async function handleDELETE(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
@@ -92,3 +98,11 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to delete medication', details: errorMsg }, { status: 500 });
   }
 }
+
+export const GET = secureRoute(handleGET);
+
+export const POST = secureRoute(handlePOST, 'canEditMeds');
+
+export const PUT = secureRoute(handlePUT, 'canEditMeds');
+
+export const DELETE = secureRoute(handleDELETE, 'canEditMeds');

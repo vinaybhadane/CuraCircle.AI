@@ -8,7 +8,7 @@ interface MedicationModalProps {
   isOpen: boolean;
   onClose: () => void;
   medicationToEdit?: Medication | null;
-  onSave: (medData: any) => void;
+  onSave: (medData: any) => Promise<void>;
 }
 
 export const MedicationModal: React.FC<MedicationModalProps> = ({
@@ -17,6 +17,8 @@ export const MedicationModal: React.FC<MedicationModalProps> = ({
   medicationToEdit,
   onSave
 }) => {
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
   const [name, setName] = useState('');
   const [dosage, setDosage] = useState('');
   const [form, setForm] = useState<MedicationForm>('TABLET');
@@ -27,11 +29,12 @@ export const MedicationModal: React.FC<MedicationModalProps> = ({
   const [foodRequirement, setFoodRequirement] = useState<FoodRequirement>('NO_RESTRICTION');
   const [frequency, setFrequency] = useState<MedicationFrequency>('DAILY');
   const [scheduledTimes, setScheduledTimes] = useState<string[]>(['08:00']);
-  const [pillCount, setPillCount] = useState(30);
-  const [refillThreshold, setRefillThreshold] = useState(7);
-  const [prescribedBy, setPrescribedBy] = useState('Dr. Evelyn Reed, MD');
+  const [pillCount, setPillCount] = useState<number | string>('');
+  const [refillThreshold, setRefillThreshold] = useState<number | string>('');
+  const [prescribedBy, setPrescribedBy] = useState('');
 
   useEffect(() => {
+    setError('');
     if (medicationToEdit) {
       setName(medicationToEdit.name);
       setDosage(medicationToEdit.dosage);
@@ -57,9 +60,9 @@ export const MedicationModal: React.FC<MedicationModalProps> = ({
       setFoodRequirement('NO_RESTRICTION');
       setFrequency('DAILY');
       setScheduledTimes(['08:00']);
-      setPillCount(30);
-      setRefillThreshold(7);
-      setPrescribedBy('Dr. Evelyn Reed, MD');
+      setPillCount('');
+      setRefillThreshold('');
+      setPrescribedBy('');
     }
   }, [medicationToEdit, isOpen]);
 
@@ -81,9 +84,10 @@ export const MedicationModal: React.FC<MedicationModalProps> = ({
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSave({
+    setSaving(true); setError('');
+    try { await onSave({
       ...(medicationToEdit ? { id: medicationToEdit.id } : {}),
       name,
       dosage,
@@ -101,6 +105,8 @@ export const MedicationModal: React.FC<MedicationModalProps> = ({
       active: true
     });
     onClose();
+    } catch (error) { setError(error instanceof Error ? error.message : 'Could not save the medication.'); }
+    finally { setSaving(false); }
   };
 
   return (
@@ -126,6 +132,7 @@ export const MedicationModal: React.FC<MedicationModalProps> = ({
           </button>
         </div>
 
+        {error && <p role="alert" className="p-3 rounded-xl bg-rose-50 text-rose-700 text-sm">{error}</p>}
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4 max-h-[65vh] overflow-y-auto pr-1">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -328,9 +335,10 @@ export const MedicationModal: React.FC<MedicationModalProps> = ({
             </button>
             <button
               type="submit"
+              disabled={saving}
               className="px-6 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-black text-sm"
             >
-              {medicationToEdit ? 'Save Changes' : 'Add Medication'}
+              {saving ? 'Saving?' : medicationToEdit ? 'Save Changes' : 'Add Medication'}
             </button>
           </div>
         </form>

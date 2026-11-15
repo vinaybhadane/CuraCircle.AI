@@ -1,14 +1,17 @@
+export const dynamic = 'force-dynamic';
+import { circleClock } from '@/lib/time';
+import { secureRoute, requireCircle } from '@/lib/auth/session';
 import { NextRequest, NextResponse } from 'next/server';
 import { AdherenceService } from '@/lib/services/adherence.service';
 import { DoseLogSchema } from '@/lib/validations/schemas';
 import { dbService } from '@/lib/db/database';
 
-export async function GET(req: NextRequest) {
+async function handleGET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const db = dbService.getDb();
     const profileId = searchParams.get('profileId') || db.profiles[0].id;
-    const dateStr = searchParams.get('date') || new Date().toISOString().split('T')[0];
+    const dateStr = searchParams.get('date') || circleClock(profileId).date;
 
     // Check for missed doses
     AdherenceService.detectMissedDoses(profileId);
@@ -27,7 +30,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
+async function handlePOST(req: NextRequest) {
   try {
     const body = await req.json();
     const parsed = DoseLogSchema.safeParse(body);
@@ -40,7 +43,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { doseId, action, skipReason, snoozeMinutes, notes } = parsed.data;
-    const actorName = body.actorName || 'Eleanor Vance (Elder)';
+    const actorName = body.actorName || 'Patient';
     const actorRole = body.actorRole || 'ELDER';
     const actorMemberId = body.actorMemberId;
 
@@ -69,3 +72,35 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to record dose action', details: errorMsg }, { status: 500 });
   }
 }
+
+async function handleDELETE(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const doseId = searchParams.get('id');
+
+    if (!doseId) {
+      return NextResponse.json({ error: 'Dose ID is required' }, { status: 400 });
+    }
+
+    const db = dbService.getDb();
+    const index = db.doseLogs.findIndex((d) => d.id === doseId);
+    if (index === -1) {
+      return NextResponse.json({ error: 'Dose not found' }, { status: 404 });
+    }
+
+    const removed = db.doseLogs[index];
+    removed.excluded = true;
+    dbService.save();
+
+    return NextResponse.json({ success: true, message: 'Dose removed from schedule', dose: removed });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown internal error';
+    return NextResponse.json({ error: 'Failed to remove dose from schedule', details: errorMsg }, { status: 500 });
+  }
+}
+
+export const GET = secureRoute(handleGET);
+
+export const POST = secureRoute(handlePOST, 'canLogAdherence');
+
+export const DELETE = secureRoute(handleDELETE, 'canEditMeds');

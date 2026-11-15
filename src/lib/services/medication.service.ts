@@ -1,6 +1,7 @@
 import { dbService } from '../db/database';
 import { Medication, Role } from '../types';
 import { AuthService } from './auth.service';
+import { circleClock } from '@/lib/time';
 
 export class MedicationService {
   public static getMedications(profileId: string, activeOnly: boolean = false): Medication[] {
@@ -68,6 +69,18 @@ export class MedicationService {
     };
 
     db.medications[index] = updated;
+
+    const today = circleClock(existing.profileId).date;
+    // Preserve completed history; rebuild future pending doses at the edited times.
+    db.doseLogs = db.doseLogs.filter((dose) => dose.medicationId !== id || dose.scheduledDate < today || dose.status === 'TAKEN' || dose.status === 'SKIPPED' || (updated.active && updated.scheduledTimes.includes(dose.scheduledTime)));
+    // Keep pending labels in sync with prescription edits.
+    for (const dose of db.doseLogs) {
+      if (dose.medicationId === id && dose.scheduledDate >= today && !['TAKEN', 'SKIPPED'].includes(dose.status)) {
+        if (updates.name) dose.medicationName = updates.name;
+        if (updates.dosage) dose.dosage = updates.dosage;
+      }
+    }
+
     dbService.save();
 
     AuthService.recordAudit(
@@ -87,6 +100,8 @@ export class MedicationService {
 
     const med = db.medications[index];
     db.medications.splice(index, 1);
+    // Also remove doses of this medication from schedule
+    db.doseLogs = db.doseLogs.filter((d) => d.medicationId !== id);
     dbService.save();
 
     AuthService.recordAudit(

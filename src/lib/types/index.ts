@@ -2,6 +2,10 @@ export type Role = 'ELDER' | 'PRIMARY_CAREGIVER' | 'FAMILY_MEMBER' | 'CLINICIAN'
 
 export interface CareCircleProfile {
   id: string;
+  ownerUid?: string;
+  isDemo?: boolean;
+  timezone?: string;
+  onboardingCompleted?: boolean;
   elderName: string;
   elderAge: number;
   elderPhoto?: string;
@@ -23,6 +27,7 @@ export interface CareCircleProfile {
 
 export interface CareCircleMember {
   id: string;
+  firebaseUid?: string;
   profileId: string;
   name: string;
   role: Role;
@@ -71,6 +76,7 @@ export type DoseStatus = 'TAKEN' | 'SKIPPED' | 'SNOOZED' | 'MISSED' | 'PENDING';
 
 export interface DoseLog {
   id: string;
+  excluded?: boolean;
   profileId: string;
   medicationId: string;
   medicationName: string;
@@ -131,9 +137,19 @@ export interface DispatchedEmail {
   subject: string;
   htmlBody: string;
   sentAt: string;
-  triggerType: 'UPCOMING_DOSE' | 'MISSED_DOSE_ESCALATION' | 'APPOINTMENT_REMINDER' | 'LOW_INVENTORY' | 'EMERGENCY_SOS';
+  triggerType: 'UPCOMING_DOSE' | 'MISSED_DOSE_ESCALATION' | 'APPOINTMENT_REMINDER' | 'LOW_INVENTORY' | 'EMERGENCY_SOS' | 'MEMBER_INVITED' | 'SCHEDULE_UPDATED';
   status: 'SENT' | 'SIMULATED' | 'FAILED';
   meta?: Record<string, unknown>;
+}
+
+export interface CareNotification {
+  id: string;
+  profileId: string;
+  memberId: string;
+  title: string;
+  message: string;
+  createdAt: string;
+  readAt?: string;
 }
 
 export interface AuditLog {

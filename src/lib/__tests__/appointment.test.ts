@@ -55,4 +55,16 @@ describe('AppointmentService & Escort Planning', () => {
       expect(apt.status).toBe('UPCOMING');
     }
   });
+
+  it('cancels and removes an appointment manually', () => {
+    const profile = dbService.getDb().profiles[0];
+    const initialApts = AppointmentService.getAppointments(profile.id);
+    const toDelete = initialApts[0];
+
+    const deleted = AppointmentService.deleteAppointment(toDelete.id, 'Sarah Vance', 'PRIMARY_CAREGIVER');
+    expect(deleted).toBe(true);
+
+    const afterApts = AppointmentService.getAppointments(profile.id);
+    expect(afterApts.find((a) => a.id === toDelete.id)).toBeUndefined();
+  });
 });

@@ -70,81 +70,11 @@ export class GeminiService {
    * 1. Multi-modal Prescription & Pill Bottle Scanner
    * Uses Gemini 3.5 Flash to extract medicine details from an image (base64)
    */
-  public static async scanPrescription(imageBase64: string, mimeType: string = 'image/jpeg'): Promise<PrescriptionScanResult> {
-    const cleanBase64 = imageBase64.replace(/^data:image\/\w+;base64,/, '');
-    const cacheKey = getCacheKey('rx_scan', cleanBase64.slice(0, 2000));
-    const cached = getFromCache<PrescriptionScanResult>(cacheKey);
-    if (cached) return cached;
-
-    const apiKey = this.getApiKey();
-
-    if (apiKey) {
-      try {
-        const client = new GoogleGenAI({ apiKey });
-        const prompt = `
-          You are an expert clinical pharmacist assistant specialized in geriatric medication management.
-          Analyze this prescription or medicine packaging image and extract the medication information into STRICT JSON format.
-          
-          Required JSON Schema:
-          {
-            "name": string (brand or full medicine name),
-            "genericName": string (active pharmaceutical ingredient),
-            "dosage": string (e.g. "10 mg", "500 mg"),
-            "form": "TABLET" | "CAPSULE" | "LIQUID" | "INHALER" | "INJECTION" | "PATCH",
-            "frequency": "DAILY" | "TWICE_DAILY" | "THREE_TIMES_DAILY" | "FOUR_TIMES_DAILY" | "AS_NEEDED",
-            "suggestedTimes": string[] (24h format times like ["08:00"], ["08:00", "20:00"]),
-            "foodRequirement": "BEFORE_MEAL" | "AFTER_MEAL" | "WITH_FOOD" | "EMPTY_STOMACH" | "NO_RESTRICTION",
-            "instructions": string (clear instructions understandable by an elderly patient),
-            "purpose": string (intended therapeutic use),
-            "refillCount": number,
-            "prescribedBy": string,
-            "warnings": string[]
-          }
-
-          Output ONLY valid raw JSON with no markdown wrapping or backticks.
-        `;
-
-        const response = await client.models.generateContent({
-          model: this.MODEL_NAME,
-          contents: [
-            prompt,
-            {
-              inlineData: {
-                data: cleanBase64,
-                mimeType: mimeType
-              }
-            }
-          ]
-        });
-
-        const text = response.text || '';
-        const cleanedText = text.replace(/```json/g, '').replace(/```/g, '').trim();
-        const parsed = JSON.parse(cleanedText) as PrescriptionScanResult;
-        setInCache(cacheKey, parsed);
-        return parsed;
-      } catch (err) {
-        console.warn('Gemini 3.5 Flash live multimodal scan fallback activated:', err);
-      }
-    }
-
-    // High-accuracy clinical fallback scanner for offline/pre-key evaluation
-    return {
-      name: 'Amlodipine Besylate',
-      genericName: 'Amlodipine',
-      dosage: '5 mg',
-      form: 'TABLET',
-      frequency: 'DAILY',
-      suggestedTimes: ['08:00'],
-      foodRequirement: 'NO_RESTRICTION',
-      instructions: 'Take 1 tablet every morning with water. May be taken with or without food.',
-      purpose: 'Calcium channel blocker for blood pressure regulation and chest comfort.',
-      refillCount: 30,
-      prescribedBy: 'Dr. Evelyn Reed, MD',
-      warnings: [
-        'May cause mild swelling in lower ankles or dizziness when standing up quickly.',
-        'Avoid excessive consumption of grapefruit products.'
-      ]
-    };
+  public static async scanPrescription(imageBase64: string, mimeType = 'image/jpeg'): Promise<PrescriptionScanResult> {
+    const { scheduleWithGemini } = await import('./prescription.service');
+    const result = await scheduleWithGemini(imageBase64, mimeType, { name: 'Patient', timezone: 'UTC', today: new Date().toISOString().slice(0, 10) });
+    const medication = result.medications[0];
+    return { ...medication, frequency: medication.frequency as PrescriptionScanResult['frequency'], suggestedTimes: medication.scheduledTimes, refillCount: medication.pillCountCurrent, warnings: result.warnings };
   }
 
   /**
@@ -329,7 +259,7 @@ export class GeminiService {
       emotionalState = 'UNWELL';
       urgencyLevel = 'MEDIUM';
       symptoms.push('dizziness / lightheadedness');
-      replyText = `Please sit down comfortably right now, ${elderName}. Take a slow, deep breath and drink some water. I will notify your daughter Sarah and Nurse David so they are aware.`;
+      replyText = `Please sit down comfortably right now, ${elderName}. Take a slow, deep breath and drink some water. Please contact a family member or caregiver and tell them how you are feeling.`;
       caregiverNote = `${elderName} reported feeling dizzy/lightheaded. Advised to sit and hydrate. Monitor blood pressure.`;
     } else if (lower.includes('pain') || lower.includes('hurts') || lower.includes('ache')) {
       emotionalState = 'TIRED';

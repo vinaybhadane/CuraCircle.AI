@@ -11,7 +11,9 @@ import {
   AlertTriangle,
   PhoneCall,
   Sparkles,
-  Info
+  Info,
+  Plus,
+  Trash2
 } from 'lucide-react';
 import { CareCircleProfile, DoseLog, DoctorAppointment } from '@/lib/types';
 
@@ -24,6 +26,8 @@ interface ElderModeProps {
   onSnoozeDose: (doseId: string, minutes: number) => void;
   onOpenVoiceCompanion: () => void;
   onOpenSosModal: () => void;
+  onDeleteDose?: (doseId: string) => void;
+  onOpenMedicationModal?: () => void;
   audioEnabled: boolean;
 }
 
@@ -36,6 +40,8 @@ export const ElderMode: React.FC<ElderModeProps> = ({
   onSnoozeDose,
   onOpenVoiceCompanion,
   onOpenSosModal,
+  onDeleteDose,
+  onOpenMedicationModal,
   audioEnabled
 }) => {
   const [selectedSkipDoseId, setSelectedSkipDoseId] = useState<string | null>(null);
@@ -73,14 +79,14 @@ export const ElderMode: React.FC<ElderModeProps> = ({
 
   const handleConfirmTake = (dose: DoseLog) => {
     onTakeDose(dose.id);
-    speakText(`Wonderful job, ${profile.elderName}! I have recorded that you took your ${dose.medicationName}. Your family has been notified.`);
+    speakText(`Thank you, ${profile.elderName}. Your ${dose.medicationName} dose is being recorded.`);
   };
 
   const handleConfirmSkip = (doseId: string) => {
     onSkipDose(doseId, skipReasonText || 'Skipped by elder choice');
     setSelectedSkipDoseId(null);
     setSkipReasonText('');
-    speakText('Dose noted as skipped. We have logged this for Nurse David and your family.');
+    speakText('Your skipped dose is being recorded for your care circle.');
   };
 
   return (
@@ -242,10 +248,22 @@ export const ElderMode: React.FC<ElderModeProps> = ({
 
       {/* Full Today Timeline */}
       <section aria-labelledby="today-plan-heading" className="space-y-4">
-        <h2 id="today-plan-heading" className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white flex items-center gap-3">
-          <Calendar className="w-8 h-8 text-brand-600 dark:text-brand-400" />
-          <span>Today&apos;s Medicine Schedule</span>
-        </h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <h2 id="today-plan-heading" className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white flex items-center gap-3">
+            <Calendar className="w-8 h-8 text-brand-600 dark:text-brand-400" />
+            <span>Today&apos;s Medicine Schedule</span>
+          </h2>
+          {onOpenMedicationModal && (
+            <button
+              type="button"
+              onClick={onOpenMedicationModal}
+              className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm flex items-center gap-2 shadow-sm self-start sm:self-auto"
+            >
+              <Plus className="w-4 h-4" />
+              <span>+ Add Medicine to Schedule</span>
+            </button>
+          )}
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {doses.map((dose) => {
@@ -270,26 +288,38 @@ export const ElderMode: React.FC<ElderModeProps> = ({
                   <span className="text-lg font-black text-slate-700 dark:text-slate-300">
                     🕒 {dose.scheduledTime}
                   </span>
-                  {isTaken && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-black bg-emerald-200 text-emerald-900">
-                      <CheckCircle2 className="w-4 h-4" /> Taken
-                    </span>
-                  )}
-                  {isSkipped && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-black bg-amber-200 text-amber-900">
-                      <AlertCircle className="w-4 h-4" /> Skipped
-                    </span>
-                  )}
-                  {isMissed && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-black bg-rose-200 text-rose-900">
-                      <AlertTriangle className="w-4 h-4" /> Overdue
-                    </span>
-                  )}
-                  {!isTaken && !isSkipped && !isMissed && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-black bg-sky-100 text-sky-900">
-                      <Clock className="w-4 h-4" /> Due
-                    </span>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {isTaken && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-black bg-emerald-200 text-emerald-900">
+                        <CheckCircle2 className="w-4 h-4" /> Taken
+                      </span>
+                    )}
+                    {isSkipped && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-black bg-amber-200 text-amber-900">
+                        <AlertCircle className="w-4 h-4" /> Skipped
+                      </span>
+                    )}
+                    {isMissed && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-black bg-rose-200 text-rose-900">
+                        <AlertTriangle className="w-4 h-4" /> Overdue
+                      </span>
+                    )}
+                    {!isTaken && !isSkipped && !isMissed && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-black bg-sky-100 text-sky-900">
+                        <Clock className="w-4 h-4" /> Due
+                      </span>
+                    )}
+                    {onDeleteDose && (
+                      <button
+                        type="button"
+                        onClick={() => onDeleteDose(dose.id)}
+                        title="Remove medicine dose from today's schedule"
+                        className="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <h4 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-2">
@@ -366,7 +396,7 @@ export const ElderMode: React.FC<ElderModeProps> = ({
               Need Immediate Help?
             </h3>
             <p className="text-base text-rose-800 dark:text-rose-300 font-medium">
-              Press the SOS button below to alert Sarah, Marcus, and Nurse David instantly.
+              Press the SOS button below to alert the family members in your care circle.
             </p>
           </div>
           <button

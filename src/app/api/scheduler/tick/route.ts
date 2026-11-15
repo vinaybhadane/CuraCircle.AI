@@ -1,8 +1,11 @@
+export const dynamic = 'force-dynamic';
+import { secureRoute, requireCircle } from '@/lib/auth/session';
 import { NextRequest, NextResponse } from 'next/server';
 import { EmailService } from '@/lib/services/email.service';
 import { dbService } from '@/lib/db/database';
+import { timingSafeEqual } from 'crypto';
 
-export async function POST(req: NextRequest) {
+async function handlePOST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
     const db = dbService.getDb();
@@ -21,4 +24,20 @@ export async function POST(req: NextRequest) {
     const errorMsg = err instanceof Error ? err.message : 'Unknown internal error';
     return NextResponse.json({ error: 'Scheduler run failed', details: errorMsg }, { status: 500 });
   }
+}
+
+export const POST = secureRoute(handlePOST);
+
+// Invoke from a hosting scheduler with Authorization: Bearer <CRON_SECRET>.
+export async function GET(req: NextRequest) {
+  const expected = process.env.CRON_SECRET;
+  const supplied = req.headers.get('authorization')?.replace(/^Bearer /, '');
+  if (!expected || !supplied || expected.length !== supplied.length || !timingSafeEqual(Buffer.from(expected), Buffer.from(supplied))) {
+    return NextResponse.json({ error: 'Scheduler authorization required.' }, { status: 401 });
+  }
+  const results = [];
+  for (const profile of dbService.getDb().profiles.filter((p) => p.ownerUid && !p.isDemo)) {
+    results.push({ profileId: profile.id, ...await dbService.runExclusive(() => EmailService.runNotificationChecks(profile.id)) });
+  }
+  return NextResponse.json({ success: true, results });
 }

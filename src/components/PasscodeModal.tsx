@@ -131,9 +131,20 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
 
         {/* Error message */}
         {errorMsg && (
-          <div className="p-3 rounded-xl bg-rose-50 text-rose-800 border border-rose-300 text-xs font-bold flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
-            <span>{errorMsg}</span>
+          <div
+            role="alert"
+            className="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/50 text-rose-900 dark:text-rose-200 border-2 border-rose-300 dark:border-rose-800 text-xs font-bold flex items-center justify-between gap-2 shadow-sm"
+          >
+            <div className="flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600 dark:text-rose-400" />
+              <span>{errorMsg}</span>
+            </div>
+            <button
+              onClick={() => setErrorMsg(null)}
+              className="p-1 rounded hover:bg-rose-100 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-300"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
           </div>
         )}
 

@@ -1,8 +1,10 @@
+export const dynamic = 'force-dynamic';
+import { secureRoute, requireCircle } from '@/lib/auth/session';
 import { NextRequest, NextResponse } from 'next/server';
 import { GeminiService } from '@/lib/services/gemini.service';
 import { dbService } from '@/lib/db/database';
 
-export async function GET(req: NextRequest) {
+async function handleGET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const db = dbService.getDb();
@@ -36,7 +38,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
+async function handlePOST(req: NextRequest) {
   try {
     const body = await req.json();
     const medications = body.medications || [];
@@ -55,3 +57,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to analyze drug interactions', details: errorMsg }, { status: 500 });
   }
 }
+
+export const GET = secureRoute(handleGET);
+
+export const POST = secureRoute(handlePOST);

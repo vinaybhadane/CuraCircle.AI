@@ -1,14 +1,18 @@
+export const dynamic = 'force-dynamic';
+import { secureRoute, requireCircle } from '@/lib/auth/session';
 import { NextRequest, NextResponse } from 'next/server';
 import { dbService } from '@/lib/db/database';
 import { EmailService } from '@/lib/services/email.service';
+import { escapeHtml } from '@/lib/services/notification.service';
 
-export async function GET(req: NextRequest) {
+async function handleGET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const db = dbService.getDb();
     const profileId = searchParams.get('profileId') || db.profiles[0].id;
 
-    const emails = db.dispatchedEmails.filter((e) => e.profileId === profileId);
+    const { member, profile } = requireCircle(req);
+    const emails = db.dispatchedEmails.filter((e) => e.profileId === profileId && (member.firebaseUid === profile.ownerUid || e.to.toLowerCase() === member.email.toLowerCase()));
     return NextResponse.json({
       total: emails.length,
       emails
@@ -19,13 +23,15 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
+async function handlePOST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { to, toName, subject, htmlBody } = body;
+    const { to } = body;
+    const { profile, member } = requireCircle(req);
+    const recipient = dbService.getDb().members.find((m) => m.profileId === profile.id && m.email === to);
 
-    if (!to || !subject) {
-      return NextResponse.json({ error: 'Recipient "to" and "subject" are required' }, { status: 400 });
+    if (!recipient || (profile.ownerUid !== member.firebaseUid && recipient.id !== member.id)) {
+      return NextResponse.json({ error: 'Select an authorized care circle recipient.' }, { status: 403 });
     }
 
     const db = dbService.getDb();
@@ -34,9 +40,9 @@ export async function POST(req: NextRequest) {
     const email = await EmailService.dispatchEmail(
       profileId,
       to,
-      toName || to,
-      subject,
-      htmlBody || `<p>Test email from CuraCircle Health Platform.</p>`,
+      recipient.name,
+      `CuraCircle notification test for ${profile.elderName}`,
+      `<p>Hello ${escapeHtml(recipient.name)},</p><p>Your care circle notifications for ${escapeHtml(profile.elderName)} are active. Sign in with Google to check the schedule and alerts.</p>`,
       'UPCOMING_DOSE'
     );
 
@@ -46,3 +52,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to dispatch email', details: errorMsg }, { status: 500 });
   }
 }
+
+export const GET = secureRoute(handleGET);
+
+export const POST = secureRoute(handlePOST);

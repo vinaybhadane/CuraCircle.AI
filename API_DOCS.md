@@ -1,171 +1,27 @@
-# REST API Documentation
+# API
 
-All API endpoints accept and return JSON. Endpoints are strictly validated using Zod schemas.
+All patient-data endpoints require the HttpOnly `curacircle_token` cookie established after a verified Firebase Google login. The server selects the patient and actor from care circle membership; client `actorRole` and cross-circle IDs cannot grant permissions. Mutations reject foreign origins. Errors return an `error` string and an HTTP status.
 
----
+| Endpoint | Behavior |
+| --- | --- |
+| `POST /api/auth/session` | Verify `{idToken}` from Firebase Google authentication; optionally select an authorized `{profileId}` in an existing session. |
+| `GET /api/auth/session` | Return safe profile data, membership, accessible circles and onboarding status. |
+| `DELETE /api/auth/session` | Clear the server session; the client also signs out of Firebase. |
+| `POST /api/auth/login` | Retired shared-PIN endpoint; returns 410. |
+| `POST /api/onboarding` | Create a manually entered patient and at least two distinct family members. See `OnboardingSchema`. |
+| `GET/POST/PUT/DELETE /api/members` | Read care circle members; only the owner can invite, edit or remove. Keep two family members. |
+| `POST /api/gemini/scan-prescription` | Validate `{imageBase64,mimeType}`, call live Gemini and return a server-held prescription draft. Nothing is scheduled yet. |
+| `POST /api/prescriptions/apply` | Apply `{draftId}` once, save all extracted medicines and notify family. Drafts expire after one hour. |
+| `GET/POST/PUT/DELETE /api/medications` | Read, add, update or remove medications in the authorized circle. |
+| `GET/POST/DELETE /api/adherence` | Read schedule and real statistics, record dose actions, exclude a dose from that day's schedule. |
+| `GET/POST/PUT/DELETE /api/appointments` | Manage appointments for the authorized circle. |
+| `GET /api/notifications` | Return the current member's notifications and unread count. |
+| `PATCH /api/notifications` | Mark own notifications read, optionally using `{notificationId}`. |
+| `GET /api/outbox` | Owner sees circle delivery history; other members see their own emails. |
+| `POST /api/outbox` | Send a server-generated test alert to `{to}`; owner may select a circle member, others only themselves. |
+| `POST /api/scheduler/tick` | Run the signed-in circle's reminder checks. |
+| `GET /api/scheduler/tick` | External cron; requires `Authorization: Bearer <CRON_SECRET>` and checks configured circles. |
+| `POST /api/sos` | Broadcast an alert to the authorized circle. |
+| `GET /api/audit` | Read the authorized circle's audit events. |
 
-### Authentication & Sessions
-
-#### `POST /api/auth/login`
-Verifies Care Circle passcode and issues a signed JWT session cookie.
-* **Payload:**
-  ```json
-  {
-    "profileId": "profile_eleanor_vance_01",
-    "passcode": "1122"
-  }
-  ```
-* **Response (200 OK):**
-  ```json
-  {
-    "success": true,
-    "role": "ELDER",
-    "member": { "id": "member_eleanor", "name": "Eleanor Vance" },
-    "token": "eyJhbGciOiJIUzI1NiIsIn..."
-  }
-  ```
-* **Rate Limiting:** Maximum 5 failed attempts within 5 minutes per IP.
-
-#### `GET /api/auth/session`
-Returns the active session user, profile, circle members, and suggested demo PINs.
-
----
-
-### Medication Management
-
-#### `GET /api/medications`
-Retrieves medications for a profile.
-* **Query Parameters:**
-  * `profileId` (optional): Defaults to primary elder profile.
-  * `activeOnly` (optional, boolean): If `true`, returns only active prescriptions.
-
-#### `POST /api/medications`
-Adds a new medication schedule.
-* **Payload:**
-  ```json
-  {
-    "name": "Lisinopril",
-    "dosage": "10 mg",
-    "form": "TABLET",
-    "color": "#f87171",
-    "shape": "Round tablet",
-    "instructions": "Take 1 tablet every morning with water.",
-    "purpose": "Blood pressure control",
-    "foodRequirement": "NO_RESTRICTION",
-    "frequency": "DAILY",
-    "scheduledTimes": ["08:00"],
-    "pillCountCurrent": 30,
-    "pillCountRefillThreshold": 7,
-    "prescribedBy": "Dr. Evelyn Reed, MD"
-  }
-  ```
-
-#### `PUT /api/medications`
-Updates an existing medication or adjusts pill count refills.
-
-#### `DELETE /api/medications?id={medId}`
-Removes a medication and logs an audit record.
-
----
-
-### Adherence Tracking
-
-#### `GET /api/adherence`
-Returns the daily dose timeline and adherence statistics.
-* **Query Parameters:** `date` (optional, `YYYY-MM-DD`).
-* **Response:**
-  ```json
-  {
-    "date": "2026-11-15",
-    "doses": [...],
-    "stats": {
-      "todayComplianceRate": 100,
-      "sevenDayComplianceRate": 95,
-      "totalDosesScheduledToday": 4,
-      "dosesTakenToday": 2,
-      "dosesSkippedToday": 0,
-      "dosesMissedToday": 0,
-      "currentStreakDays": 14
-    }
-  }
-  ```
-
-#### `POST /api/adherence`
-Records an action on a dose (`TAKEN`, `SKIPPED`, `SNOOZED`).
-* **Payload:**
-  ```json
-  {
-    "doseId": "dose_med_lisinopril_2026-11-15_08:00",
-    "action": "TAKEN",
-    "actorName": "Eleanor Vance",
-    "actorRole": "ELDER"
-  }
-  ```
-
----
-
-### Doctor Appointments
-
-#### `GET /api/appointments`
-Returns doctor appointments ordered chronologically.
-
-#### `POST /api/appointments`
-Schedules a new doctor appointment with escort assignment and pre-visit questions.
-
-#### `PUT /api/appointments`
-Updates appointment details or post-visit doctor notes.
-
-#### `DELETE /api/appointments?id={aptId}`
-Cancels an appointment.
-
----
-
-### Proactive Notification & Scheduler
-
-#### `POST /api/scheduler/tick`
-Evaluates care circle rules, detects overdue medications, upcoming doses, and doctor appointments, dispatching proactive emails.
-* **Response:**
-  ```json
-  {
-    "success": true,
-    "dispatched": {
-      "upcomingDoseEmailsSent": 0,
-      "missedDoseEmailsSent": 0,
-      "appointmentEmailsSent": 1,
-      "refillEmailsSent": 0
-    }
-  }
-  ```
-
-#### `GET /api/outbox`
-Lists all dispatched emails with status, subject, recipient, and rendered HTML body.
-
----
-
-### Gemini 3.5 Flash Intelligence Endpoints
-
-#### `POST /api/gemini/scan-prescription`
-Accepts a base64-encoded prescription image and extracts structured medication fields.
-
-#### `GET /api/gemini/interactions`
-Cross-analyzes all active prescriptions and dietary factors for dangerous contraindications.
-
-#### `POST /api/gemini/companion`
-Handles conversational elder check-ins, evaluates emotional state, detects symptoms, and produces caregiver notes.
-
-#### `POST /api/gemini/appointment-prep`
-Synthesizes recent adherence and medication data into high-yield clinical questions for the doctor visit.
-
----
-
-### Emergency SOS
-
-#### `POST /api/sos`
-Immediately broadcasts emergency alert emails to all care circle contacts.
-
----
-
-### Security Audit Trail
-
-#### `GET /api/audit`
-Returns the immutable security audit log of all system mutations and authentication events.
+Medication and appointment updates use `{id,updates}`; member updates use the same shape. Refer to `src/lib/validations/schemas.ts` and `src/lib/services/circle.service.ts` for validation. No API response includes passcode hashes. Unauthenticated requests never return a demo patient.

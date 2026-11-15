@@ -11,17 +11,18 @@ import {
   Mail,
   UserCheck,
   Sparkles,
-  PhoneCall
+  PhoneCall,
+  Users,
+  LogOut
 } from 'lucide-react';
 import { Role, CareCircleProfile } from '@/lib/types';
+import { User as FirebaseUser } from 'firebase/auth';
 
 interface NavbarProps {
   viewMode: 'ELDER' | 'CAREGIVER';
   setViewMode: (mode: 'ELDER' | 'CAREGIVER') => void;
   currentRole: Role;
   profile: CareCircleProfile;
-  contrastMode: 'normal' | 'dark' | 'gold';
-  setContrastMode: (mode: 'normal' | 'dark' | 'gold') => void;
   fontScale: number;
   setFontScale: (scale: number | ((prev: number) => number)) => void;
   audioEnabled: boolean;
@@ -29,6 +30,9 @@ interface NavbarProps {
   onOpenPasscodeModal: () => void;
   onOpenOutboxModal: () => void;
   onOpenSosModal: () => void;
+  onOpenMembersModal: () => void;
+  firebaseUser?: FirebaseUser | null;
+  onFirebaseSignOut?: () => void;
   outboxCount: number;
 }
 
@@ -37,8 +41,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   setViewMode,
   currentRole,
   profile,
-  contrastMode,
-  setContrastMode,
   fontScale,
   setFontScale,
   audioEnabled,
@@ -46,13 +48,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenPasscodeModal,
   onOpenOutboxModal,
   onOpenSosModal,
+  onOpenMembersModal,
+  firebaseUser,
+  onFirebaseSignOut,
   outboxCount
 }) => {
-  const cycleContrast = () => {
-    if (contrastMode === 'normal') setContrastMode('dark');
-    else if (contrastMode === 'dark') setContrastMode('gold');
-    else setContrastMode('normal');
-  };
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm dark:bg-slate-900 dark:border-slate-800 transition-colors">
@@ -129,16 +129,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             </div>
 
-            {/* High Contrast Toggle */}
-            <button
-              onClick={cycleContrast}
-              title={`Contrast: ${contrastMode.toUpperCase()} (Click to toggle)`}
-              aria-label="Toggle high contrast accessibility mode"
-              className="p-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700"
-            >
-              <Eye className="w-5 h-5" />
-            </button>
-
             {/* Audio Voice Narration Toggle */}
             <button
               onClick={() => setAudioEnabled((prev) => !prev)}
@@ -156,8 +146,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Proactive Email Outbox Trigger */}
             <button
               onClick={onOpenOutboxModal}
-              title="View Proactive Email Alerts & Outbox"
-              aria-label="Open Proactive Email Outbox and Delivery Monitor"
+              title="View notifications and email outbox"
+              aria-label="Open notifications and email delivery monitor"
               className="relative p-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700"
             >
               <Mail className="w-5 h-5" />
@@ -179,23 +169,46 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span>SOS</span>
             </button>
 
+            {/* Manage Members & Emails Button */}
+            <button
+              onClick={onOpenMembersModal}
+              title="Manage Care Circle Members & Notification Emails"
+              aria-label="Manage Care Circle Members & Notification Emails"
+              className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-lg font-bold text-xs border border-slate-300 dark:border-slate-700 transition-colors"
+            >
+              <Users className="w-4 h-4 text-brand-600 dark:text-brand-400" />
+              <span className="hidden lg:inline">Members</span>
+            </button>
+
             {/* Passcode / Role Badge */}
             <button
               onClick={onOpenPasscodeModal}
-              title="Click to switch Care Circle Role or Change PIN"
-              aria-label={`Logged in as ${currentRole}. Click to switch role.`}
+              title="View your assigned care circle role"
+              aria-label={`Logged in as ${currentRole}. View care circle membership.`}
               className="flex items-center gap-2 pl-2.5 pr-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-left transition-colors"
             >
               <div className="w-7 h-7 rounded-lg bg-brand-100 text-brand-700 dark:bg-brand-900 dark:text-brand-300 flex items-center justify-center">
                 <KeyRound className="w-4 h-4" />
               </div>
               <div className="hidden md:block">
-                <p className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">PIN Access</p>
+                <p className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">Your role</p>
                 <p className="text-xs font-bold text-slate-900 dark:text-white capitalize">
-                  {currentRole.replace('_', ' ').toLowerCase()}
+                  {currentRole === 'ELDER' ? 'Patient' : currentRole.replace(/_/g, ' ').toLowerCase()}
                 </p>
               </div>
             </button>
+
+            {/* Firebase Logged In User & Sign Out */}
+            {firebaseUser && onFirebaseSignOut && (
+              <button
+                onClick={onFirebaseSignOut}
+                title={`Signed in as ${firebaseUser.email || 'Evaluator'}. Click to Sign Out.`}
+                aria-label="Sign out of Firebase"
+                className="p-2 rounded-lg bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 dark:bg-slate-800 dark:hover:bg-rose-950 border border-slate-200 dark:border-slate-700 transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
       </div>

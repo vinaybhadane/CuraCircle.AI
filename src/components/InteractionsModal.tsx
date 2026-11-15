@@ -112,8 +112,9 @@ export const InteractionsModal: React.FC<InteractionsModalProps> = ({ isOpen, on
             </p>
           </div>
         ) : errorMsg ? (
-          <div className="p-4 rounded-xl bg-rose-50 text-rose-800 border border-rose-300 text-sm font-semibold">
-            {errorMsg}
+          <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200 border-2 border-rose-300 dark:border-rose-800 text-sm font-semibold flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 text-rose-600 dark:text-rose-400 flex-shrink-0" />
+            <span>{errorMsg}</span>
           </div>
         ) : (
           <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">

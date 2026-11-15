@@ -1,7 +1,9 @@
+export const dynamic = 'force-dynamic';
+import { secureRoute, requireCircle } from '@/lib/auth/session';
 import { NextRequest, NextResponse } from 'next/server';
 import { dbService } from '@/lib/db/database';
 
-export async function GET(req: NextRequest) {
+async function handleGET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const db = dbService.getDb();
@@ -17,3 +19,5 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to retrieve audit logs', details: errorMsg }, { status: 500 });
   }
 }
+
+export const GET = secureRoute(handleGET);

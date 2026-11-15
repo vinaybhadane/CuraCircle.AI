@@ -185,7 +185,7 @@ export class AuthService {
       id: `audit_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       profileId,
       timestamp: new Date().toISOString(),
-      actorName: actorRole === 'ELDER' ? 'Eleanor Vance (Elder)' : actorRole,
+      actorName: actorRole === 'ELDER' ? (db.profiles.find((p) => p.id === profileId)?.elderName || 'Patient') : actorRole,
       actorRole: (actorRole === 'UNKNOWN' ? 'FAMILY_MEMBER' : actorRole) as Role,
       action,
       details

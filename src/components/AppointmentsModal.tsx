@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Calendar, Plus, Sparkles, X, Clock, MapPin, User, Check, Phone } from 'lucide-react';
+import { Calendar, Plus, Sparkles, X, Clock, MapPin, User, Check, Phone, Trash2 } from 'lucide-react';
 import { DoctorAppointment, CareCircleMember } from '@/lib/types';
 
 interface AppointmentsModalProps {
@@ -10,6 +10,7 @@ interface AppointmentsModalProps {
   appointments: DoctorAppointment[];
   members: CareCircleMember[];
   onAddAppointment: (appointmentData: any) => void;
+  onDeleteAppointment: (id: string) => void;
 }
 
 export const AppointmentsModal: React.FC<AppointmentsModalProps> = ({
@@ -17,7 +18,8 @@ export const AppointmentsModal: React.FC<AppointmentsModalProps> = ({
   onClose,
   appointments,
   members,
-  onAddAppointment
+  onAddAppointment,
+  onDeleteAppointment
 }) => {
   const [activeTab, setActiveTab] = useState<'LIST' | 'NEW'>('LIST');
   const [doctorName, setDoctorName] = useState('');
@@ -140,15 +142,26 @@ export const AppointmentsModal: React.FC<AppointmentsModalProps> = ({
                       {apt.specialty} &bull; {apt.clinicName}
                     </p>
                   </div>
-                  <span className="px-3 py-1 rounded-full text-xs font-black bg-purple-100 text-purple-900 border border-purple-300">
-                    {new Date(apt.appointmentDateTime).toLocaleString('en-US', {
-                      weekday: 'short',
-                      month: 'short',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="px-3 py-1 rounded-full text-xs font-black bg-purple-100 text-purple-900 border border-purple-300">
+                      {new Date(apt.appointmentDateTime).toLocaleString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => onDeleteAppointment(apt.id)}
+                      title="Cancel and remove appointment"
+                      className="px-2.5 py-1 text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-lg flex items-center gap-1 transition-colors"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Remove</span>
+                    </button>
+                  </div>
                 </div>
 
                 <p className="text-xs text-slate-700 dark:text-slate-300">

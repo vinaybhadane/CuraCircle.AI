@@ -1,6 +1,7 @@
 import { dbService } from '../db/database';
 import { DoseLog, DoseStatus, AdherenceStats, Role } from '../types';
 import { AuthService } from './auth.service';
+import { circleClock } from '@/lib/time';
 
 export class AdherenceService {
   /**
@@ -12,7 +13,7 @@ export class AdherenceService {
 
     // Get existing logs for this date
     const existingLogs = db.doseLogs.filter(
-      (log) => log.profileId === profileId && log.scheduledDate === dateStr
+      (log) => log.profileId === profileId && log.scheduledDate === dateStr && (['TAKEN', 'SKIPPED'].includes(log.status) || activeMeds.some((m) => m.id === log.medicationId && m.scheduledTimes.includes(log.scheduledTime) && dateStr >= m.startDate && (!m.endDate || dateStr <= m.endDate)))
     );
 
     const logMap = new Map<string, DoseLog>();
@@ -24,6 +25,9 @@ export class AdherenceService {
 
     // Ensure every scheduled time for each active med has a log entry
     for (const med of activeMeds) {
+      if (dateStr < med.startDate || (med.endDate && dateStr > med.endDate) || med.frequency === 'AS_NEEDED') continue;
+      const days = Math.round((Date.parse(dateStr) - Date.parse(med.startDate)) / 86400000);
+      if ((med.frequency === 'EVERY_OTHER_DAY' && days % 2 !== 0) || (med.frequency === 'WEEKLY' && days % 7 !== 0)) continue;
       for (const time of med.scheduledTimes) {
         const key = `${med.id}_${time}`;
         if (!logMap.has(key)) {
@@ -48,7 +52,7 @@ export class AdherenceService {
       dbService.save();
     }
 
-    const allDosesForDate = Array.from(logMap.values());
+    const allDosesForDate = Array.from(logMap.values()).filter((log) => !log.excluded);
 
     // Sort by scheduled time ascending
     return allDosesForDate.sort((a, b) => a.scheduledTime.localeCompare(b.scheduledTime));
@@ -73,6 +77,7 @@ export class AdherenceService {
     const dose = db.doseLogs.find((d) => d.id === doseId);
     if (!dose) return null;
 
+    if (dose.status === 'TAKEN') return dose;
     dose.status = action;
     dose.actualTime = new Date().toISOString();
     dose.takenByMemberId = options.actorMemberId;
@@ -115,11 +120,7 @@ export class AdherenceService {
    */
   public static detectMissedDoses(profileId: string, gracePeriodMinutes: number = 30): DoseLog[] {
     const db = dbService.getDb();
-    const todayStr = new Date().toISOString().split('T')[0];
-    const now = new Date();
-    const currentHours = now.getHours();
-    const currentMinutes = now.getMinutes();
-    const nowTotalMinutes = currentHours * 60 + currentMinutes;
+    const { date: todayStr, minutes: nowTotalMinutes } = circleClock(profileId);
 
     const missed: DoseLog[] = [];
 
@@ -156,7 +157,7 @@ export class AdherenceService {
    */
   public static getAdherenceStats(profileId: string): AdherenceStats {
     const db = dbService.getDb();
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = circleClock(profileId).date;
     const todayDoses = this.getDosesForDate(profileId, todayStr);
 
     const totalDosesScheduledToday = todayDoses.length;
@@ -165,7 +166,7 @@ export class AdherenceService {
     const dosesMissedToday = todayDoses.filter((d) => d.status === 'MISSED').length;
 
     const evaluatedToday = dosesTakenToday + dosesSkippedToday + dosesMissedToday;
-    const todayComplianceRate = evaluatedToday > 0 ? Math.round((dosesTakenToday / evaluatedToday) * 100) : 100;
+    const todayComplianceRate = evaluatedToday > 0 ? Math.round((dosesTakenToday / evaluatedToday) * 100) : 0;
 
     // 7-day adherence calculation
     const sevenDaysAgo = new Date();
@@ -178,12 +179,16 @@ export class AdherenceService {
 
     const totalSevenDayTaken = pastSevenDaysLogs.filter((d) => d.status === 'TAKEN').length;
     const totalSevenDayDecided = pastSevenDaysLogs.filter((d) => ['TAKEN', 'SKIPPED', 'MISSED'].includes(d.status)).length;
-    const sevenDayComplianceRate = totalSevenDayDecided > 0 ? Math.round((totalSevenDayTaken / totalSevenDayDecided) * 100) : 95;
+    const sevenDayComplianceRate = totalSevenDayDecided > 0 ? Math.round((totalSevenDayTaken / totalSevenDayDecided) * 100) : 0;
 
     // Calculate streak (consecutive days with 100% or >= 80% adherence)
-    let currentStreakDays = 14; // Default seed streak for Eleanor
-    if (dosesMissedToday > 0) {
-      currentStreakDays = 0;
+    let currentStreakDays = 0;
+    for (let offset = 0; offset < 365; offset++) {
+      const day = new Date(`${todayStr}T12:00:00Z`);
+      day.setUTCDate(day.getUTCDate() - offset);
+      const logs = db.doseLogs.filter((d) => d.profileId === profileId && d.scheduledDate === day.toISOString().slice(0, 10));
+      if (!logs.length || logs.some((d) => d.status !== 'TAKEN')) break;
+      currentStreakDays++;
     }
 
     return {

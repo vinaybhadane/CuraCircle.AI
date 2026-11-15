@@ -1,9 +1,11 @@
+export const dynamic = 'force-dynamic';
+import { secureRoute, requireCircle } from '@/lib/auth/session';
 import { NextRequest, NextResponse } from 'next/server';
 import { EmailService } from '@/lib/services/email.service';
 import { EmergencySOSSchema } from '@/lib/validations/schemas';
 import { dbService } from '@/lib/db/database';
 
-export async function POST(req: NextRequest) {
+async function handlePOST(req: NextRequest) {
   try {
     const body = await req.json();
     const parsed = EmergencySOSSchema.safeParse(body);
@@ -32,3 +34,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to trigger emergency SOS', details: errorMsg }, { status: 500 });
   }
 }
+
+export const POST = secureRoute(handlePOST);

@@ -1,8 +1,11 @@
+export const dynamic = 'force-dynamic';
+import { AdherenceService } from '@/lib/services/adherence.service';
+import { secureRoute, requireCircle } from '@/lib/auth/session';
 import { NextRequest, NextResponse } from 'next/server';
 import { GeminiService } from '@/lib/services/gemini.service';
 import { dbService } from '@/lib/db/database';
 
-export async function POST(req: NextRequest) {
+async function handlePOST(req: NextRequest) {
   try {
     const body = await req.json();
     const { doctorSpecialty, reasonForVisit, profileId } = body;
@@ -17,7 +20,7 @@ export async function POST(req: NextRequest) {
       doctorSpecialty || 'General Practitioner',
       reasonForVisit || 'Routine follow-up',
       meds,
-      95
+      AdherenceService.getAdherenceStats(targetProfileId).sevenDayComplianceRate
     );
 
     return NextResponse.json({
@@ -30,3 +33,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to generate appointment questions', details: errorMsg }, { status: 500 });
   }
 }
+
+export const POST = secureRoute(handlePOST);

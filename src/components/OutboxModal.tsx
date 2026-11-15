@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Mail, Clock, AlertTriangle, Calendar, PhoneCall, RefreshCw, X, Check, Eye } from 'lucide-react';
-import { DispatchedEmail } from '@/lib/types';
+import { DispatchedEmail, CareNotification } from '@/lib/types';
 
 interface OutboxModalProps {
   isOpen: boolean;
@@ -20,24 +20,32 @@ export const OutboxModal: React.FC<OutboxModalProps> = ({
   const [emails, setEmails] = useState<DispatchedEmail[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState<DispatchedEmail | null>(null);
+  const [notifications, setNotifications] = useState<CareNotification[]>([]);
+  const [tab, setTab] = useState<'notifications' | 'outbox'>('notifications');
+  const [notice, setNotice] = useState('');
 
   useEffect(() => {
     if (isOpen) {
       loadEmails();
     }
-  }, [isOpen]);
+  }, [isOpen, schedulerLoading]);
 
   const loadEmails = async () => {
     setLoading(true);
     try {
       const res = await fetch('/api/outbox');
       const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Could not load email outbox.');
       setEmails(data.emails || []);
+      const notificationResponse = await fetch('/api/notifications');
+      const notificationData = await notificationResponse.json();
+      if (!notificationResponse.ok) throw new Error(notificationData.error || 'Could not load notifications.');
+      setNotifications(notificationData.notifications || []);
       if (data.emails && data.emails.length > 0 && !selectedEmail) {
         setSelectedEmail(data.emails[0]);
       }
     } catch (err) {
-      console.error(err);
+      setNotice(err instanceof Error ? err.message : 'Could not load notifications.');
     } finally {
       setLoading(false);
     }
@@ -71,6 +79,9 @@ export const OutboxModal: React.FC<OutboxModalProps> = ({
             🚨 Emergency SOS
           </span>
         );
+      case 'SCHEDULE_UPDATED':
+      case 'MEMBER_INVITED':
+        return <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-sky-100 text-sky-800 border border-sky-300">{type === 'SCHEDULE_UPDATED' ? 'Schedule update' : 'Care circle invitation'}</span>;
       default:
         return (
           <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-amber-100 text-amber-800">
@@ -114,7 +125,30 @@ export const OutboxModal: React.FC<OutboxModalProps> = ({
           </div>
         </div>
 
+        <div className="flex flex-wrap items-center gap-2 text-xs font-bold">
+          <button className={`px-3 py-2 rounded-xl border ${tab === 'notifications' ? 'bg-brand-600 text-white' : 'bg-slate-100'}`} onClick={() => setTab('notifications')}>My notifications ({notifications.filter((n) => !n.readAt).length})</button>
+          <button className={`px-3 py-2 rounded-xl border ${tab === 'outbox' ? 'bg-brand-600 text-white' : 'bg-slate-100'}`} onClick={() => setTab('outbox')}>Email outbox</button>
+          <button className="px-3 py-2 rounded-xl border" onClick={loadEmails}>{loading ? 'Refreshing…' : 'Refresh'}</button>
+          <button className="px-3 py-2 rounded-xl border" onClick={async () => {
+            if (!('Notification' in window)) { setNotice('This browser does not support desktop notifications. Your in-app notifications are available here.'); return; }
+            const permission = await Notification.requestPermission();
+            setNotice(permission === 'granted' ? 'Browser notifications enabled while CuraCircle is open. Email reminders continue when the reminder scheduler is running.' : 'Browser notifications are blocked. Your in-app notifications and emails remain available.');
+          }}>Enable browser notifications</button>
+          <button className="px-3 py-2 rounded-xl border" onClick={async () => {
+            const response = await fetch('/api/notifications', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+            if (!response.ok) { setNotice('Could not mark notifications as read.'); return; }
+            await loadEmails();
+          }}>Mark all read</button>
+        </div>
+        {notice && <p role="status" className="text-xs text-slate-600">{notice}</p>}
+        {tab === 'notifications' && <div className="space-y-3 max-h-[60vh] overflow-y-auto">
+          {notifications.length === 0 && <p className="text-sm text-slate-500 text-center py-8">No notifications yet. Care circle invitations, schedule changes and dose alerts appear here.</p>}
+          {notifications.map((notification) => <article key={notification.id} className={`p-4 rounded-2xl border ${notification.readAt ? 'bg-slate-50 border-slate-200' : 'bg-sky-50 border-sky-200'}`}>
+            <h4 className="text-sm font-bold">{notification.title}</h4><p className="text-xs text-slate-600 mt-1">{notification.message}</p><time className="text-xs text-slate-400">{new Date(notification.createdAt).toLocaleString()}</time>
+          </article>)}
+        </div>}
         {/* Two-Pane Outbox Inspector */}
+        {tab === 'outbox' &&
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6 max-h-[65vh]">
           {/* Left: Email List (2 cols) */}
           <div className="md:col-span-2 space-y-2 overflow-y-auto pr-1">
@@ -170,10 +204,7 @@ export const OutboxModal: React.FC<OutboxModalProps> = ({
                 </div>
 
                 {/* Rendered HTML Body */}
-                <div
-                  className="bg-white p-5 rounded-xl border shadow-inner text-slate-800 text-sm overflow-x-auto"
-                  dangerouslySetInnerHTML={{ __html: selectedEmail.htmlBody }}
-                />
+                <iframe title="Email preview" sandbox="" className="w-full min-h-[320px] bg-white rounded-xl border shadow-inner" srcDoc={`<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'">${selectedEmail.htmlBody}`} />
               </div>
             ) : (
               <div className="py-12 text-center text-slate-400 text-sm">
@@ -181,7 +212,7 @@ export const OutboxModal: React.FC<OutboxModalProps> = ({
               </div>
             )}
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );
