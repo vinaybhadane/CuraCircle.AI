@@ -346,7 +346,9 @@
       "caregiverPasscodeHash": "$2a$10$9XQwgo3Ln4GhsrOViaTviO0G4AY5qtq9X73EfvXhaW.cVTwSlUjqO",
       "familyPasscodeHash": "$2a$10$9XQwgo3Ln4GhsrOViaTviOhu3YSOPSnN6m4uiLHrNpb8q629yI./q",
       "createdAt": "2026-11-15T10:20:55.042Z",
-      "updatedAt": "2026-11-15T10:20:55.043Z"
+      "updatedAt": "2026-11-15T10:20:55.043Z",
+      "ownerUid": "default_owner",
+      "isDemo": false
     },
     {
       "id": "circle_63ef6d6f-2975-49a8-8c3a-3c5979f4e89a",

@@ -17,13 +17,13 @@ async function handlePOST(req: NextRequest) {
       if (!db.members.some((member) => member.profileId === existing.id && member.firebaseUid === identity.uid)) {
         throw new ApiError('Your saved patient profile is missing its owner membership.', 409);
       }
-      return setIdentity(NextResponse.json({ success: true, alreadyCompleted: true, profile: publicProfile(existing) }), { ...identity, profileId: existing.id });
+      return setIdentity(NextResponse.json({ success: true, alreadyCompleted: true, profile: publicProfile(existing) }), { ...identity, profileId: existing.id, elderName: existing.elderName });
     }
     const parsed = OnboardingSchema.safeParse(await req.json());
     if (!parsed.success) throw new ApiError(parsed.error.issues[0].message);
     const { profile, members, owner } = createCircle(identity, parsed.data);
     await Promise.all(members.filter((m) => m.id !== owner.id).map((member) => NotificationService.invite(profile, member)));
-    return setIdentity(NextResponse.json({ success: true, profile: publicProfile(profile) }), { ...identity, profileId: profile.id });
+    return setIdentity(NextResponse.json({ success: true, profile: publicProfile(profile) }), { ...identity, profileId: profile.id, elderName: profile.elderName, role: owner.role });
   } catch (error) { return apiError(error); }
 }
 

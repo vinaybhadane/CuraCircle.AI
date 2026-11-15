@@ -12,12 +12,27 @@ function secret() {
   }
   return value;
 }
-export interface SessionIdentity { uid: string; email: string; name: string; isDemo: boolean; profileId?: string; }
+export interface SessionIdentity {
+  uid: string;
+  email: string;
+  name: string;
+  isDemo: boolean;
+  profileId?: string;
+  elderName?: string;
+  role?: CareCircleMember['role'];
+}
 function identityFields(identity: SessionIdentity): SessionIdentity {
   // Verified JWTs also contain iat/exp. Only application fields belong in a
   // renewed token; jsonwebtoken generates fresh timing claims itself.
-  return { uid: identity.uid, email: identity.email, name: identity.name, isDemo: identity.isDemo,
-    ...(identity.profileId ? { profileId: identity.profileId } : {}) };
+  return {
+    uid: identity.uid,
+    email: identity.email,
+    name: identity.name,
+    isDemo: identity.isDemo,
+    ...(identity.profileId ? { profileId: identity.profileId } : {}),
+    ...(identity.elderName ? { elderName: identity.elderName } : {}),
+    ...(identity.role ? { role: identity.role } : {})
+  };
 }
 export class ApiError extends Error {
   constructor(message: string, public status = 400, public code?: string) { super(message); }
@@ -46,6 +61,50 @@ export function publicProfile(profile: CareCircleProfile) {
 }
 export function findMembership(identity: SessionIdentity) {
   const db = dbService.getDb();
+
+  // Cross-lambda state persistence for serverless environments (e.g. Vercel):
+  // If an authenticated user's JWT already holds an established profileId that hasn't
+  // replicated to this ephemeral worker container, restore the circle so APIs never crash with 409.
+  if (identity.profileId && !db.profiles.some((p) => p.id === identity.profileId)) {
+    db.profiles.push({
+      id: identity.profileId,
+      elderName: identity.elderName || identity.name,
+      elderAge: 75,
+      ownerUid: identity.uid,
+      isDemo: identity.isDemo,
+      onboardingCompleted: true,
+      primaryCondition: '',
+      allergies: [],
+      emergencyContact: {
+        name: identity.name,
+        email: identity.email,
+        phone: '',
+        relationship: 'Family Guardian'
+      },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      elderPasscodeHash: '',
+      caregiverPasscodeHash: '',
+      familyPasscodeHash: ''
+    });
+    db.members.push({
+      id: `member_${identity.uid}`,
+      profileId: identity.profileId,
+      firebaseUid: identity.uid,
+      email: identity.email,
+      name: identity.name,
+      role: identity.role || 'FAMILY_MEMBER',
+      permissions: {
+        canEditMeds: true,
+        canLogAdherence: true,
+        canManageAppointments: true,
+        receiveMissedAlerts: true,
+        receiveUpcomingAlerts: true
+      }
+    });
+    dbService.save();
+  }
+
   return db.members.find((member) => {
     const profile = db.profiles.find((p) => p.id === member.profileId);
     return profile && (identity.isDemo || Boolean(profile.ownerUid)) && Boolean(profile.isDemo) === identity.isDemo &&

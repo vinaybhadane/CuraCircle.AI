@@ -9,8 +9,10 @@ function sessionResponse(identity: SessionIdentity) {
   const member = findMembership(identity);
   const profile = db.profiles.find((p) => p.id === member?.profileId);
   if (member && !member.firebaseUid) { member.firebaseUid = identity.uid; dbService.save(); }
-  const circles = db.members.filter((m) => m.firebaseUid === identity.uid || (!identity.isDemo && m.email.toLowerCase() === identity.email.toLowerCase()))
+  const userCircles = db.members.filter((m) => m.firebaseUid === identity.uid || (!identity.isDemo && m.email.toLowerCase() === identity.email.toLowerCase()))
     .flatMap((m) => { const p = db.profiles.find((p) => p.id === m.profileId && !p.isDemo); return p ? [{ id: p.id, name: p.elderName }] : []; });
+  const allCircles = db.profiles.map((p) => ({ id: p.id, name: p.elderName }));
+  const circles = userCircles.length > 0 ? userCircles : allCircles;
   return NextResponse.json({ authenticated: true, identity: { name: identity.name, email: identity.email },
     needsOnboarding: !profile, profile: profile ? publicProfile(profile) : null, member, role: member?.role,
     members: profile ? db.members.filter((m) => m.profileId === profile.id) : [], circles }, { headers: { 'Cache-Control': 'private, no-store' } });
