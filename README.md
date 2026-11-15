@@ -37,11 +37,18 @@ This repository uses a file-backed server database. Local data is persisted in `
 
 ## Verify
 
+For Vercel, commit both `package.json` and `package-lock.json` with the scoped `jwks-rsa` / `jose` compatibility override. The project pins Node.js 24.x. This avoids the Firebase Admin CommonJS import failure that can otherwise make the entire session route return an HTML 500 page, including GET and DELETE. The Firebase Admin SDK is loaded only when verifying a Google token, so session checks and sign-out remain independent of that import.
+
+Set `JWT_SECRET` to a unique random value of at least 32 characters in the hosting project's Production environment and redeploy after changing environment variables. Missing or invalid session configuration now returns JSON with `AUTH_CONFIGURATION_ERROR`; Firebase verification infrastructure failures return `AUTH_SERVICE_UNAVAILABLE`. Neither response contains credentials. Browser `window.closed` warnings can still be emitted by Google's popup page even when the app sends `Cross-Origin-Opener-Policy: same-origin-allow-popups`; inspect the `/api/auth/session` response separately.
+
 ```sh
 npm test
 npx tsc --noEmit
 npm run build
+node scripts/verify-http.mjs
 npx vite-node --config vitest.config.ts scripts/verify-prescription.ts
 ```
 
 Tests use an isolated temporary data directory and simulated delivery; they never send real emails or modify the user's patient store. The final command performs an actual Gemini request using the downloadable fictional prescription and the configured server API key.
+
+The HTTP check starts and stops a local production server with CommonJS `require(ESM)` support disabled, checks session GET/POST/DELETE and the OAuth opener header, and never signs in a real user or sends messages.

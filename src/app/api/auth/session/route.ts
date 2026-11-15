@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminAuth } from '@/lib/firebase/admin';
-import { apiError, ApiError, assertSameOrigin, findMembership, publicProfile, readIdentity, setIdentity, type SessionIdentity } from '@/lib/auth/session';
+import { apiError, ApiError, assertSameOrigin, findMembership, publicProfile, readIdentity, setIdentity, validateSessionConfiguration, type SessionIdentity } from '@/lib/auth/session';
 import { dbService } from '@/lib/db/database';
 
 function sessionResponse(identity: SessionIdentity) {
@@ -13,7 +13,7 @@ function sessionResponse(identity: SessionIdentity) {
     .flatMap((m) => { const p = db.profiles.find((p) => p.id === m.profileId && !p.isDemo); return p ? [{ id: p.id, name: p.elderName }] : []; });
   return NextResponse.json({ authenticated: true, identity: { name: identity.name, email: identity.email },
     needsOnboarding: !profile, profile: profile ? publicProfile(profile) : null, member, role: member?.role,
-    members: profile ? db.members.filter((m) => m.profileId === profile.id) : [], circles });
+    members: profile ? db.members.filter((m) => m.profileId === profile.id) : [], circles }, { headers: { 'Cache-Control': 'private, no-store' } });
 }
 async function handleGET(req: NextRequest) {
   try { return sessionResponse(readIdentity(req)); }
@@ -22,6 +22,7 @@ async function handleGET(req: NextRequest) {
 async function handlePOST(req: NextRequest) {
   try {
     assertSameOrigin(req);
+    validateSessionConfiguration();
     const body = await req.json();
     if (body.profileId && !body.idToken) {
       const identity = { ...readIdentity(req), profileId: String(body.profileId) };
@@ -30,8 +31,19 @@ async function handlePOST(req: NextRequest) {
     }
     if (typeof body.idToken !== 'string') throw new ApiError('Google sign-in token is required.', 401);
     let decoded;
-    try { decoded = await getAdminAuth().verifyIdToken(body.idToken); }
-    catch { throw new ApiError('Google sign-in could not be verified. Please sign in again.', 401); }
+    try {
+      // Loading the SDK only for Google verification keeps its dependency tree
+      // out of GET session checks and DELETE sign-out cold starts.
+      const { getAdminAuth } = await import('@/lib/firebase/admin');
+      decoded = await getAdminAuth().verifyIdToken(body.idToken);
+    } catch (error) {
+      const code = (error as { code?: string })?.code;
+      if (code && ['auth/argument-error', 'auth/invalid-id-token', 'auth/id-token-expired', 'auth/id-token-revoked', 'auth/user-disabled'].includes(code)) {
+        throw new ApiError('Google sign-in could not be verified. Please sign in again.', 401);
+      }
+      console.error('Firebase server authentication unavailable:', { code: code || 'unknown', node: process.version });
+      throw new ApiError('Server Google authentication is unavailable. Check the Firebase Admin SDK dependencies and Node.js runtime, then redeploy.', 503, 'AUTH_SERVICE_UNAVAILABLE');
+    }
     if (decoded.firebase.sign_in_provider !== 'google.com' || !decoded.email_verified || !decoded.email) {
       throw new ApiError('Use a verified Google account to sign in.', 403);
     }

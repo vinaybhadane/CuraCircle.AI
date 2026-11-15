@@ -8,7 +8,7 @@ function secret() {
   const configured = process.env.JWT_SECRET;
   const value = configured === 'curacircle_super_secure_jwt_token_secret_key_32_bytes_min' ? undefined : configured;
   if (!value || value.length < 32) {
-    throw new Error('Configure JWT_SECRET with at least 32 random characters.');
+    throw new ApiError('Server sign-in is not configured. Set a unique JWT_SECRET of at least 32 characters in the hosting environment, then redeploy.', 503, 'AUTH_CONFIGURATION_ERROR');
   }
   return value;
 }
@@ -20,18 +20,21 @@ function identityFields(identity: SessionIdentity): SessionIdentity {
     ...(identity.profileId ? { profileId: identity.profileId } : {}) };
 }
 export class ApiError extends Error {
-  constructor(message: string, public status = 400) { super(message); }
+  constructor(message: string, public status = 400, public code?: string) { super(message); }
 }
+export function validateSessionConfiguration() { secret(); }
 export function readIdentity(req: NextRequest): SessionIdentity {
   const token = req.cookies.get('curacircle_token')?.value;
   if (!token) throw new ApiError('Sign in with Google to continue.', 401);
+  const signingSecret = secret();
   try {
-    const identity = jwt.verify(token, secret(), { algorithms: ['HS256'] }) as SessionIdentity;
+    const identity = jwt.verify(token, signingSecret, { algorithms: ['HS256'] }) as SessionIdentity;
     if (!identity.uid || !identity.email) throw new Error('Invalid identity');
     return identityFields(identity);
   } catch { throw new ApiError('Your session expired. Please sign in again.', 401); }
 }
 export function setIdentity(response: NextResponse, identity: SessionIdentity) {
+  response.headers.set('Cache-Control', 'private, no-store');
   response.cookies.set('curacircle_token', jwt.sign(identityFields(identity), secret(), { expiresIn: '7d', algorithm: 'HS256' }), {
     httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/', maxAge: 604800,
   });
@@ -59,7 +62,7 @@ export function requireCircle(req: NextRequest): CircleSession {
   return { identity, profile, member };
 }
 export function apiError(error: unknown) {
-  if (error instanceof ApiError) return NextResponse.json({ error: error.message }, { status: error.status });
+  if (error instanceof ApiError) return NextResponse.json({ error: error.message, ...(error.code ? { code: error.code } : {}) }, { status: error.status, headers: { 'Cache-Control': 'private, no-store' } });
   if (error instanceof SyntaxError) return NextResponse.json({ error: 'Invalid JSON request.' }, { status: 400 });
   console.error('Care circle request failed:', error);
   return NextResponse.json({ error: 'The request could not be completed. Please try again.' }, { status: 500 });

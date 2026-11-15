@@ -367,8 +367,11 @@ export default function HomePage() {
   };
   const handleFirebaseSignOut = async () => {
     try {
-      await request('/api/auth/session', { method: 'DELETE' });
+      // Firebase sign-out must still run if the deployed session API is down.
+      try { await fetch('/api/auth/session', { method: 'DELETE' }); }
+      catch (error) { console.error('Server session sign-out failed:', error); }
       await signOut(auth);
+      accountVersion.current++;
       setProfile(null); setFirebaseUser(null); setNeedsOnboarding(false); setPageError('');
     } catch (error) { console.error(error); }
   };

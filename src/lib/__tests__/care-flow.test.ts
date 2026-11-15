@@ -12,7 +12,7 @@ import { POST as applyPrescription } from '@/app/api/prescriptions/apply/route';
 import { POST as scanPrescription } from '@/app/api/gemini/scan-prescription/route';
 import { scheduleWithGemini } from '../services/prescription.service';
 import { AdherenceService } from '../services/adherence.service';
-import { POST as googleSession, GET as getSession } from '@/app/api/auth/session/route';
+import { POST as googleSession, GET as getSession, DELETE as signOutSession } from '@/app/api/auth/session/route';
 import { EmailService } from '../services/email.service';
 import { POST as completeOnboarding } from '@/app/api/onboarding/route';
 
@@ -36,6 +36,32 @@ function medication(name = 'Prescription Medicine') {
 afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals(); vi.useRealTimers(); generate.mockReset(); verifyToken.mockReset(); });
 
 describe('Google care circle onboarding and authorization', () => {
+  it('reports missing production session configuration without exposing secrets', async () => {
+    vi.stubEnv('JWT_SECRET', '');
+    const response = await googleSession(request('/api/auth/session', undefined, { idToken: 'google-token' }, 'POST'));
+    expect(response.status).toBe(503);
+    expect(await response.json()).toMatchObject({ code: 'AUTH_CONFIGURATION_ERROR', error: expect.stringContaining('JWT_SECRET') });
+    expect(verifyToken).not.toHaveBeenCalled();
+  });
+  it('reports a server configuration error rather than an expired session for an existing cookie', async () => {
+    const signedRequest = request('/api/auth/session', owner);
+    vi.stubEnv('JWT_SECRET', '');
+    const response = await getSession(signedRequest);
+    expect(response.status).toBe(503);
+    expect((await response.json()).code).toBe('AUTH_CONFIGURATION_ERROR');
+  });
+  it('isolates Google verification failures from session checks and sign-out', async () => {
+    verifyToken.mockRejectedValueOnce(Object.assign(new Error('SDK dependency import failed'), { code: 'ERR_REQUIRE_ESM' }));
+    const response = await googleSession(request('/api/auth/session', undefined, { idToken: 'google-token' }, 'POST'));
+    expect(response.status).toBe(503);
+    expect((await response.json()).code).toBe('AUTH_SERVICE_UNAVAILABLE');
+    expect((await getSession(request('/api/auth/session'))).status).toBe(401);
+    expect((await signOutSession(request('/api/auth/session', undefined, undefined, 'DELETE'))).status).toBe(200);
+  });
+  it('continues to reject an invalid Google token as an authentication failure', async () => {
+    verifyToken.mockRejectedValueOnce(Object.assign(new Error('Invalid token'), { code: 'auth/invalid-id-token' }));
+    expect((await googleSession(request('/api/auth/session', undefined, { idToken: 'invalid' }, 'POST'))).status).toBe(401);
+  });
   it('completes onboarding using the existing signed Google session cookie', async () => {
     const response = await completeOnboarding(request('/api/onboarding', owner, input, 'POST'));
     expect(response.status).toBe(200);

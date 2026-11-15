@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process';
 import assert from 'node:assert/strict';
 
 const port = 3100;
-const server = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'start', '-p', String(port)], { windowsHide: true, stdio: 'ignore' });
+const server = spawn(process.execPath, ['--no-experimental-require-module', 'node_modules/next/dist/bin/next', 'start', '-p', String(port)], { windowsHide: true, stdio: 'ignore' });
 try {
   let ready = false;
   for (let attempt = 0; attempt < 50; attempt++) {
@@ -23,4 +23,12 @@ try {
     results.push(`${path}: ${response.status}`);
   }
   console.log(results.join('\n'));
+  const invalidLogin = await fetch(`http://localhost:${port}/api/auth/session`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken: 'invalid-smoke-test-token' }),
+  });
+  assert.equal(invalidLogin.status, 401, 'Invalid tokens must return a JSON auth failure, not a module-load 500.');
+  assert.ok((await invalidLogin.json()).error);
+  const signOut = await fetch(`http://localhost:${port}/api/auth/session`, { method: 'DELETE' });
+  assert.equal(signOut.status, 200, 'Sign-out must not depend on Firebase Admin token verification.');
+  console.log('POST invalid Google token: 401\nDELETE session: 200');
 } finally { server.kill(); }
