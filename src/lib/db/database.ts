@@ -12,7 +12,8 @@ import {
   AuditLog,
   CareNotification
 } from '../types';
-import { FirestoreService } from '../services/firestore.service';
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { emptyDatabase, productionStore, StorageError, type DurableStore, type StorageScope } from './firestore-store';
 
 export interface DatabaseSchema {
   prescriptionDrafts: { id: string; profileId: string; medications: Omit<Medication, 'id' | 'profileId' | 'createdAt' | 'updatedAt'>[]; warnings: string[]; createdAt: string; appliedAt?: string }[];
@@ -31,18 +32,24 @@ const isVercel = Boolean(process.env.VERCEL);
 const PRIMARY_DATA_DIR = process.env.CURACIRCLE_DATA_DIR || path.join(process.cwd(), 'data');
 const TMP_DATA_DIR = path.join(os.tmpdir(), 'curacircle_data');
 
-class DatabaseService {
+export class DatabaseService {
+  private context = new AsyncLocalStorage<DatabaseSchema>();
   private cache: DatabaseSchema | null = null;
   private activeDbFile: string;
   private modifiedAt = 0;
 
-  constructor() {
+  constructor(private durableStore?: DurableStore) {
     this.activeDbFile = this.resolveDbFile();
   }
 
   // Serialize API mutations across Next.js route workers on this persistent disk.
   // The lock also protects asynchronous email/scheduler updates from lost writes.
-  public async runExclusive<T>(operation: () => Promise<T>): Promise<T> {
+  public async runExclusive<T>(operation: () => Promise<T>, scope?: StorageScope): Promise<T> {
+    if (this.context.getStore()) return operation();
+    if (this.durableStore || process.env.CURACIRCLE_STORAGE === 'firestore' || (process.env.VERCEL && !process.env.VITEST)) {
+      const store = this.durableStore || await productionStore();
+      return store.runExclusive((data) => this.context.run(data, operation), scope);
+    }
     const lockPath = `${this.activeDbFile}.lock`;
     const startedAt = Date.now();
     while (true) {
@@ -56,7 +63,7 @@ class DatabaseService {
         await new Promise((resolve) => setTimeout(resolve, 40));
       }
     }
-    try { return await operation(); }
+    try { this.cache = null; return await operation(); }
     finally { try { fs.rmdirSync(lockPath); } catch { /* Lock has already been removed. */ } }
   }
 
@@ -85,6 +92,11 @@ class DatabaseService {
   }
 
   public getDb(): DatabaseSchema {
+    const context = this.context.getStore();
+    if (context) return context;
+    if (this.durableStore || process.env.CURACIRCLE_STORAGE === 'firestore' || (process.env.VERCEL && !process.env.VITEST)) {
+      throw new StorageError('Database access requires a request storage context.');
+    }
     if (this.cache && fs.existsSync(this.activeDbFile) && fs.statSync(this.activeDbFile).mtimeMs === this.modifiedAt) {
       return this.cache;
     }
@@ -96,8 +108,8 @@ class DatabaseService {
         this.cache = { notifications: [], prescriptionDrafts: [], ...JSON.parse(raw) };
         this.modifiedAt = fs.statSync(this.activeDbFile).mtimeMs;
         return this.cache!;
-      } catch (err) {
-        console.error('Failed reading active DB file, falling back', err);
+      } catch {
+        throw new StorageError('The saved care circle data could not be read. Restore the data file from a backup.');
       }
     }
 
@@ -115,12 +127,13 @@ class DatabaseService {
     }
 
     // 3. Fallback to programmatic seed
-    this.cache = { profiles: [], members: [], medications: [], doseLogs: [], appointments: [], dispatchedEmails: [], auditLogs: [], notifications: [], prescriptionDrafts: [] };
+    this.cache = emptyDatabase();
     this.save();
     return this.cache;
   }
 
   public save(): void {
+    if (this.context.getStore()) return; // The durable store commits before the response is returned.
     if (!this.cache) return;
     const payload = JSON.stringify(this.cache, null, 2);
     try {
@@ -132,13 +145,6 @@ class DatabaseService {
       throw new Error('Care circle data could not be saved. Configure a writable persistent data directory.');
     }
 
-    if (process.env.NODE_ENV !== 'test' && !process.env.VITEST) {
-      try {
-        void FirestoreService.syncAllToFirestore(this.cache);
-      } catch {
-        // Non-blocking background sync
-      }
-    }
   }
 
   public createSeedData(): DatabaseSchema {

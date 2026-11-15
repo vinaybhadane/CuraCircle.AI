@@ -9,9 +9,9 @@ import { cleanNotificationText } from '@/lib/utils/sanitize';
 
 export class EmailService {
   private static checks = new Map<string, Promise<{ upcomingDoseEmailsSent: number; missedDoseEmailsSent: number; appointmentEmailsSent: number; refillEmailsSent: number }>>();
-  private static transporter: nodemailer.Transporter | null = null;
+  private static transporter: ReturnType<typeof nodemailer.createTransport> | null = null;
 
-  private static getTransporter(): nodemailer.Transporter | null {
+  private static getTransporter(): ReturnType<typeof nodemailer.createTransport> | null {
     if (this.transporter) return this.transporter;
 
     if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS && process.env.NODE_ENV !== 'test') {
@@ -461,7 +461,10 @@ export class EmailService {
     const todayDoses = db.doseLogs.filter((d) => d.profileId === profileId && d.scheduledDate === todayStr && !d.excluded);
 
     for (const dose of todayDoses) {
-      if (dose.status === 'SNOOZED' && dose.actualTime && Date.now() < Date.parse(dose.actualTime) + (dose.snoozeMinutes || 15) * 60000) continue;
+      if (dose.status === 'SNOOZED') {
+        if (dose.actualTime && Date.now() < Date.parse(dose.actualTime) + (dose.snoozeMinutes || 15) * 60000) continue;
+        dose.status = 'PENDING';
+      }
       const [h, m] = dose.scheduledTime.split(':').map(Number);
       const scheduledTotalMinutes = h * 60 + m;
       const med = db.medications.find((m) => m.id === dose.medicationId);

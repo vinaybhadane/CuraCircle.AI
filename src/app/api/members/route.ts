@@ -5,7 +5,6 @@ import { secureRoute, requireCircle, ApiError } from '@/lib/auth/session';
 import { dbService } from '@/lib/db/database';
 import { MemberInputSchema, permissionsFor } from '@/lib/services/circle.service';
 import { NotificationService } from '@/lib/services/notification.service';
-import { FirestoreService } from '@/lib/services/firestore.service';
 
 function requireOwner(req: NextRequest) {
   const session = requireCircle(req);
@@ -15,23 +14,7 @@ function requireOwner(req: NextRequest) {
 export const GET = secureRoute(async (req: NextRequest) => {
   const { profile } = requireCircle(req);
   const db = dbService.getDb();
-  let members = db.members.filter((m) => m.profileId === profile.id);
-  if (members.length === 0 && profile.id) {
-    try {
-      const remoteMembers = await FirestoreService.getMembers(profile.id);
-      if (remoteMembers.length > 0) {
-        for (const rm of remoteMembers) {
-          if (!db.members.some((m) => m.id === rm.id)) {
-            db.members.push(rm);
-          }
-        }
-        dbService.save();
-        members = db.members.filter((m) => m.profileId === profile.id);
-      }
-    } catch {
-      // Fallback
-    }
-  }
+  const members = db.members.filter((m) => m.profileId === profile.id);
   return NextResponse.json({ members });
 });
 export const POST = secureRoute(async (req: NextRequest) => {
@@ -44,7 +27,6 @@ export const POST = secureRoute(async (req: NextRequest) => {
     permissions: { ...permissionsFor(parsed.data.role), ...parsed.data.permissions } };
   db.members.push(member);
   dbService.save();
-  void FirestoreService.saveMember(member);
   const email = await NotificationService.invite(profile, member);
   return NextResponse.json({ success: true, member, deliveryStatus: email.status }, { status: 201 });
 });
@@ -62,7 +44,6 @@ export const PUT = secureRoute(async (req: NextRequest) => {
   if (member.email !== parsed.data.email) delete member.firebaseUid;
   Object.assign(member, parsed.data, { permissions: { ...permissionsFor(parsed.data.role), ...parsed.data.permissions } });
   dbService.save();
-  void FirestoreService.saveMember(member);
   return NextResponse.json({ success: true, member });
 });
 export const DELETE = secureRoute(async (req: NextRequest) => {
@@ -74,6 +55,5 @@ export const DELETE = secureRoute(async (req: NextRequest) => {
   if (member.role === 'ELDER' || member.firebaseUid === profile.ownerUid) throw new ApiError('The patient and profile owner cannot be removed.');
   db.members = db.members.filter((m) => m.id !== id);
   dbService.save();
-  if (id) void FirestoreService.deleteMember(id);
   return NextResponse.json({ success: true });
 });

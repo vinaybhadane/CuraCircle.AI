@@ -1,47 +1,32 @@
-# Testing Strategy — CuraCircle AI
+# Testing CuraCircle
 
-## 1. Test Architecture
-We enforce 100% automated test coverage across all critical business logic, security layers, clinical algorithms, and accessibility standards using **Vitest 2.1**:
+Use Node.js 24.12+ within the 24.x release line and `npm ci`.
 
-### §1.1 Passcode Security & Cryptographic Auth (`auth.test.ts`)
-*   Verifies salted bcrypt hashing and password verification for Elder (`1122`), Caregiver (`4321`), and Family (`5678`) roles.
-*   Asserts sliding-window brute-force rate limiter locks out unauthorized actors after 5 failed attempts.
-*   Asserts cryptographically signed JWT tokens are properly validated and tampered tokens are rejected.
-
-### §1.2 Prescription Schedules & Inventory Refill (`medication.test.ts`)
-*   Tests CRUD lifecycle for medication schedules.
-*   Verifies sorting by scheduled time ascending.
-*   Tests refill inventory tracking, threshold warnings, and audit trail generation.
-
-### §1.3 Adherence Compliance & Streak Tracking (`adherence.test.ts`)
-*   Asserts daily dose schedule generation for active medications.
-*   Verifies dose state transitions (`TAKEN`, `SKIPPED` with reason, `SNOOZED`).
-*   Validates compliance calculation formulas for Today (%) and 7-day adherence trends.
-*   Tests automated missed dose detection when scheduled time exceeds grace period.
-
-### §1.4 Doctor Appointments & Escort Coordination (`appointment.test.ts`)
-*   Tests appointment scheduling, clinic details, chronological sorting, and family escort assignments.
-*   Verifies filtering between upcoming and completed consultations.
-
-### §1.5 Clinical Safety & Contraindications (`safety.test.ts`)
-*   Tests drug-drug and food contraindication rules (Atorvastatin + Grapefruit, Lisinopril + Potassium salt substitutes).
-*   Verifies senior voice companion ("Amity") emotional state detection and symptom triage.
-*   Tests doctor pre-visit consultation question synthesis.
-
-### §1.6 Proactive Email Notifications & Outbox (`email.test.ts`)
-*   Verifies upcoming dose alerts, missed dose escalations, and emergency SOS dispatch.
-*   Asserts autonomous scheduler tick evaluates adherence criteria and logs to outbox.
-
-### §1.7 Accessibility Constraints (`a11y.test.ts`)
-*   Verifies touch target dimension constraints satisfy senior requirements ($\ge 48$px standard, $\ge 64$px Elder mode).
-*   Asserts high-contrast color palettes satisfy WCAG AAA standards ($\ge 7:1$).
-*   Verifies dual-encoding contracts (icon + text + accessible color).
-
----
-
-## 2. Test Execution
-To run all tests:
-```bash
+```sh
 npm test
+npm run lint
+npm run build
+node scripts/verify-http.mjs
+npm audit
 ```
-*Current Status: 7 passed test suites, 28 passed tests (100% passing rate).*
+
+The unit/API suite covers Google sessions, authorization, circle isolation, onboarding, prescriptions, medication schedules, doses, inventory, appointments, notification delivery status, and runtime compatibility. Tests use an isolated temporary file store and simulated email. The inherited accessibility tests are static assertions, not a browser accessibility audit; no claim of complete coverage or zero bugs is made.
+
+`regressions.test.ts` covers missing generated dose records, retry idempotency, excluded and cross-circle doses, stale JWT memberships, private circle lists, date validation, snooze expiry, frequency edits, retained dose history, rescheduled appointment reminders, and cron authorization.
+
+For actual multi-worker persistence, start a local Firestore emulator on port 8188 with a demo project (never the real project). If Firebase CLI's emulator is installed:
+
+```powershell
+java -jar "$env:USERPROFILE/.cache/firebase/emulators/cloud-firestore-emulator-v1.21.0.jar" --host 127.0.0.1 --port 8188 --project_id demo-curacircle-regression
+```
+
+In another PowerShell window:
+
+```powershell
+$env:FIRESTORE_EMULATOR_HOST = '127.0.0.1:8188'
+npm run test:integration
+```
+
+The integration suite uses its own `demo-curacircle-<pid>` namespace. It checks a GET schedule on worker A followed by POST taken on worker B, a fresh worker retry, inventory idempotency, concurrent writes, deletions, error rollback, lease expiry, and scoped reads preserving unloaded data. It refuses non-localhost emulator hosts and never sends real emails.
+
+The HTTP smoke script runs the production build with an isolated data directory, checks public assets, rejects unauthenticated APIs and invalid Google tokens, verifies the OAuth popup header, and confirms sign-out works. CI repeats unit/API tests, type checks, the production build, and the dependency audit on pushes to main and pull requests. Live Google sign-in, external Gemini responses, email delivery, provider quotas, and production IAM configuration require separate deployment validation.

@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { StorageError, type StorageScope } from '@/lib/db/firestore-store';
 import { NextRequest, NextResponse } from 'next/server';
 import { dbService } from '@/lib/db/database';
 import type { CareCircleMember, CareCircleProfile } from '@/lib/types';
@@ -62,49 +63,6 @@ export function publicProfile(profile: CareCircleProfile) {
 export function findMembership(identity: SessionIdentity) {
   const db = dbService.getDb();
 
-  // Cross-lambda state persistence for serverless environments (e.g. Vercel):
-  // If an authenticated user's JWT already holds an established profileId that hasn't
-  // replicated to this ephemeral worker container, restore the circle so APIs never crash with 409.
-  if (identity.profileId && !db.profiles.some((p) => p.id === identity.profileId)) {
-    db.profiles.push({
-      id: identity.profileId,
-      elderName: identity.elderName || identity.name,
-      elderAge: 75,
-      ownerUid: identity.uid,
-      isDemo: identity.isDemo,
-      onboardingCompleted: true,
-      primaryCondition: '',
-      allergies: [],
-      emergencyContact: {
-        name: identity.name,
-        email: identity.email,
-        phone: '',
-        relationship: 'Family Guardian'
-      },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      elderPasscodeHash: '',
-      caregiverPasscodeHash: '',
-      familyPasscodeHash: ''
-    });
-    db.members.push({
-      id: `member_${identity.uid}`,
-      profileId: identity.profileId,
-      firebaseUid: identity.uid,
-      email: identity.email,
-      name: identity.name,
-      role: identity.role || 'FAMILY_MEMBER',
-      permissions: {
-        canEditMeds: true,
-        canLogAdherence: true,
-        canManageAppointments: true,
-        receiveMissedAlerts: true,
-        receiveUpcomingAlerts: true
-      }
-    });
-    dbService.save();
-  }
-
   return db.members.find((member) => {
     const profile = db.profiles.find((p) => p.id === member.profileId);
     return profile && (identity.isDemo || Boolean(profile.ownerUid)) && Boolean(profile.isDemo) === identity.isDemo &&
@@ -121,6 +79,7 @@ export function requireCircle(req: NextRequest): CircleSession {
   return { identity, profile, member };
 }
 export function apiError(error: unknown) {
+  if (error instanceof StorageError) return NextResponse.json({ error: error.message, code: error.code }, { status: 503, headers: { 'Cache-Control': 'private, no-store' } });
   if (error instanceof ApiError) return NextResponse.json({ error: error.message, ...(error.code ? { code: error.code } : {}) }, { status: error.status, headers: { 'Cache-Control': 'private, no-store' } });
   if (error instanceof SyntaxError) return NextResponse.json({ error: 'Invalid JSON request.' }, { status: 400 });
   console.error('Care circle request failed:', error);
@@ -135,6 +94,26 @@ export function assertSameOrigin(req: NextRequest) {
 // All ID-based mutations are checked before a handler can access a record.
 export function secureRoute(handler: (req: NextRequest) => Promise<NextResponse>, permission?: keyof CareCircleMember['permissions']) {
   return async (req: NextRequest) => {
+    let identity: SessionIdentity;
+    try {
+      if (req.method !== 'GET') assertSameOrigin(req);
+      identity = readIdentity(req);
+    } catch (error) { return apiError(error); }
+    // Read only the selected circle and tables used by this request. New audit
+    // entries can be appended without rereading the complete audit history.
+    const routeTables: Record<string, StorageScope['tables']> = {
+      '/api/adherence': ['profiles', 'members', 'medications', 'doseLogs'],
+      '/api/medications': ['profiles', 'members', 'medications', 'doseLogs'],
+      '/api/appointments': ['profiles', 'members', 'appointments'],
+      '/api/members': ['profiles', 'members'],
+      '/api/notifications': ['profiles', 'members', 'notifications'],
+      '/api/audit': ['profiles', 'members', 'auditLogs'],
+      '/api/outbox': ['profiles', 'members', 'dispatchedEmails'],
+      '/api/scheduler/tick': ['profiles', 'members', 'medications', 'doseLogs', 'appointments', 'dispatchedEmails', 'notifications'],
+      '/api/sos': ['profiles', 'members'],
+      '/api/gemini/scan-prescription': ['profiles', 'members'],
+      '/api/prescriptions/apply': ['profiles', 'members', 'medications', 'doseLogs', 'prescriptionDrafts'],
+    };
     return dbService.runExclusive(async () => {
     try {
       if (req.method !== 'GET') assertSameOrigin(req);
@@ -157,16 +136,24 @@ export function secureRoute(handler: (req: NextRequest) => Promise<NextResponse>
       if (id) {
         const db = dbService.getDb();
         const pathname = url.pathname;
+        if (pathname === '/api/adherence' && req.method === 'POST') {
+          // A displayed schedule may predate a cold start or a legacy storage
+          // migration. Recreate only doses authorized by today's saved schedule.
+          const { AdherenceService } = await import('@/lib/services/adherence.service');
+          const { circleClock } = await import('@/lib/time');
+          AdherenceService.getDosesForDate(session.profile.id, circleClock(session.profile.id).date);
+        }
         const records = pathname.includes('/medications') ? db.medications : pathname.includes('/appointments') ? db.appointments : pathname.includes('/adherence') ? db.doseLogs : pathname.includes('/members') ? db.members : [];
-        if (!records.some((record) => record.id === id && record.profileId === session.profile.id)) throw new ApiError('Record not found.', 404);
+        if (!records.some((record) => record.id === id && record.profileId === session.profile.id && !('excluded' in record && record.excluded))) throw new ApiError(pathname === '/api/adherence' ? 'This dose is no longer on your schedule. Refresh to see the current medicines.' : 'Record not found.', 404);
       }
       const scoped = new NextRequest(url, { method: req.method, headers: req.headers, ...(body ? { body: JSON.stringify(body) } : {}) });
       const response = await handler(scoped);
       if (response.ok && ['POST', 'PUT', 'DELETE'].includes(req.method) && url.pathname === '/api/medications') {
         await NotificationService.scheduleChanged(session.profile, session.member.name, 'updated the medication schedule');
       }
+      response.headers.set('Cache-Control', 'private, no-store');
       return response;
     } catch (error) { return apiError(error); }
-    }).catch(apiError);
+    }, { profileId: identity.profileId, tables: routeTables[req.nextUrl.pathname] }).catch(apiError);
   };
 }

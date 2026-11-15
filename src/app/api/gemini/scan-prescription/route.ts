@@ -6,7 +6,6 @@ import { apiError, ApiError, requireCircle, secureRoute } from '@/lib/auth/sessi
 import { scheduleWithGemini } from '@/lib/services/prescription.service';
 import { dbService } from '@/lib/db/database';
 import { circleClock } from '@/lib/time';
-import { FirestoreService } from '@/lib/services/firestore.service';
 
 async function scan(req: NextRequest) {
   try {
@@ -19,7 +18,6 @@ async function scan(req: NextRequest) {
     const draft = { ...result, id: `rx_${randomUUID()}`, profileId: profile.id, createdAt: new Date().toISOString() };
     dbService.getDb().prescriptionDrafts.push(draft);
     dbService.save();
-    void FirestoreService.savePrescriptionDraft(draft);
     return NextResponse.json({ success: true, draftId: draft.id, modelUsed: process.env.GEMINI_MODEL || 'gemini-2.5-flash', data: result });
   } catch (error) { return apiError(error); }
 }

@@ -3,22 +3,23 @@ export const runtime = 'nodejs';
 import { NextRequest, NextResponse } from 'next/server';
 import { apiError, ApiError, assertSameOrigin, findMembership, publicProfile, readIdentity, setIdentity, validateSessionConfiguration, type SessionIdentity } from '@/lib/auth/session';
 import { dbService } from '@/lib/db/database';
+import { dashboardSnapshot } from '@/lib/services/dashboard.service';
 
-function sessionResponse(identity: SessionIdentity) {
+function sessionResponse(identity: SessionIdentity, includeDashboard = false) {
   const db = dbService.getDb();
   const member = findMembership(identity);
   const profile = db.profiles.find((p) => p.id === member?.profileId);
   if (member && !member.firebaseUid) { member.firebaseUid = identity.uid; dbService.save(); }
   const userCircles = db.members.filter((m) => m.firebaseUid === identity.uid || (!identity.isDemo && m.email.toLowerCase() === identity.email.toLowerCase()))
     .flatMap((m) => { const p = db.profiles.find((p) => p.id === m.profileId && !p.isDemo); return p ? [{ id: p.id, name: p.elderName }] : []; });
-  const allCircles = db.profiles.map((p) => ({ id: p.id, name: p.elderName }));
-  const circles = userCircles.length > 0 ? userCircles : allCircles;
+  const circles = userCircles;
   return NextResponse.json({ authenticated: true, identity: { name: identity.name, email: identity.email },
     needsOnboarding: !profile, profile: profile ? publicProfile(profile) : null, member, role: member?.role,
-    members: profile ? db.members.filter((m) => m.profileId === profile.id) : [], circles }, { headers: { 'Cache-Control': 'private, no-store' } });
+    members: profile ? db.members.filter((m) => m.profileId === profile.id) : [], circles,
+    ...(includeDashboard && profile && member ? { dashboard: dashboardSnapshot(profile.id, member.id) } : {}) }, { headers: { 'Cache-Control': 'private, no-store' } });
 }
 async function handleGET(req: NextRequest) {
-  try { return sessionResponse(readIdentity(req)); }
+  try { return sessionResponse(readIdentity(req), req.nextUrl.searchParams.get('dashboard') === '1'); }
   catch (error) { return apiError(error); }
 }
 async function handlePOST(req: NextRequest) {
@@ -26,10 +27,13 @@ async function handlePOST(req: NextRequest) {
     assertSameOrigin(req);
     validateSessionConfiguration();
     const body = await req.json();
+    if (!body || typeof body !== 'object' || Array.isArray(body)) throw new ApiError('Invalid request body.');
     if (body.profileId && !body.idToken) {
       const identity = { ...readIdentity(req), profileId: String(body.profileId) };
-      if (!findMembership(identity)) throw new ApiError('Care circle access denied.', 403);
-      return setIdentity(sessionResponse(identity), identity);
+      return await dbService.runExclusive(async () => {
+        if (!findMembership(identity)) throw new ApiError('Care circle access denied.', 403);
+        return setIdentity(sessionResponse(identity), identity);
+      }, { tables: ['profiles', 'members'] });
     }
     if (typeof body.idToken !== 'string') throw new ApiError('Google sign-in token is required.', 401);
     let decoded;
@@ -50,6 +54,7 @@ async function handlePOST(req: NextRequest) {
       throw new ApiError('Use a verified Google account to sign in.', 403);
     }
     const identity: SessionIdentity = { uid: decoded.uid, email: decoded.email.toLowerCase(), name: decoded.name || decoded.email, isDemo: false };
+    return await dbService.runExclusive(async () => {
     try {
       const previous = readIdentity(req);
       if (previous.uid === identity.uid && previous.profileId && findMembership({ ...identity, profileId: previous.profileId })) identity.profileId = previous.profileId;
@@ -57,6 +62,7 @@ async function handlePOST(req: NextRequest) {
     const member = findMembership(identity);
     if (member) identity.profileId = member.profileId;
     return setIdentity(sessionResponse(identity), identity);
+    }, { tables: ['profiles', 'members'] });
   } catch (error) { return apiError(error); }
 }
 export async function DELETE(req: NextRequest) {
@@ -68,6 +74,11 @@ export async function DELETE(req: NextRequest) {
   } catch (error) { return apiError(error); }
 }
 
-export async function GET(req: NextRequest) { return dbService.runExclusive(() => handleGET(req)).catch(apiError); }
+export async function GET(req: NextRequest) {
+  try {
+    readIdentity(req);
+    return await dbService.runExclusive(() => handleGET(req), { tables: req.nextUrl.searchParams.get('dashboard') === '1' ? ['profiles', 'members', 'medications', 'doseLogs', 'appointments', 'notifications'] : ['profiles', 'members'] });
+  } catch (error) { return apiError(error); }
+}
 
-export async function POST(req: NextRequest) { return dbService.runExclusive(() => handlePOST(req)).catch(apiError); }
+export const POST = handlePOST;

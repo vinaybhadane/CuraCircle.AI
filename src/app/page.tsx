@@ -29,6 +29,7 @@ import {
 
 export default function HomePage() {
   const accountVersion = useRef(0);
+  const dataVersion = useRef(0);
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
   const [authChecking, setAuthChecking] = useState(true);
   const [needsOnboarding, setNeedsOnboarding] = useState(false);
@@ -72,7 +73,13 @@ export default function HomePage() {
   const [medicationToEdit, setMedicationToEdit] = useState<Medication | null>(null);
 
   const request = async (url: string, options?: RequestInit) => {
-    const response = await fetch(url, options);
+    let response: Response;
+    try { response = await fetch(url, { ...options, cache: 'no-store' }); }
+    catch {
+      const message = 'Unable to connect. Check your connection and retry.';
+      setPageError(message);
+      throw new Error(message);
+    }
     if (!response.ok) {
       const data = await response.clone().json().catch(() => ({}));
       const message = data.error || 'The request failed. Please try again.';
@@ -90,6 +97,7 @@ export default function HomePage() {
       setFirebaseUser(user);
       setAuthChecking(true);
       setPageError('');
+      setProfile(null); setMembers([]); setMedications([]); setDoses([]); setAppointments([]); setNeedsOnboarding(false);
       try {
         if (user) {
           const response = await fetch('/api/auth/session', {
@@ -105,17 +113,26 @@ export default function HomePage() {
         } else {
           setProfile(null); setMembers([]); setMedications([]); setDoses([]); setAppointments([]); setCurrentMember(null);
         }
-      } catch (error) { if (active) setPageError(error instanceof Error ? error.message : 'Could not load your account.'); }
-      finally { if (active) setAuthChecking(false); }
+      } catch (error) { if (active && version === accountVersion.current) setPageError(error instanceof Error ? error.message : 'Could not load your account.'); }
+      finally { if (active && version === accountVersion.current) setAuthChecking(false); }
     });
     return () => { active = false; unsubscribe(); };
   }, []);
 
+  const applyDashboard = (dashboard: { medications: Medication[]; doses: DoseLog[]; stats: AdherenceStats; appointments: DoctorAppointment[]; unreadCount: number }) => {
+    setMedications(dashboard.medications || []);
+    setDoses(dashboard.doses || []);
+    if (dashboard.stats) setStats(dashboard.stats);
+    setAppointments(dashboard.appointments || []);
+    setOutboxCount(dashboard.unreadCount || 0);
+  };
+
   const loadAllData = async () => {
     const version = accountVersion.current;
-    const sessionRes = await request('/api/auth/session');
+    const refresh = ++dataVersion.current;
+    const sessionRes = await request('/api/auth/session?dashboard=1');
     const session = await sessionRes.json();
-    if (version !== accountVersion.current) return;
+    if (version !== accountVersion.current || refresh !== dataVersion.current) return;
     setNeedsOnboarding(session.needsOnboarding);
     setCircles(session.circles || []);
     if (!session.profile) return;
@@ -123,29 +140,27 @@ export default function HomePage() {
     setMembers(session.members || []);
     setCurrentMember(session.member);
     setCurrentRole(session.role);
-    const responses = await Promise.all(['/api/medications', '/api/adherence', '/api/appointments', '/api/notifications'].map((url) => request(url)));
-    const [medsData, adhData, aptsData, notificationData] = await Promise.all(responses.map((response) => response.json()));
-    if (version !== accountVersion.current) return;
-    setMedications(medsData.medications || []);
-    setDoses(adhData.doses || []);
-    if (adhData.stats) setStats(adhData.stats);
-    setAppointments(aptsData.appointments || []);
-    setOutboxCount(notificationData.unreadCount || 0);
+    if (session.dashboard) applyDashboard(session.dashboard);
+
   };
 
   useEffect(() => {
     if (!profile?.id) return;
     let running = false;
+    let cancelled = false;
     const seenNotifications = new Set<string>();
     let initializedNotifications = false;
     const check = async () => {
-      if (running) return;
+      if (running || cancelled || document.visibilityState === 'hidden') return;
       running = true;
+      const version = accountVersion.current;
+      const refresh = ++dataVersion.current;
       try {
-        await request('/api/scheduler/tick', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
-        await loadAllData();
-        const notificationResponse = await request('/api/notifications');
-        const { notifications } = await notificationResponse.json();
+        const response = await request('/api/scheduler/tick', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        const { dashboard } = await response.json();
+        if (cancelled || version !== accountVersion.current || refresh !== dataVersion.current) return;
+        if (dashboard) applyDashboard(dashboard);
+        const notifications = dashboard?.notifications || [];
         for (const notification of notifications || []) {
           if (initializedNotifications && !seenNotifications.has(notification.id) && !notification.readAt && 'Notification' in window && Notification.permission === 'granted') {
             new Notification('CuraCircle care update', { body: notification.title, tag: notification.id });
@@ -158,80 +173,34 @@ export default function HomePage() {
     };
     void check();
     const interval = setInterval(check, 60000);
-    return () => clearInterval(interval);
+    const onVisible = () => { if (document.visibilityState === 'visible') void check(); };
+    document.addEventListener('visibilitychange', onVisible);
+    return () => { cancelled = true; clearInterval(interval); document.removeEventListener('visibilitychange', onVisible); };
   }, [profile?.id]);
 
-  // Dose Actions
-  const handleTakeDose = async (doseId: string) => {
+  // Acknowledge a dose only after the server has durably saved it.
+  const recordDose = async (doseId: string, action: 'TAKEN' | 'SKIPPED' | 'SNOOZED', extra = {}) => {
+    const version = accountVersion.current;
+    ++dataVersion.current; // Invalidate any older background refresh.
+    setPageError('');
     try {
-      const res = await request('/api/adherence', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          doseId,
-          action: 'TAKEN',
-          actorName: currentMember?.name || profile?.elderName || 'Patient',
-          actorRole: currentRole
-        })
+      const response = await request('/api/adherence', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ doseId, action, ...extra })
       });
-      const data = await res.json();
-      if (data.success) {
-        setDoses((prev) => prev.map((d) => (d.id === doseId ? data.dose : d)));
-        if (data.stats) setStats(data.stats);
-        // Refresh medications to reflect decremented pill count
-        const medsRes = await request('/api/medications');
-        const medsData = await medsRes.json();
-        setMedications(medsData.medications || []);
-      }
-    } catch (err) {
-      console.error(err);
-    }
+      const data = await response.json();
+      if (version !== accountVersion.current) return false;
+      ++dataVersion.current;
+      setDoses((prev) => prev.map((dose) => dose.id === doseId ? data.dose : dose));
+      if (data.stats) setStats(data.stats);
+      // A failed refresh must not turn a successfully saved dose into a failure.
+      void loadAllData().catch(console.error);
+      return true;
+    } catch { return false; }
   };
-
-  const handleSkipDose = async (doseId: string, reason: string) => {
-    try {
-      const res = await request('/api/adherence', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          doseId,
-          action: 'SKIPPED',
-          skipReason: reason,
-          actorName: currentMember?.name || profile?.elderName || 'Patient',
-          actorRole: currentRole
-        })
-      });
-      const data = await res.json();
-      if (data.success) {
-        setDoses((prev) => prev.map((d) => (d.id === doseId ? data.dose : d)));
-        if (data.stats) setStats(data.stats);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleSnoozeDose = async (doseId: string, minutes: number) => {
-    try {
-      const res = await request('/api/adherence', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          doseId,
-          action: 'SNOOZED',
-          snoozeMinutes: minutes,
-          actorName: currentMember?.name || profile?.elderName || 'Patient',
-          actorRole: currentRole
-        })
-      });
-      const data = await res.json();
-      if (data.success) {
-        setDoses((prev) => prev.map((d) => (d.id === doseId ? data.dose : d)));
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const handleTakeDose = (doseId: string) => recordDose(doseId, 'TAKEN');
+  const handleSkipDose = (doseId: string, skipReason: string) => recordDose(doseId, 'SKIPPED', { skipReason });
+  const handleSnoozeDose = (doseId: string, snoozeMinutes: number) => recordDose(doseId, 'SNOOZED', { snoozeMinutes });
 
   // Medication CRUD
   const handleSaveMedication = async (medData: any) => {
@@ -281,18 +250,10 @@ export default function HomePage() {
 
   // Appointment CRUD
   const handleAddAppointment = async (aptData: any) => {
-    try {
-      const res = await request('/api/appointments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(aptData)
-      });
-      if (res.ok) {
-        await loadAllData();
-      }
-    } catch (err) {
-      console.error(err);
-    }
+    await request('/api/appointments', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(aptData)
+    });
+    await loadAllData();
   };
 
   const handleDeleteAppointment = async (id: string) => {
@@ -434,6 +395,8 @@ export default function HomePage() {
       {pageError && <div role="alert" className="max-w-7xl mx-auto mt-4 p-3 rounded-xl bg-rose-50 text-rose-800 border border-rose-200 flex justify-between"><span>{pageError}</span><button onClick={() => setPageError('')} aria-label="Dismiss error">?</button></div>}
       {viewMode === 'ELDER' ? (
         <ElderMode
+          key={profile.id}
+          canLogAdherence={Boolean(currentMember?.permissions.canLogAdherence)}
           profile={profile}
           doses={doses}
           appointments={appointments}
@@ -546,7 +509,7 @@ export default function HomePage() {
         onUpdateMember={handleUpdateMember}
         circles={circles}
         activeCircleId={profile.id}
-        onSelectCircle={async (profileId) => { await request('/api/auth/session', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ profileId }) }); await loadAllData(); }}
+        onSelectCircle={async (profileId) => { accountVersion.current++; dataVersion.current++; await request('/api/auth/session', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ profileId }) }); await loadAllData(); }}
         onAddMember={handleAddMember}
         onDeleteMember={handleDeleteMember}
         onSendTestEmail={handleSendTestEmail}

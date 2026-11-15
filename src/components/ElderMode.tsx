@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   CheckCircle2,
   Clock,
@@ -21,9 +21,10 @@ interface ElderModeProps {
   profile: CareCircleProfile;
   doses: DoseLog[];
   appointments: DoctorAppointment[];
-  onTakeDose: (doseId: string) => void;
-  onSkipDose: (doseId: string, reason: string) => void;
-  onSnoozeDose: (doseId: string, minutes: number) => void;
+  onTakeDose: (doseId: string) => Promise<boolean>;
+  onSkipDose: (doseId: string, reason: string) => Promise<boolean>;
+  onSnoozeDose: (doseId: string, minutes: number) => Promise<boolean>;
+  canLogAdherence: boolean;
   onOpenVoiceCompanion: () => void;
   onOpenSosModal: () => void;
   onDeleteDose?: (doseId: string) => void;
@@ -42,10 +43,25 @@ export const ElderMode: React.FC<ElderModeProps> = ({
   onOpenSosModal,
   onDeleteDose,
   onOpenMedicationModal,
-  audioEnabled
+  audioEnabled,
+  canLogAdherence
 }) => {
   const [selectedSkipDoseId, setSelectedSkipDoseId] = useState<string | null>(null);
   const [skipReasonText, setSkipReasonText] = useState('');
+  const [savingDose, setSavingDose] = useState<string | null>(null);
+  const busy = useRef(false);
+  const [doseFeedback, setDoseFeedback] = useState('');
+  const runDoseAction = async (id: string, action: () => Promise<boolean>, message: string) => {
+    if (busy.current || !canLogAdherence) return false;
+    busy.current = true; setSavingDose(id); setDoseFeedback('');
+    try {
+      const saved = await action();
+      const feedback = saved ? message : 'Your dose was not saved. Please check the error above and try again.';
+      setDoseFeedback(feedback); speakText(feedback);
+      return saved;
+    } catch { setDoseFeedback('Your dose was not saved. Please try again.'); return false; }
+    finally { busy.current = false; setSavingDose(null); }
+  };
 
   // Find next pending or missed dose
   const nextDose = doses.find((d) => d.status === 'PENDING' || d.status === 'MISSED');
@@ -78,19 +94,18 @@ export const ElderMode: React.FC<ElderModeProps> = ({
   };
 
   const handleConfirmTake = (dose: DoseLog) => {
-    onTakeDose(dose.id);
-    speakText(`Thank you, ${profile.elderName}. Your ${dose.medicationName} dose is being recorded.`);
+    void runDoseAction(dose.id, () => onTakeDose(dose.id), `Your ${dose.medicationName} dose has been recorded as taken.`);
   };
 
-  const handleConfirmSkip = (doseId: string) => {
-    onSkipDose(doseId, skipReasonText || 'Skipped by elder choice');
-    setSelectedSkipDoseId(null);
-    setSkipReasonText('');
-    speakText('Your skipped dose is being recorded for your care circle.');
+  const handleConfirmSkip = async (doseId: string) => {
+    if (await runDoseAction(doseId, () => onSkipDose(doseId, skipReasonText || 'Skipped by elder choice'), 'Your skipped dose has been recorded.')) {
+      setSelectedSkipDoseId(null); setSkipReasonText('');
+    }
   };
 
   return (
     <main id="main-content" className="py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-8">
+      {doseFeedback && <p role="status" className="rounded-xl border bg-white p-4 font-semibold">{doseFeedback}</p>}
       {/* Elder Greeting Banner */}
       <section
         aria-labelledby="elder-greeting"
@@ -166,15 +181,17 @@ export const ElderMode: React.FC<ElderModeProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
               <button
                 onClick={() => handleConfirmTake(nextDose)}
+                disabled={Boolean(savingDose) || !canLogAdherence}
                 aria-label={`Confirm taken ${nextDose.medicationName} ${nextDose.dosage}`}
                 className="col-span-1 md:col-span-2 flex items-center justify-center gap-3 py-5 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xl sm:text-2xl shadow-xl min-h-[72px] transition-transform active:scale-95"
               >
                 <CheckCircle2 className="w-8 h-8" />
-                <span>I Took This Medicine</span>
+                <span>{savingDose === nextDose.id ? 'Saving…' : 'I Took This Medicine'}</span>
               </button>
 
               <button
-                onClick={() => onSnoozeDose(nextDose.id, 15)}
+                disabled={Boolean(savingDose) || !canLogAdherence}
+                onClick={() => void runDoseAction(nextDose.id, () => onSnoozeDose(nextDose.id, 15), 'Reminder snoozed for 15 minutes.')}
                 aria-label="Remind me again in 15 minutes"
                 className="flex items-center justify-center gap-2 py-4 px-4 rounded-2xl bg-amber-100 hover:bg-amber-200 text-amber-900 border-2 border-amber-300 font-bold text-lg min-h-[72px]"
               >
@@ -186,6 +203,7 @@ export const ElderMode: React.FC<ElderModeProps> = ({
             <div className="flex justify-end">
               <button
                 onClick={() => setSelectedSkipDoseId(nextDose.id)}
+                disabled={Boolean(savingDose) || !canLogAdherence}
                 className="text-base font-bold text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 underline"
               >
                 Skip this dose with a note
@@ -196,10 +214,10 @@ export const ElderMode: React.FC<ElderModeProps> = ({
           <div className="bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-300 rounded-3xl p-8 text-center space-y-3">
             <CheckCircle2 className="w-16 h-16 text-emerald-600 mx-auto" />
             <h3 className="text-2xl sm:text-3xl font-black text-emerald-900 dark:text-emerald-200">
-              All Caught Up For Today!
+              {doses.some((dose) => dose.status === 'SNOOZED') ? 'Your reminder is snoozed' : doses.length ? 'No more doses awaiting action' : 'No medicines scheduled today'}
             </h3>
             <p className="text-lg text-emerald-800 dark:text-emerald-300 font-medium">
-              You have completed all your scheduled medicines on time. Fantastic job, {profile.elderName}!
+              {doses.some((dose) => dose.status === 'SNOOZED') ? 'Your medicine will return when the snooze ends.' : `${completedDoses.length} of ${doses.length} scheduled doses recorded as taken.`}
             </p>
           </div>
         )}
@@ -332,6 +350,7 @@ export const ElderMode: React.FC<ElderModeProps> = ({
                 {!isTaken && (
                   <button
                     onClick={() => handleConfirmTake(dose)}
+                    disabled={Boolean(savingDose) || !canLogAdherence}
                     aria-label={`Mark ${dose.medicationName} as taken`}
                     className="mt-4 w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg min-h-[48px] shadow"
                   >

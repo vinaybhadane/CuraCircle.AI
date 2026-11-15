@@ -9,7 +9,7 @@ interface AppointmentsModalProps {
   onClose: () => void;
   appointments: DoctorAppointment[];
   members: CareCircleMember[];
-  onAddAppointment: (appointmentData: any) => void;
+  onAddAppointment: (appointmentData: any) => Promise<void>;
   onDeleteAppointment: (id: string) => void;
 }
 
@@ -33,6 +33,8 @@ export const AppointmentsModal: React.FC<AppointmentsModalProps> = ({
   const [doctorNotes, setDoctorNotes] = useState('');
   const [aiQuestions, setAiQuestions] = useState<string[]>([]);
   const [loadingAi, setLoadingAi] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
 
   if (!isOpen) return null;
 
@@ -46,21 +48,24 @@ export const AppointmentsModal: React.FC<AppointmentsModalProps> = ({
         body: JSON.stringify({ doctorSpecialty: specialty, reasonForVisit: reason })
       });
       const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Could not prepare appointment questions.');
       if (data.questions) {
         setAiQuestions(data.questions);
       }
     } catch (err) {
-      console.error(err);
+      setError(err instanceof Error ? err.message : 'Could not prepare appointment questions.');
     } finally {
       setLoadingAi(false);
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (saving) return;
+    setSaving(true); setError('');
     const escortMember = members.find((m) => m.id === accompaniedMemberId);
 
-    onAddAppointment({
+    try { await onAddAppointment({
       doctorName,
       specialty,
       clinicName,
@@ -76,11 +81,14 @@ export const AppointmentsModal: React.FC<AppointmentsModalProps> = ({
     });
 
     setActiveTab('LIST');
+    } catch (error) { setError(error instanceof Error ? error.message : 'Could not save the appointment.'); }
+    finally { setSaving(false); }
   };
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
       <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl border border-slate-200 dark:border-slate-800 space-y-6">
+        {error && <p role="alert" className="rounded-xl bg-rose-50 p-3 text-rose-700">{error}</p>}
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
           <div className="flex items-center gap-3">
@@ -358,9 +366,10 @@ export const AppointmentsModal: React.FC<AppointmentsModalProps> = ({
               </button>
               <button
                 type="submit"
+                disabled={saving}
                 className="px-6 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-black text-sm"
               >
-                Schedule Appointment
+                {saving ? 'Saving…' : 'Schedule Appointment'}
               </button>
             </div>
           </form>

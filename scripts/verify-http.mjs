@@ -1,8 +1,14 @@
 import { spawn } from 'node:child_process';
 import assert from 'node:assert/strict';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 const port = 3100;
-const server = spawn(process.execPath, ['--no-experimental-require-module', 'node_modules/next/dist/bin/next', 'start', '-p', String(port)], { windowsHide: true, stdio: 'ignore' });
+const dataDir = mkdtempSync(join(tmpdir(), 'curacircle-http-'));
+const server = spawn(process.execPath, ['--no-experimental-require-module', 'node_modules/next/dist/bin/next', 'start', '-p', String(port)], {
+  windowsHide: true, stdio: 'ignore', env: { ...process.env, CURACIRCLE_DATA_DIR: dataDir, CURACIRCLE_STORAGE: '', VERCEL: '', JWT_SECRET: 'isolated-http-smoke-test-secret-at-least-32-characters', BREVO_API_KEY: '', SMTP_HOST: '' },
+});
 try {
   let ready = false;
   for (let attempt = 0; attempt < 50; attempt++) {
@@ -31,4 +37,8 @@ try {
   const signOut = await fetch(`http://localhost:${port}/api/auth/session`, { method: 'DELETE' });
   assert.equal(signOut.status, 200, 'Sign-out must not depend on Firebase Admin token verification.');
   console.log('POST invalid Google token: 401\nDELETE session: 200');
-} finally { server.kill(); }
+} finally {
+  server.kill();
+  // This path is the unique temporary directory created by this script.
+  rmSync(dataDir, { recursive: true, force: true });
+}

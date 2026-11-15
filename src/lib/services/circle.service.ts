@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { dbService } from '@/lib/db/database';
 import { ApiError, type SessionIdentity } from '@/lib/auth/session';
 import type { CareCircleMember, Role } from '@/lib/types';
-import { FirestoreService } from '@/lib/services/firestore.service';
 
 export const MemberInputSchema = z.object({
   name: z.string().trim().min(2).max(100),
@@ -51,7 +50,5 @@ export function createCircle(identity: SessionIdentity, input: z.infer<typeof On
   db.profiles.push(profile);
   db.members.push(...members);
   dbService.save();
-  void FirestoreService.saveProfile(profile);
-  for (const m of members) void FirestoreService.saveMember(m);
   return { profile, members, owner };
 }

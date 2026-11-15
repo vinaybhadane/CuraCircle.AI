@@ -5,7 +5,6 @@ import { MedicationService } from '@/lib/services/medication.service';
 import { MedicationCreateSchema } from '@/lib/validations/schemas';
 import { dbService } from '@/lib/db/database';
 import { circleClock } from '@/lib/time';
-import { FirestoreService } from '@/lib/services/firestore.service';
 
 async function handleGET(req: NextRequest) {
   try {
@@ -14,23 +13,7 @@ async function handleGET(req: NextRequest) {
     const profileId = searchParams.get('profileId') || db.profiles[0]?.id;
     const activeOnly = searchParams.get('activeOnly') === 'true';
 
-    let medications = MedicationService.getMedications(profileId, activeOnly);
-    if (medications.length === 0 && profileId) {
-      try {
-        const remoteMeds = await FirestoreService.getMedications(profileId);
-        if (remoteMeds.length > 0) {
-          for (const m of remoteMeds) {
-            if (!db.medications.some((existing) => existing.id === m.id)) {
-              db.medications.push(m);
-            }
-          }
-          dbService.save();
-          medications = MedicationService.getMedications(profileId, activeOnly);
-        }
-      } catch {
-        // Fallback to local
-      }
-    }
+    const medications = MedicationService.getMedications(profileId, activeOnly);
 
     return NextResponse.json({ medications });
   } catch (err: unknown) {
@@ -54,6 +37,7 @@ async function handlePOST(req: NextRequest) {
 
     const db = dbService.getDb();
     const profileId = body.profileId || db.profiles[0].id;
+    if (parsed.data.endDate && parsed.data.endDate < parsed.data.startDate) return NextResponse.json({ error: 'End date cannot be before start date.' }, { status: 400 });
     const actorName = body.actorName || 'Caregiver';
     const actorRole = body.actorRole || 'PRIMARY_CAREGIVER';
 
@@ -75,6 +59,10 @@ async function handlePUT(req: NextRequest) {
     if (!id || !updates) {
       return NextResponse.json({ error: 'Medication ID and updates are required' }, { status: 400 });
     }
+
+    const existing = MedicationService.getMedicationById(id);
+    const merged = { ...existing, ...validatedUpdates.data };
+    if (merged.endDate && merged.startDate && merged.endDate < merged.startDate) return NextResponse.json({ error: 'End date cannot be before start date.' }, { status: 400 });
 
     const updated = MedicationService.updateMedication(
       id,

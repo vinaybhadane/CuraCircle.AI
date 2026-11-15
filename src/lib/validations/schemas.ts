@@ -1,5 +1,10 @@
 import { z } from 'zod';
 
+export const DateOnlySchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use YYYY-MM-DD').refine((value) => {
+  const date = new Date(`${value}T00:00:00Z`);
+  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
+}, 'Invalid calendar date');
+
 export const LoginSchema = z.object({
   profileId: z.string().min(1, 'Profile ID is required'),
   passcode: z.string().min(4, 'Passcode must be at least 4 digits').max(12, 'Passcode max length 12')
@@ -16,13 +21,13 @@ export const MedicationCreateSchema = z.object({
   purpose: z.string().min(2, 'Therapeutic purpose is required'),
   foodRequirement: z.enum(['BEFORE_MEAL', 'AFTER_MEAL', 'WITH_FOOD', 'EMPTY_STOMACH', 'NO_RESTRICTION']),
   frequency: z.enum(['DAILY', 'TWICE_DAILY', 'THREE_TIMES_DAILY', 'FOUR_TIMES_DAILY', 'EVERY_OTHER_DAY', 'WEEKLY', 'AS_NEEDED']),
-  scheduledTimes: z.array(z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Invalid 24h time format (HH:MM)')).min(1, 'At least one scheduled time is required'),
+  scheduledTimes: z.array(z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Invalid 24h time format (HH:MM)')).min(1, 'At least one scheduled time is required').max(24).refine((times) => new Set(times).size === times.length, 'Each reminder time must be unique'),
   active: z.boolean().default(true),
   pillCountCurrent: z.number().int().nonnegative().default(0),
   pillCountRefillThreshold: z.number().int().nonnegative().default(7),
   prescribedBy: z.string().default('Physician'),
-  startDate: z.string().default(() => new Date().toISOString().split('T')[0]),
-  endDate: z.string().optional(),
+  startDate: DateOnlySchema.default(() => new Date().toISOString().split('T')[0]),
+  endDate: DateOnlySchema.optional(),
   notes: z.string().optional()
 });
 
@@ -40,7 +45,7 @@ export const AppointmentCreateSchema = z.object({
   clinicName: z.string().min(2, 'Clinic name is required'),
   address: z.string().min(5, 'Address is required'),
   contactPhone: z.string().optional(),
-  appointmentDateTime: z.string().min(10, 'Valid date-time is required'),
+  appointmentDateTime: z.string().datetime({ offset: true, message: 'A valid date-time with timezone is required' }),
   reasonForVisit: z.string().min(3, 'Reason for visit is required'),
   accompaniedByMemberId: z.string().optional(),
   accompaniedByName: z.string().optional(),

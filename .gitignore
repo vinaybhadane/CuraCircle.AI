@@ -16,6 +16,9 @@
 # misc
 .DS_Store
 *.pem
+firebase-debug.log*
+firestore-debug.log*
+*-service-account*.json
 
 # debug
 npm-debug.log*

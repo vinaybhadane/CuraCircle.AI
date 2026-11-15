@@ -3,7 +3,7 @@ import { circleClock } from '@/lib/time';
 import { secureRoute, requireCircle } from '@/lib/auth/session';
 import { NextRequest, NextResponse } from 'next/server';
 import { AdherenceService } from '@/lib/services/adherence.service';
-import { DoseLogSchema } from '@/lib/validations/schemas';
+import { DoseLogSchema, DateOnlySchema } from '@/lib/validations/schemas';
 import { dbService } from '@/lib/db/database';
 
 async function handleGET(req: NextRequest) {
@@ -12,8 +12,10 @@ async function handleGET(req: NextRequest) {
     const db = dbService.getDb();
     const profileId = searchParams.get('profileId') || db.profiles[0].id;
     const dateStr = searchParams.get('date') || circleClock(profileId).date;
+    if (!DateOnlySchema.safeParse(dateStr).success) return NextResponse.json({ error: 'Use a valid date in YYYY-MM-DD format.' }, { status: 400 });
 
-    // Check for missed doses
+    AdherenceService.getDosesForDate(profileId, circleClock(profileId).date);
+    // Check for missed doses after generating the current schedule.
     AdherenceService.detectMissedDoses(profileId);
 
     const doses = AdherenceService.getDosesForDate(profileId, dateStr);

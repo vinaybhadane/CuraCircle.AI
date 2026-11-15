@@ -2,6 +2,7 @@ import { dbService } from '../db/database';
 import { DoseLog, DoseStatus, AdherenceStats, Role } from '../types';
 import { AuthService } from './auth.service';
 import { circleClock } from '@/lib/time';
+import { isScheduledOn } from '@/lib/schedule';
 
 export class AdherenceService {
   /**
@@ -13,7 +14,7 @@ export class AdherenceService {
 
     // Get existing logs for this date
     const existingLogs = db.doseLogs.filter(
-      (log) => log.profileId === profileId && log.scheduledDate === dateStr && (['TAKEN', 'SKIPPED'].includes(log.status) || activeMeds.some((m) => m.id === log.medicationId && m.scheduledTimes.includes(log.scheduledTime) && dateStr >= m.startDate && (!m.endDate || dateStr <= m.endDate)))
+      (log) => log.profileId === profileId && log.scheduledDate === dateStr && (['TAKEN', 'SKIPPED'].includes(log.status) || activeMeds.some((m) => m.id === log.medicationId && m.scheduledTimes.includes(log.scheduledTime) && isScheduledOn(m, dateStr)))
     );
 
     const logMap = new Map<string, DoseLog>();
@@ -25,9 +26,7 @@ export class AdherenceService {
 
     // Ensure every scheduled time for each active med has a log entry
     for (const med of activeMeds) {
-      if (dateStr < med.startDate || (med.endDate && dateStr > med.endDate) || med.frequency === 'AS_NEEDED') continue;
-      const days = Math.round((Date.parse(dateStr) - Date.parse(med.startDate)) / 86400000);
-      if ((med.frequency === 'EVERY_OTHER_DAY' && days % 2 !== 0) || (med.frequency === 'WEEKLY' && days % 7 !== 0)) continue;
+      if (!isScheduledOn(med, dateStr)) continue;
       for (const time of med.scheduledTimes) {
         const key = `${med.id}_${time}`;
         if (!logMap.has(key)) {
@@ -75,9 +74,11 @@ export class AdherenceService {
   ): DoseLog | null {
     const db = dbService.getDb();
     const dose = db.doseLogs.find((d) => d.id === doseId);
-    if (!dose) return null;
+    if (!dose || dose.excluded) return null;
 
     if (dose.status === 'TAKEN') return dose;
+    delete dose.skipReason;
+    delete dose.snoozeMinutes;
     dose.status = action;
     dose.actualTime = new Date().toISOString();
     dose.takenByMemberId = options.actorMemberId;
@@ -125,10 +126,15 @@ export class AdherenceService {
     const missed: DoseLog[] = [];
 
     const todayDoses = db.doseLogs.filter(
-      (d) => d.profileId === profileId && d.scheduledDate === todayStr && d.status === 'PENDING'
+      (d) => d.profileId === profileId && d.scheduledDate === todayStr && !d.excluded && ['PENDING', 'SNOOZED'].includes(d.status)
     );
 
     for (const dose of todayDoses) {
+      if (dose.status === 'SNOOZED') {
+        if (dose.actualTime && Date.now() < Date.parse(dose.actualTime) + (dose.snoozeMinutes || 15) * 60000) continue;
+        dose.status = 'PENDING';
+        dbService.save();
+      }
       const [h, m] = dose.scheduledTime.split(':').map(Number);
       const scheduledTotalMinutes = h * 60 + m;
 
@@ -169,12 +175,12 @@ export class AdherenceService {
     const todayComplianceRate = evaluatedToday > 0 ? Math.round((dosesTakenToday / evaluatedToday) * 100) : 0;
 
     // 7-day adherence calculation
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const sevenDaysAgo = new Date(`${todayStr}T12:00:00Z`);
+    sevenDaysAgo.setUTCDate(sevenDaysAgo.getUTCDate() - 6);
     const sevenDaysAgoStr = sevenDaysAgo.toISOString().split('T')[0];
 
     const pastSevenDaysLogs = db.doseLogs.filter(
-      (d) => d.profileId === profileId && d.scheduledDate >= sevenDaysAgoStr && d.scheduledDate <= todayStr
+      (d) => d.profileId === profileId && !d.excluded && d.scheduledDate >= sevenDaysAgoStr && d.scheduledDate <= todayStr
     );
 
     const totalSevenDayTaken = pastSevenDaysLogs.filter((d) => d.status === 'TAKEN').length;
@@ -186,7 +192,7 @@ export class AdherenceService {
     for (let offset = 0; offset < 365; offset++) {
       const day = new Date(`${todayStr}T12:00:00Z`);
       day.setUTCDate(day.getUTCDate() - offset);
-      const logs = db.doseLogs.filter((d) => d.profileId === profileId && d.scheduledDate === day.toISOString().slice(0, 10));
+      const logs = db.doseLogs.filter((d) => d.profileId === profileId && !d.excluded && d.scheduledDate === day.toISOString().slice(0, 10));
       if (!logs.length || logs.some((d) => d.status !== 'TAKEN')) break;
       currentStreakDays++;
     }

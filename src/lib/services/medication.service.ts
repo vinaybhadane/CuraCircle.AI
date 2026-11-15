@@ -2,7 +2,7 @@ import { dbService } from '../db/database';
 import { Medication, Role } from '../types';
 import { AuthService } from './auth.service';
 import { circleClock } from '@/lib/time';
-import { FirestoreService } from './firestore.service';
+import { isScheduledOn } from '@/lib/schedule';
 
 export class MedicationService {
   public static getMedications(profileId: string, activeOnly: boolean = false): Medication[] {
@@ -41,7 +41,6 @@ export class MedicationService {
 
     db.medications.push(newMed);
     dbService.save();
-    void FirestoreService.saveMedication(newMed);
 
     AuthService.recordAudit(
       profileId,
@@ -74,7 +73,7 @@ export class MedicationService {
 
     const today = circleClock(existing.profileId).date;
     // Preserve completed history; rebuild future pending doses at the edited times.
-    db.doseLogs = db.doseLogs.filter((dose) => dose.medicationId !== id || dose.scheduledDate < today || dose.status === 'TAKEN' || dose.status === 'SKIPPED' || (updated.active && updated.scheduledTimes.includes(dose.scheduledTime)));
+    db.doseLogs = db.doseLogs.filter((dose) => dose.medicationId !== id || dose.scheduledDate < today || dose.status === 'TAKEN' || dose.status === 'SKIPPED' || (isScheduledOn(updated, dose.scheduledDate) && updated.scheduledTimes.includes(dose.scheduledTime)));
     // Keep pending labels in sync with prescription edits.
     for (const dose of db.doseLogs) {
       if (dose.medicationId === id && dose.scheduledDate >= today && !['TAKEN', 'SKIPPED'].includes(dose.status)) {
@@ -84,7 +83,6 @@ export class MedicationService {
     }
 
     dbService.save();
-    void FirestoreService.saveMedication(updated);
 
     AuthService.recordAudit(
       updated.profileId,
@@ -103,10 +101,10 @@ export class MedicationService {
 
     const med = db.medications[index];
     db.medications.splice(index, 1);
-    // Also remove doses of this medication from schedule
-    db.doseLogs = db.doseLogs.filter((d) => d.medicationId !== id);
+    // Remove future reminders while retaining completed and historical records.
+    const today = circleClock(med.profileId).date;
+    db.doseLogs = db.doseLogs.filter((d) => d.medicationId !== id || d.scheduledDate < today || ['TAKEN', 'SKIPPED', 'MISSED'].includes(d.status));
     dbService.save();
-    void FirestoreService.deleteMedication(id);
 
     AuthService.recordAudit(
       med.profileId,
@@ -126,7 +124,6 @@ export class MedicationService {
     med.pillCountCurrent = Math.max(0, newCount);
     med.updatedAt = new Date().toISOString();
     dbService.save();
-    void FirestoreService.saveMedication(med);
 
     return med;
   }

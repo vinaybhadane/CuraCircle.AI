@@ -27,4 +27,9 @@ async function handlePOST(req: NextRequest) {
   } catch (error) { return apiError(error); }
 }
 
-export async function POST(req: NextRequest) { return dbService.runExclusive(() => handlePOST(req)).catch(apiError); }
+export async function POST(req: NextRequest) {
+  try {
+    assertSameOrigin(req); readIdentity(req);
+    return await dbService.runExclusive(() => handlePOST(req), { tables: ['profiles', 'members'] });
+  } catch (error) { return apiError(error); }
+}

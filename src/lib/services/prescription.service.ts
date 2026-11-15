@@ -34,6 +34,7 @@ export async function scheduleWithGemini(imageBase64: string, mimeType: string, 
   const parsed = PrescriptionResultSchema.safeParse(raw);
   if (!parsed.success) throw new ApiError('Gemini could not extract a complete, valid schedule. Upload a clear prescription showing medicine names, doses and frequencies.', 422);
   for (const medication of parsed.data.medications) {
+    if (medication.endDate && medication.endDate < medication.startDate) throw new ApiError('Gemini returned an end date before the start date. Please review the prescription.', 422);
     if (medication.frequency === 'AS_NEEDED') throw new ApiError('As-needed medicines require manual review and cannot have automatic reminders.', 422);
     const expected = { DAILY: 1, TWICE_DAILY: 2, THREE_TIMES_DAILY: 3, FOUR_TIMES_DAILY: 4, EVERY_OTHER_DAY: 1, WEEKLY: 1 }[medication.frequency];
     if (new Set(medication.scheduledTimes).size !== expected) throw new ApiError('Gemini returned times that do not match the prescribed frequency. Please retry.', 422);
